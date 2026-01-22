@@ -4,7 +4,8 @@ import requests
 import json
 
 # Get Institutions
-banks_id = pd.read_csv("../data/input/fdic/cert_nums.csv")
+# Following line requires fsspec (`pip install fsspec`)
+banks_id = pd.read_csv("zip://input/fdic/cert_nums.csv::data/input.zip")
 
 url= "https://banks.data.fdic.gov/api/financials"
 output = [["CERT", "DEP", "DEPINS", "ASSETS"]]
@@ -33,8 +34,6 @@ for bank in banks_id['fdic_cert_num']:
 bank_data_final = (pd.DataFrame(output[1:], 
                                 columns = ["CERT", "DEP", "DEPINS", "ASSETS"])
                    .merge(right=banks_id, 
-                         left_on = "CERT", right_on = "fdic_cert_num")
+                         left_on = "CERT", right_on = "fdic_cert_num"))
 
 bank_data_final.to_csv("../data/input/fdic/bank_deposits.csv")
-
-
