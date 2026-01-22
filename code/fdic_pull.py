@@ -1,11 +1,12 @@
-
 import pandas as pd
 import requests
 import json
+import zipfile
 
 # Get Institutions
-# Following line requires fsspec (`pip install fsspec`)
-banks_id = pd.read_csv("zip://input/fdic/cert_nums.csv::data/input.zip")
+with zipfile.ZipFile("data/input.zip") as z:
+    with z.open("input/fdic/cert_nums.csv") as f:
+        banks_id = pd.read_csv(f)
 
 url= "https://banks.data.fdic.gov/api/financials"
 output = [["CERT", "DEP", "DEPINS", "ASSETS"]]
