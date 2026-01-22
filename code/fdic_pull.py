@@ -4,7 +4,7 @@ import json
 import zipfile
 
 # Get Institutions
-with zipfile.ZipFile("../data/input.zip") as z:
+with zipfile.ZipFile("data/input.zip") as z:
     with z.open("input/fdic/cert_nums.csv") as f:
         banks_id = pd.read_csv(f)
 
@@ -14,7 +14,7 @@ def get_bank_data(certs):
     url = "https://banks.data.fdic.gov/api/financials"
 
     cert_filter = " OR ".join(f"CERT:{c}" for c in certs)
-    repdte_filter = "REPDTE:20250930"
+    repdte_filter = "REPDTE:20211231"
 
     filter_expr = f"({cert_filter}) AND {repdte_filter}"
     
@@ -63,4 +63,4 @@ bank_data_final = (bank_data
     .sort_values(["CERT", "ID_RSSD_PARENT"])
 )
 
-bank_data_final.to_csv("../data/input/fdic/bank_deposits.csv")
+bank_data_final.to_csv("data/input/fdic/bank_deposits.csv")
