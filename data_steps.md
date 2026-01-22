@@ -25,7 +25,7 @@ data from `BHCF20211231.txt` using rssdids from `permco_rssdid_xwalk.csv`
 
 To do this, it requires three steps:
 
-a. Loop thorugh every child of the BHC and identify the RSSDID assocaited with the commercial banks
+a. Loop thorugh every child of the BHC and identify the RSSDID associated with the commercial banks
 
 for each rssdid  in `permco_rssdid_xwalk.csv` 
  find all children with rssdid in `CSV_RELATIONSHIPS.csv`
