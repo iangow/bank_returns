@@ -4,11 +4,8 @@ library(fixest)
 library(data.table)
 
 
-unzip(
-    "data/input.zip",
-    files = "input/wrds_data/wrds_2022data.csv",
-    exdir = "data"
-)
+unzip("data/input.zip", exdir = "data")
+unzip("data/input/BHCF20211231.ZIP", exdir = "data")
 
 date_list <- c(
   as.Date("2023-03-17"),
@@ -222,6 +219,10 @@ children_cert_num <- call_report_data %>%
 children_cert_num %>%
   filter(fdic_cert_num != 0) %>%
   write_csv("data/input/fdic/cert_nums.csv")
+
+library(reticulate)
+
+source_python("code/fdic_pull.py")
 
 # load FDIC deposit data
 fdic_deposit_data <- fread("data/input/fdic/bank_deposits.csv") %>%
