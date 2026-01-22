@@ -1,9 +1,14 @@
-setwd("~/Dropbox/bank_returns")
 library(tidyverse)
 library(ggrepel)
 library(fixest)
 library(data.table)
 
+
+unzip(
+    "data/input.zip",
+    files = "input/wrds_data/wrds_2022data.csv",
+    exdir = "data"
+)
 
 date_list <- c(
   as.Date("2023-03-17"),
