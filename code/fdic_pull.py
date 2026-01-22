@@ -6,7 +6,7 @@ import json
 
 
 # Get Institutions
-banks_id = pd.read_csv("/Users/psg24/repos/bank_returns/data/input/fdic/cert_nums.csv")
+banks_id = pd.read_csv("../data/input/fdic/cert_nums.csv")
 
 
 # url= "https://banks.data.fdic.gov/api/institutions"
@@ -46,6 +46,6 @@ for bank in banks_id['fdic_cert_num']:
 
 bank_data_final = pd.DataFrame(output[1:], columns = ["CERT", "DEP", "DEPINS", "ASSETS"]).merge(right=banks_id, left_on = "CERT", right_on = "fdic_cert_num")
 
-bank_data_final.to_csv("/Users/psg24/repos/bank_returns/data/input/fdic/bank_deposits.csv")
+bank_data_final.to_csv("../data/input/fdic/bank_deposits.csv")
 
 
