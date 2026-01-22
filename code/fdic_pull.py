@@ -36,20 +36,11 @@ def get_bank_data(certs):
     data = resp.json()["data"]
     return data
 
-def batched(iterable, n=30):
-    iterable = list(iterable)
-    for i in range(0, len(iterable), n):
-        yield iterable[i:i+n]
 
-certs = banks_id["fdic_cert_num"].to_numpy()
-
-output = [get_bank_data(cert_batch) for cert_batch in batched(certs)]
+certs = banks_id["fdic_cert_num"].to_list()
 
 bank_data = (
-    pd.DataFrame(
-        d["data"]
-        for records in output
-        for d in records)
+    pd.DataFrame(d['data'] for d in get_bank_data(certs))
     .rename(columns={"ASSET": "ASSETS"})
     .sort_values(["CERT", "REPDTE"])
     .drop_duplicates("CERT", keep="last")
