@@ -12,9 +12,11 @@ format:
     include-in-header:
       text: |
         \usepackage{adjustbox}
+        \setlength{\footskip}{30pt}
     geometry:
       - left=2cm
       - right=2cm
+      - bottom=1.5cm
 ---
 
 ```{r}
@@ -1425,6 +1427,25 @@ cat(table5_tex, sep = "\n")
 ```
 
 ```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+table6_tex <- readLines("output/table6_2022.tex")
+table6_tex <- gsub(
+  "width = 1\\\\textwidth, center",
+  "width = 0.90\\\\textwidth, center",
+  table6_tex
+)
+table6_tex <- gsub(
+  "\\\\centering",
+  "\\\\centering\n\\\\footnotesize",
+  table6_tex
+)
+cat(table6_tex, sep = "\n")
+```
+
+```{r}
 #| include: false
 # Figure 2 ----
 # Panel A: 2022
@@ -2760,21 +2781,6 @@ est4 <- feols(
 )
 
 etable(est1, est2, est3, est4, dict = var_dict, vcov = "HC1")
-etable(est1, est2, est3, est4,
-  vcov = "HC1",
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1,
-  label = "tab:dep_2022",
-  title = "Cumulative returns in 2022 correlations. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2022 to January 31, 2023. %
-   In Column (1), we report the relationship with binned indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all observations, and do not include a constant, so each coefficient is the average for each bin. %
-   Column (2) includes the binned controls for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share, hold-to-maturity asset share, and unrealized hold-to-maturity losses.
-   Column (3) includes  cash/ total assets and securities / total assets.
-   Column (4) includes  tier 1 capital ratio and non-performing loan ratio.
-    All variables are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table6_2022.tex", replace = TRUE
-)
 
 feols(cumul_abnormal_capm ~ i(Date, asset_bin, ref2 = "(0,5e+06]") + i(Date, dep_unins_share_std) + i(Date, tier1capratio_std) + i(Date, cash_asset_ratio_std) + i(Date, unrealized_htm_losses_rat_tier1_std) | Date,
   data = bank_returns_data_parsed_y9c %>%
