@@ -672,6 +672,42 @@ ggplot(data = returns_data_parsed %>%
 ```
 
 ```{r}
+#| label: fig-4
+#| fig-cap: >-
+#|   2022 bank excess returns vs 2023 bank excess returns. This figure compares
+#|   cumulative returns in excess of the S&P 500 index for the banks in our
+#|   sample for the 2022 period versus the early 2023 period. On the x-axis,
+#|   we plot the cumulative returns in excess of the S&P 500 index for the
+#|   banks in our sample from February 1, 2022 to January 31, 2023. On the
+#|   y-axis, we plot the cumulative returns in excess of the S&P 500 index for
+#|   the banks in our sample from February 1, 2023 to March 17, 2023. We also
+#|   plot the least squares line of best fit. Stocks are denoted by their
+#|   ticker symbol; Silicon Valley Bank’s ticker is SIVB.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 6
+ggplot(data = bank_cumul_ret_2022 %>%
+  select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
+  inner_join(bank_cumul_ret_early,
+    by = c("ticker")
+  )) +
+  geom_point(
+    aes(y = cumul_abnormal, x = cumul_abnormal_2022)
+  ) +
+  geom_smooth(
+    aes(y = cumul_abnormal, x = cumul_abnormal_2022),
+    method = "lm"
+  ) +
+  geom_text_repel(aes(y = cumul_abnormal, x = cumul_abnormal_2022, label = ticker)) +
+  labs(
+    x = "Cumulative Abnormal Returns\n2022-02-01 to 2023-01-31",
+    y = "Cumulative Abnormal Returns\n2023-02-01 to 2023-03-17"
+  )
+```
+
+```{r}
 #| label: fig-1
 #| fig-cap: >-
 #|   Aggregate cumulative returns for the S&P 500 and banking sector.
@@ -942,8 +978,6 @@ ggplot(data = bank_cumul_ret_2022 %>%
     x = "Cumulative Abnormal Returns\n2022-02-01 to 2023-01-31",
     y = "Cumulative Abnormal Returns\n2023-02-01 to 2023-03-17"
   )
-ggsave("output/fig3_2022_v_2023_returns.pdf", width = 8, height = 6)
-
 ### Trying out bank beta
 ggplot(data = bank_cumul_ret_2022 %>%
   select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
