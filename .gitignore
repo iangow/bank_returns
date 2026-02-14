@@ -5,3 +5,5 @@
 old/*
 data/old/*
 code/old/*
+construct_data_files/
+construct_data_cache/
