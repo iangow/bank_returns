@@ -804,8 +804,8 @@ ggplot(
 #|   regression (loess) curves. Stocks are denoted by their ticker symbol;
 #|   Silicon Valley Bank’s ticker is SIVB.
 #| fig-subcap:
-#|   - "(a) Held-to-maturity asset share"
-#|   - "(b) Unrealized HTM losses / Tier 1 capital"
+#|   - "Held-to-maturity asset share"
+#|   - "Unrealized HTM losses / Tier 1 capital"
 #| layout-ncol: 2
 #| echo: false
 #| warning: false
