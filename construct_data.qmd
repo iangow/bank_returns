@@ -9,6 +9,9 @@ execute-dir: project
 format:
   pdf: 
     colorlinks: true
+    include-in-header:
+      text: |
+        \usepackage{adjustbox}
     geometry:
       - left=2cm
       - right=2cm
@@ -1185,6 +1188,80 @@ st(table1_data,
 ```
 
 ```{r}
+#| label: tbl-2
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+#| tbl-cap: >-
+#|   Cumulative returns correlated with uninsured deposits and HTM securities.
+#|   This table reports estimated coefficients of regressions with the cumulative returns in excess of the S&P 500 index
+#|   for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. In Column (1),
+#|   we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of
+#|   total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset
+#|   share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports
+#|   unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3).
+#|   Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized
+#|   HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have
+#|   standard deviation one, prior to interactions.
+table2_data <- bank_cumul_ret_linked_y9c_early %>%
+  ungroup() %>%
+  mutate(
+    dep_unins_share_std = standardize(dep_unins_share),
+    htm_ratio_std = standardize(htm_ratio),
+    unrealized_htm_losses_rat_tier1_std = standardize(unrealized_htm_losses_rat_tier1)
+  )
+
+table2_dict <- c(
+  dep_unins_share_std = "Uninsured Deposit Share",
+  htm_ratio_std = "HTM Asset Share",
+  unrealized_htm_losses_rat_tier1_std = "Unrealized HTM Losses / Tier 1 Capital"
+)
+
+tbl2_est1 <- feols(
+  cumul_abnormal ~ dep_unins_share_std,
+  data = table2_data,
+  vcov = "HC1"
+)
+tbl2_est2 <- feols(
+  cumul_abnormal ~ htm_ratio_std,
+  data = table2_data,
+  vcov = "HC1"
+)
+tbl2_est3 <- feols(
+  cumul_abnormal ~ unrealized_htm_losses_rat_tier1_std,
+  data = table2_data,
+  vcov = "HC1"
+)
+tbl2_est4 <- feols(
+  cumul_abnormal ~ dep_unins_share_std + htm_ratio_std + unrealized_htm_losses_rat_tier1_std,
+  data = table2_data,
+  vcov = "HC1"
+)
+tbl2_est5 <- feols(
+  cumul_abnormal ~ dep_unins_share_std +
+    htm_ratio_std +
+    unrealized_htm_losses_rat_tier1_std +
+    htm_ratio_std:dep_unins_share_std +
+    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
+  data = table2_data,
+  vcov = "HC1"
+)
+
+etable(
+  tbl2_est1, tbl2_est2, tbl2_est3, tbl2_est4, tbl2_est5,
+  tex = TRUE,
+  title = "",
+  depvar = FALSE,
+  digits = 3,
+  digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.05,
+  dict = table2_dict
+)
+```
+
+```{r}
 #| include: false
 # Figure 2 ----
 # Panel A: 2022
@@ -1672,19 +1749,6 @@ est5 <- feols(
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
 )
 etable(est1, est2, est3, est4, est5, dict = var_dict)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tab:dep_htm",
-  title = "Cumulative returns correlated with uninsured deposits and HTM. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total
-deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets
-as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-
-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table3.tex", replace = TRUE
-)
 
 library(ggfixest)
 feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Date, dep_unins_share_std) | Date,
