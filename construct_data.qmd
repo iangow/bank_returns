@@ -792,6 +792,65 @@ ggplot(
 ```
 
 ```{r}
+#| label: fig-6
+#| fig-cap: >-
+#|   Early cumulative returns explained by held-to-maturity assets. Panel (a)
+#|   plots the cumulative returns in excess of the S&P 500 index for the banks
+#|   in our sample from February 1, 2023 to March 17, 2023 against the
+#|   held-to-maturity asset share (held-to-maturity assets as a share of total
+#|   assets) measured in 2022q4. Panel (b) plots against unrealized
+#|   held-to-maturity losses scaled by Tier 1 capital. See Section 3.1 for
+#|   details on the data construction. The fitted lines are local linear
+#|   regression (loess) curves. Stocks are denoted by their ticker symbol;
+#|   Silicon Valley Bank’s ticker is SIVB.
+#| fig-subcap:
+#|   - "(a) Held-to-maturity asset share"
+#|   - "(b) Unrealized HTM losses / Tier 1 capital"
+#| layout-ncol: 2
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 6
+p6a <- ggplot(
+  data = bank_cumul_ret_linked_y9c_early %>%
+    mutate(nonbank = (ticker %in% nonbank_fig5)),
+  aes(x = htm_ratio, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker), size = 8) +
+  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
+  theme(legend.position = "none", text = element_text(size = 28)) +
+  labs(
+    x = "Hold-to-Maturity Asset Share",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_manual(values = c("black", "grey"))
+
+p6b <- ggplot(
+  data = bank_cumul_ret_linked_y9c_early %>%
+    mutate(nonbank = (ticker %in% nonbank_fig5)),
+  aes(x = unrealized_htm_losses_rat_tier1, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker), size = 8) +
+  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
+  theme(legend.position = "none", text = element_text(size = 28)) +
+  labs(
+    x = "Unrealized Hold-to-Maturity Losses / Tier 1 Capital",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_manual(values = c("black", "grey"))
+
+p6a
+p6b
+```
+
+```{r}
 #| include: false
 # Figure 2 ----
 # Panel A: 2022
