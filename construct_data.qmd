@@ -754,6 +754,44 @@ ggplot(data = bank_cumul_ret_2022 %>%
 ```
 
 ```{r}
+#| label: fig-5
+#| fig-cap: >-
+#|   Cumulative returns vs. uninsured deposit share. This figure plots the
+#|   cumulative returns in excess of the S&P 500 index for the banks in our
+#|   sample from February 1, 2023 to March 17, 2023 against the uninsured
+#|   deposit share (uninsured deposits as a share of total deposits) measured
+#|   in 2022q4. See Section 3.1 for details on the data construction. The
+#|   fitted line is a local linear regression (loess) curve. Stocks are denoted
+#|   by their ticker symbol; Silicon Valley Bank’s ticker is SIVB.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 6
+nonbank_fig5 <- final_bank_data %>%
+  filter(loans_asset_ratio < .2 | deposits_liabilities_ratio < .2) %>%
+  pull(TICKER)
+
+ggplot(
+  data = bank_cumul_ret_linked_y9c_early %>%
+    mutate(nonbank = (ticker %in% nonbank_fig5)),
+  aes(x = dep_unins_share, y = cumul_abnormal)
+) +
+  geom_point(aes(colour = factor(nonbank))) +
+  geom_text_repel(aes(label = ticker, colour = factor(nonbank))) +
+  geom_smooth(data = bank_cumul_ret_linked_y9c_early %>%
+    filter(!(ticker %in% nonbank_fig5))) +
+  theme(legend.position = "none") +
+  labs(
+    x = "Uninsured Deposit Share",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_manual(values = c("black", "grey"))
+```
+
+```{r}
 #| include: false
 # Figure 2 ----
 # Panel A: 2022
@@ -1153,8 +1191,6 @@ ggplot(
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_manual(values = c("black", "grey"))
-ggsave("output/uninsured_deposit_share_v_returns.pdf", width = 8, height = 6)
-
 ## HTM Securities and Hidden Losses ----
 ggplot(
   data = bank_cumul_ret_linked_y9c_early %>%
