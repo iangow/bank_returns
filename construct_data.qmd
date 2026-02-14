@@ -611,8 +611,75 @@ theme_set(theme_minimal(base_size = 16))
 ```
 
 ```{r}
+#| label: fig-2
+#| fig-cap: >-
+#|   Bank Returns Over Time for Select Banks. This figure plots cumulative
+#|   returns in excess of the S&P 500 index from February 1, 2023, until
+#|   May 25, 2023. We highlight the 8 banks with the largest cumulative
+#|   declines as of March 17th and the Dow Jones U.S. Bank Index’s abnormal
+#|   returns. The rest of the banks in our sample are plotted in grey.
+#|   Stocks are denoted by their ticker symbol; Silicon Valley Bank’s ticker
+#|   is SIVB.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 5
+ggplot(data = returns_data_parsed %>%
+  filter(ticker %in% bank_list & ticker != "SI")) +
+  geom_line(
+    data = returns_data_parsed %>% filter(!(ticker %in% bank_list)),
+    aes(y = cumul_abnormal, x = Date, group = ticker),
+    color = "grey",
+    alpha = 0.1
+  ) +
+  geom_line(
+    data = sp_data_parsed,
+    aes(
+      y = cumul_abnormal_bankidx,
+      x = Date
+    ),
+    color = "black"
+  ) +
+  geom_line(aes(y = cumul_abnormal, x = Date, color = ticker)) +
+  geom_text_repel(
+    data = returns_data_parsed %>%
+      filter(ticker %in% bank_list &
+        Date == as.Date("2023-05-25")),
+    aes(y = cumul_abnormal, x = Date, label = ticker, color = ticker),
+    hjust = -1,
+    vjust = -1
+  ) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(-1.2, .4)) +
+  scale_x_date(limits = c(cutoff_date, as.Date("2023-05-30"))) +
+  scale_colour_brewer(palette = "Dark2") +
+  labs(
+    y = "Cumulative Return Excess of Market",
+    x = "Date"
+  ) +
+  theme_minimal(base_size = 18) +
+  theme(legend.position = "none") +
+  annotate("text",
+    x = as.Date("2023-03-30"), y = 0.1,
+    label = "Other Bank Returns in Grey"
+  ) +
+  annotate("text",
+    x = as.Date("2023-05-15"), y = -0.11,
+    label = "Bank Index\n Excess of S&P500"
+  ) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_hline(yintercept = -1, linetype = 2)
+```
+
+```{r}
 #| label: fig-1
-#| fig-cap: Aggregate cumulative returns for the S&P 500 and banking sector.
+#| fig-cap: >-
+#|   Aggregate cumulative returns for the S&P 500 and banking sector.
+#|   This figure plots cumulative returns for three sets of stock indices:
+#|   the S&P 500 index, the Dow Jones U.S. Banks Index, and the asset-weighted
+#|   average of the banks in our sample. The top panel reports the cumulative
+#|   return from February 1, 2022, until January 31, 2023. The bottom panel
+#|   reports the cumulative return from February 1, 2023, until May 25, 2023.
 #| echo: false
 #| warning: false
 #| message: false
@@ -703,7 +770,6 @@ ggplot(data = bank_cumul_ret_2022) +
     vjust = 1,
     hjust = 1
   )
-ggsave("output/fig2a_2022_density.pdf", width = 5, height = 5, units = "in")
 
 # Panel B: Early 2023
 label1 <- paste(
@@ -755,7 +821,6 @@ ggplot(data = bank_cumul_ret_early) +
     vjust = 1,
     hjust = 1
   )
-ggsave("output/fig2b_early_density.pdf", width = 5, height = 5, units = "in")
 
 # Panel C: Late 2023
 label1 <- paste(
@@ -807,7 +872,6 @@ ggplot(data = bank_cumul_ret) +
     vjust = 1,
     hjust = 1
   )
-ggsave("output/fig2c_late_density.pdf", width = 5, height = 5, units = "in")
 
 # Panel C: Late 2023
 label1 <- paste(
@@ -859,7 +923,6 @@ ggplot(data = bank_cumul_ret %>% filter(ticker != "FCNCA")) +
     vjust = 1,
     hjust = 1
   )
-ggsave("output/fig2c_late_density2.pdf", width = 5, height = 5, units = "in")
 # Figure 3 ----
 
 ggplot(data = bank_cumul_ret_2022 %>%
@@ -956,8 +1019,6 @@ ggplot(data = returns_data_parsed %>%
   ) +
   geom_hline(yintercept = 0, linetype = 2) +
   geom_hline(yintercept = -1, linetype = 2)
-ggsave("output/returns_over_time.pdf", width = 8, height = 5)
-
 returns_data_parsed %>%
   filter(Date == as.Date("2023-03-16")) %>%
   ungroup() %>%
