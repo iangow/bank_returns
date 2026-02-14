@@ -1411,6 +1411,20 @@ etable(
 ```
 
 ```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+table5_tex <- readLines("output/table5_size.tex")
+table5_tex <- gsub(
+  "width = 1\\.2\\\\textwidth, center",
+  "width = \\\\textwidth, center",
+  table5_tex
+)
+cat(table5_tex, sep = "\n")
+```
+
+```{r}
 #| include: false
 # Figure 2 ----
 # Panel A: 2022
@@ -2637,19 +2651,6 @@ est6 <- feols(
 )
 
 etable(est1, est2, est3, est4, est5, est6, dict = var_dict, vcov = "HC1")
-etable(est1, est2, est3, est4, est5, est6,
-  vcov = "HC1",
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tab:dep_assets",
-  title = "Cumulative returns correlated with asset size. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample. %
-   In Column (1), we report the relationship with binned indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all observations, and do not include a constant, so each coefficient is the average for each bin. %
-   Column (2) includes the binned controls for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share, tier 1 capital ratio, cash/ total assets and unrealized hold-to-maturity losses. We also include a control for the individual banks' estimated factor loading (beta) on the bank index in excess of the S\\&P500 in 2022. This captures any systematic loading on overall bank movements. Column 3 adds the cumulative abnormal return from February 1, 2022 to January 31, 2023 to Column (2). Columns (1)-(3) use cumluative returns from February 1, 2023 to March 17, 2023 as the outcome. Columns (4)-(6) repeat Columns (1)-(3) and use cumluative returns from February 1, 2023 to May 25, 2023 as the outcome.
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table5_size.tex", replace = TRUE
-)
 
 reg_data <- bank_cumul_ret_linked_y9c_early %>%
   mutate(asset_bin = cut(as.numeric(assets),
