@@ -5,15 +5,20 @@ date: 2026-02-14
 date-format: "D MMMM YYYY"
 number-sections: true
 format-links: false
-pdf:
+execute-dir: project
+format:
+  html:
     colorlinks: true
-geometry:
-    - left=2cm
-    - right=2cm
+  pdf: 
+    colorlinks: true
+    geometry:
+      - left=2cm
+      - right=2cm
 ---
 
 ```{r}
 #| include: false
+#| cache: true
 
 library(tidyverse)
 library(ggrepel)
@@ -27,14 +32,16 @@ date_list <- c(
 )
 early_date <- date_list[1]
 late_date <- date_list[2]
+
+input_zip <- "data/input.zip"
 # Load Data ----
 ## Ticker - RSSDID - PermCo Crosswalk
 permco_rssdid_xwalk <- read_csv(
-  unz("data/input.zip", "input/permco_rssdid_xwalk.csv"),
+  unz(input_zip, "input/permco_rssdid_xwalk.csv"),
   show_col_types = FALSE
 ) %>% filter(!is.na(entity))
 wrds_compustat_data <- read_csv(
-  unz("data/input.zip", "input/wrds_data/wrds_2022data.csv"),
+  unz(input_zip, "input/wrds_data/wrds_2022data.csv"),
   show_col_types = FALSE
 )
 
@@ -52,7 +59,7 @@ y9c_data_2022q4 <- local({
   dir.create(tmp_dir)
   on.exit(unlink(tmp_dir, recursive = TRUE), add = TRUE)
   y9c_file <- unzip(
-    "data/input.zip",
+    input_zip,
     files = "input/y9c_data/BHCF20211231.txt",
     exdir = tmp_dir,
     junkpaths = TRUE
@@ -141,7 +148,6 @@ y9c_data_2022q4_subsample <- bank_sample %>%
   filter(!is.na(assets))
 
 ## Call Report Data ----
-input_zip <- "data/input.zip"
 files <- unzip(input_zip, list = TRUE)$Name %>%
   .[grepl("^input/FFIEC CDR Call Bulk All Schedules 12312022/.*\\.txt$", .)] %>%
   sort()
