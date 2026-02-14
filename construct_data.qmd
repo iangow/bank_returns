@@ -18,14 +18,15 @@ format:
 
 ```{r}
 #| include: false
-#| cache: true
-
 library(tidyverse)
 library(ggrepel)
 library(fixest)
 library(data.table)
+```
 
-
+```{r}
+#| include: false
+#| cache: true
 date_list <- c(
   as.Date("2023-03-17"),
   as.Date("2023-05-25")
@@ -600,8 +601,23 @@ dim(bank_sample)
 dim(bank_cumul_ret)
 dim(fdic_deposit_data)
 dim(bank_balance_sheet_sample)
-theme_set(theme_minimal(base_size = 16))
+
 bank_list <- c(bank_cumul_ret_early[1:8, ] %>% pull(ticker))
+```
+
+```{r}
+#| include: false
+theme_set(theme_minimal(base_size = 16))
+```
+
+```{r}
+#| label: fig-1
+#| fig-cap: Aggregate cumulative returns for the S&P 500 and banking sector.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 5
 
 # Figure 1 ----
 ggplot(data = sp_data_parsed_2022 %>%
@@ -632,8 +648,10 @@ ggplot(data = sp_data_parsed_2022 %>%
     color = ""
   ) +
   scale_color_brewer(palette = "Dark2")
-ggsave("output/fig1_aggregate_cumulative_return.pdf", width = 8, height = 5, units = "in")
+```
 
+```{r}
+#| include: false
 # Figure 2 ----
 # Panel A: 2022
 label1 <- paste(
