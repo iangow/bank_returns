@@ -27,56 +27,54 @@ bank_sample <- permco_rssdid_xwalk %>%
   filter(!(entity == 497570 | entity == 3382332))
 
 ## Y9C Data ----
-y9c_data_2022q4 <- fread("data/input/y9c_data/BHCF20211231.txt", sep = "^")
-y9c_data_2022q4_subsample <- bank_sample %>%
-  inner_join(
-    y9c_data_2022q4 %>%
-      mutate(
+y9c_data_2022q4_prepped <-
+    fread("data/input/y9c_data/BHCF20211231.txt", sep = "^") %>%
+    mutate(
         cash_securities = rowSums(
-          select(
-            .,
-            BHCK0081, BHCK0395, BHCK0397, BHCKJJ34, BHCK1773, BHCKJA22
-          ),
-          na.rm = TRUE
+            select(
+                .,
+                BHCK0081, BHCK0395, BHCK0397, BHCKJJ34, BHCK1773, BHCKJA22
+            ),
+            na.rm = TRUE
         ),
         cash = rowSums(
-          select(
-            .,
-            BHCK0081, BHCK0395, BHCK0397
-          ),
-          na.rm = TRUE
+            select(
+                .,
+                BHCK0081, BHCK0395, BHCK0397
+            ),
+            na.rm = TRUE
         ),
         securities = rowSums(
-          select(
-            .,
-            BHCKJJ34, BHCK1773, BHCKJA22
-          ),
-          na.rm = TRUE
+            select(
+                .,
+                BHCKJJ34, BHCK1773, BHCKJA22
+            ),
+            na.rm = TRUE
         ),
-        liabilties = BHCK2948,
+        liabilities = BHCK2948,
         dep_y9c = rowSums(
-          select(
-            .,
-            BHDM6631, BHDM6636
-          ),
-          na.rm = TRUE
+            select(
+                .,
+                BHDM6631, BHDM6636
+            ),
+            na.rm = TRUE
         ),
         nonperforming_loans = rowSums(
-          select(
-            .,
-            BHCK1407, BHCK1403
-          ),
-          na.rm = TRUE
+            select(
+                .,
+                BHCK1407, BHCK1403
+            ),
+            na.rm = TRUE
         ),
         total_loans = rowSums(
-          select(
-            .,
-            BHCK5369, BHCKB528
-          ),
-          na.rm = TRUE
+            select(
+                .,
+                BHCK5369, BHCKB528
+            ),
+            na.rm = TRUE
         ),
         deposits = as.numeric(BHDM6631) + as.numeric(BHDM6636) +
-          as.numeric(BHFN6631) + as.numeric(BHFN6636),
+            as.numeric(BHFN6631) + as.numeric(BHFN6636),
         tier1capratio = coalesce(BHCA7206, BHCW7206),
         htm = BHCKJJ34,
         unrealized_htm_losses = BHCK1754 - BHCK1771,
@@ -84,67 +82,164 @@ y9c_data_2022q4_subsample <- bank_sample %>%
         assets = BHCK2170,
         tier1_capital = BHCA8274,
         afs = BHCK1773
-      ) %>%
-      select(
+    ) %>%
+    select(
         deposits, tier1_capital, BHCA8274, cash_securities,
         unrealized_htm_losses, cash, assets, afs,
-        htm, htm_book, securities, liabilties, dep_y9c,
-        RSSD9001, nonperforming_loans, total_loans,
-        tier1capratio
-      ),
-    by = c("entity" = "RSSD9001")
-  ) %>%
-  mutate(
-    htm_ratio = htm / assets,
-    htm_ratio2 = htm / afs,
-    npl_ratio = nonperforming_loans / total_loans,
-    unrealized_htm_losses_rat_book = (unrealized_htm_losses) / htm_book,
-    unrealized_htm_losses_rat_tier1 = (unrealized_htm_losses) / tier1_capital,
-    liquid_asset_ratio = cash_securities / assets,
-    liquid_asset_ratio2 = cash_securities / tier1_capital,
-    cash_asset_ratio = cash / assets,
-    securities_asset_ratio = securities / assets,
-    loans_asset_ratio = total_loans / assets,
-    deposits_liabilities_ratio = deposits / liabilties
-  ) %>%
-  filter(!is.na(assets))
+        htm, htm_book, securities, liabilities, dep_y9c,
+        RSSD9001, nonperforming_loans, total_loans, tier1capratio
+    ) %>%
+    mutate(
+        htm_ratio = htm / assets,
+        htm_ratio2 = htm / afs,
+        npl_ratio = nonperforming_loans / total_loans,
+        unrealized_htm_losses_rat_book = (unrealized_htm_losses) / htm_book,
+        unrealized_htm_losses_rat_tier1 = (unrealized_htm_losses) / tier1_capital,
+        liquid_asset_ratio = cash_securities / assets,
+        liquid_asset_ratio2 = cash_securities / tier1_capital,
+        cash_asset_ratio = cash / assets,
+        securities_asset_ratio = securities / assets,
+        loans_asset_ratio = total_loans / assets,
+        deposits_liabilities_ratio = deposits / liabilities
+    ) %>%
+    mutate(across(c(assets, liabilities), as.double)) |>
+    filter(!is.na(assets)) |>
+    as_tibble() |>
+    system_time()
+
+
+library(dplyr)
+library(readr)
+
+library(farr)
+
+y9c_data_2022q4_prepped_alt <-
+    read_delim(
+        "data/input/y9c_data/BHCF20211231.txt",
+        delim = "^",
+        guess_max = 1e5,
+        na = c("", "NA"),
+        quote = "") |>
+    mutate(
+        cash_securities = rowSums(pick(BHCK0081, BHCK0395, BHCK0397,
+                                       BHCKJJ34, BHCK1773, BHCKJA22),
+                                  na.rm = TRUE),
+        cash            = rowSums(pick(BHCK0081, BHCK0395, BHCK0397),
+                                  na.rm = TRUE),
+        securities      = rowSums(pick(BHCKJJ34, BHCK1773, BHCKJA22),
+                                  na.rm = TRUE),
+        liabilities = BHCK2948,
+        dep_y9c = rowSums(pick(BHDM6631, BHDM6636), na.rm = TRUE),
+        nonperforming_loans = rowSums(pick(BHCK1407, BHCK1403), na.rm = TRUE),
+        total_loans = rowSums(pick(BHCK5369, BHCKB528), na.rm = TRUE),
+        deposits = BHDM6631 + BHDM6636 + BHFN6631 + BHFN6636,
+        tier1capratio = coalesce(BHCA7206, BHCW7206),
+        htm = BHCKJJ34,
+        unrealized_htm_losses = BHCK1754 - BHCK1771,
+        htm_book = BHCK1754,
+        assets = BHCK2170,
+        tier1_capital = BHCA8274,
+        afs = BHCK1773
+    ) |>
+    select(
+        deposits, tier1_capital, BHCA8274, cash_securities,
+        unrealized_htm_losses, cash, assets, afs,
+        htm, htm_book, securities, liabilities, dep_y9c,
+        RSSD9001, nonperforming_loans, total_loans, tier1capratio
+    ) |>
+    mutate(
+        htm_ratio = htm / assets,
+        htm_ratio2 = htm / afs,
+        npl_ratio = nonperforming_loans / total_loans,
+        unrealized_htm_losses_rat_book  = unrealized_htm_losses / htm_book,
+        unrealized_htm_losses_rat_tier1 = unrealized_htm_losses / tier1_capital,
+        liquid_asset_ratio  = cash_securities / assets,
+        liquid_asset_ratio2 = cash_securities / tier1_capital,
+        cash_asset_ratio = cash / assets,
+        securities_asset_ratio = securities / assets,
+        loans_asset_ratio = total_loans / assets,
+        deposits_liabilities_ratio = deposits / liabilities
+    ) |>
+    filter(!is.na(assets)) |>
+    system_time()
+
+y9c_data_2022q4_subsample <- bank_sample %>%
+  inner_join(y9c_data_2022q4_prepped,
+             by = c("entity" = "RSSD9001"))
+
 
 ## Call Report Data ----
-files <- dir("data/input/FFIEC CDR Call Bulk All Schedules 12312022/", pattern = ".txt", full.names = TRUE)
+cr_dir <- "data/input/FFIEC CDR Call Bulk All Schedules 12312022/"
 
-call_report_data_vars <- fread(files[1])
-for (fn in files[2:48]) {
-  call_report_data_vars <- call_report_data_vars %>% left_join(fread(fn, fill = TRUE),
-    suffix = c("", ".y"),
-    by = c("IDRSSD")
-  )
-}
-call_report_subsample_2022q4 <- bank_sample %>%
-  filter(dt_end >= 20210930) %>%
-  inner_join(
+rcb1_file <- dir(cr_dir, "RCB\\s.*\\(1.*.txt", full.names = TRUE)
+cr_rcb1 <- fread(rcb1_file) |>
+    select(IDRSSD,
+           RCFD1754, RCON1754,
+           RCFD1771, RCON1771,
+           RCFD1773, RCON1773)
+
+rc_file <- dir(cr_dir, "RC\\s.*.txt", full.names = TRUE)
+cr_rc <- fread(str_glue("{cr_dir}FFIEC CDR Call Schedule RC 12312022.txt"),
+               fill = TRUE) |>
+    select(IDRSSD,
+           RCFD0081, RCON0081,
+           RCFD0071, RCON0071,
+           RCFD2948, RCON2948,
+           RCFD5369, RCON5369,
+           RCFDB528, RCONB528,
+           RCFD2170, RCON2170,
+           RCFDJJ34, RCONJJ34,
+           RCFDJA22, RCONJA22)
+
+rcn_file <- dir(cr_dir, "RCN\\s.*\\(1.*.txt", full.names = TRUE)
+cr_rcn <- fread(rcn_file) |>
+    select(IDRSSD,
+           RCFD1407, RCON1407,
+           RCFD1403, RCON1403)
+
+rcr_file <- dir(cr_dir, "RCRI\\s.*.txt", full.names = TRUE)
+cr_rcr <- fread(rcr_file) |> select(IDRSSD, RCFA8274, RCOA8274)
+
+call_report_data_vars <-
+    cr_rcb1 |>
+    inner_join(cr_rc, by = "IDRSSD") |>
+    inner_join(cr_rcn, by = "IDRSSD") |>
+    inner_join(cr_rcr, by = "IDRSSD")
+
+call_report_data <-
     call_report_data_vars %>%
-      mutate(
-        cash = coalesce(RCFD0081 + RCFD0071, RCON0081 + RCON0071),
-        securities = coalesce(RCFDJJ34 + RCFD1773 + RCFDJA22, RCONJJ34 + RCON1773 + RCONJA22, ),
+    mutate(
+        cash = coalesce(RCFD0081 + RCFD0071,
+                        RCON0081 + RCON0071),
+        securities = coalesce(RCFDJJ34 + RCFD1773 + RCFDJA22,
+                              RCONJJ34 + RCON1773 + RCONJA22),
         cash_securities = cash + securities,
-        liabilties = coalesce(RCFD2948, RCON2948),
-        nonperforming_loans = coalesce(RCFD1407 + RCFD1403, RCON1407 + RCON1403),
-        total_loans = coalesce(RCFD5369 + RCFDB528, RCON5369 + RCONB528),
+        liabilities = coalesce(RCFD2948, RCON2948),
+        nonperforming_loans = coalesce(RCFD1407 + RCFD1403,
+                                       RCON1407 + RCON1403),
+        total_loans = coalesce(RCFD5369 + RCFDB528,
+                               RCON5369 + RCONB528),
         htm = coalesce(RCFDJJ34, RCONJJ34),
-        unrealized_htm_losses = coalesce(RCFD1754, RCON1754) - coalesce(RCFD1771, RCON1771),
+        unrealized_htm_losses =
+            coalesce(RCFD1754, RCON1754) -
+            coalesce(RCFD1771, RCON1771),
         htm_book = coalesce(RCFD1754, RCON1754),
         assets = coalesce(RCFD2170, RCON2170),
         tier1_capital = coalesce(RCFA8274, RCOA8274),
         afs = coalesce(RCFD1773, RCON1773)
-      ) %>%
-      select(
+    ) %>%
+    select(
         tier1_capital, cash_securities,
         unrealized_htm_losses, cash, assets, afs,
-        htm, htm_book, securities, liabilties,
+        htm, htm_book, securities, liabilities,
         IDRSSD, nonperforming_loans, total_loans
-      ),
-    by = c("entity" = "IDRSSD")
-  ) %>%
+    )
+
+
+call_report_subsample_2022q4 <-
+    bank_sample %>%
+    filter(dt_end >= 20210930) %>%
+    inner_join(call_report_data, by = c("entity" = "IDRSSD")) %>%
   mutate(
     htm_ratio = htm / assets,
     htm_ratio2 = htm / afs,
