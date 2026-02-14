@@ -594,6 +594,23 @@ bank_returns_data_parsed_y9c <-
   returns_data_parsed %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER"))
 
+# Effects over time prep (needed by Figure 7+)
+standardize <- function(x) {
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+bank_returns_data_parsed_y9c <- bank_returns_data_parsed_y9c %>%
+  ungroup() %>%
+  mutate(
+    dep_unins_share_std = standardize(dep_unins_share),
+    liquid_asset_ratio_std = standardize(liquid_asset_ratio),
+    cash_asset_ratio_std = standardize(cash_asset_ratio),
+    securities_asset_ratio_std = standardize(securities_asset_ratio),
+    htm_ratio_std = standardize(htm_ratio),
+    unrealized_htm_losses_rat_tier1_std = standardize(unrealized_htm_losses_rat_tier1),
+    npl_ratio_std = standardize(npl_ratio),
+    tier1capratio_std = standardize(tier1capratio)
+  )
+
 
 
 # Counts of Sample for Data Description
@@ -1082,6 +1099,60 @@ p6b
 ```
 
 ```{r}
+#| label: fig-7
+#| fig-cap: >-
+#|   Cumulative returns correlated with uninsured deposits and HTM losses, over
+#|   time. This graph plots the coefficients for uninsured deposit share and
+#|   unrealized HTM losses scaled by Tier 1 capital (Column 3 of Table 2) for
+#|   every trading day. We omit day fixed effects, which correspond to the
+#|   constant for each cross-sectional regression.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 6
+feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Date, dep_unins_share_std) | Date,
+  data = bank_returns_data_parsed_y9c,
+  vcov = "HC1"
+) %>%
+  broom::tidy() %>%
+  filter(str_detect(term, "unrealized_htm_losses_rat_tier1_std|dep_unins_share_std")) %>%
+  separate(term, c(NA, NA, "date", "characteristic"), sep = ":") %>%
+  mutate(
+    characteristic = factor(
+      characteristic,
+      levels = c("dep_unins_share_std", "unrealized_htm_losses_rat_tier1_std"),
+      labels = c("Uninsured Deposit Share", "Unrealized HTM Losses / Tier 1 Capital")
+    ),
+    date = as.Date(date)
+  ) %>%
+  ggplot(aes(
+    x = date,
+    y = estimate,
+    color = characteristic, shape = characteristic
+  )) +
+  geom_point() +
+  geom_pointrange(
+    aes(
+      ymin = estimate - 1.96 * std.error,
+      ymax = estimate + 1.96 * std.error
+    ),
+    position = position_dodge2(width = 1), alpha = 0.5
+  ) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
+  labs(
+    y = "Marginal effect of 1 std. dev. on cumul. returns",
+    x = "Date", color = "Characteristic", shape = "Characteristic"
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 1))
+```
+
+```{r}
 #| include: false
 # Figure 2 ----
 # Panel A: 2022
@@ -1518,24 +1589,6 @@ ggplot(
   scale_color_manual(values = c("black", "grey"))
 ggsave("output/htm_losses_v_returns.pdf", width = 8, height = 6)
 
-## Effects over time of deposits
-standardize <- function(x) {
-  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
-}
-bank_returns_data_parsed_y9c <- bank_returns_data_parsed_y9c %>%
-  ungroup() %>%
-  mutate(
-    dep_unins_share_std = standardize(dep_unins_share),
-    liquid_asset_ratio_std = standardize(liquid_asset_ratio),
-    cash_asset_ratio_std = standardize(cash_asset_ratio),
-    securities_asset_ratio_std = standardize(securities_asset_ratio),
-    htm_ratio_std = standardize(htm_ratio),
-    unrealized_htm_losses_rat_tier1_std = standardize(unrealized_htm_losses_rat_tier1),
-    npl_ratio_std = standardize(npl_ratio),
-    tier1capratio_std = standardize(tier1capratio)
-  )
-
-
 ### Table 2 ----
 var_dict <- c(
   liquid_asset_ratio_std = "Liquid Assets / Total Assets",
@@ -1676,11 +1729,6 @@ feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Dat
   # put legend in bottom left
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 1))
-ggsave("output/table3_over_time.pdf", width = 8, height = 6)
-
-
-
-
 # Table 2, short run ---
 est1 <- feols(cumul_abnormal ~ dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c_short, vcov = "HC1"
