@@ -1337,6 +1337,80 @@ etable(
 ```
 
 ```{r}
+#| label: tbl-4
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+#| tbl-cap: >-
+#|   Cumulative returns correlated with NPL and Tier 1 capital. This table reports estimated
+#|   coefficients of regressions with the cumulative returns in excess of the S&P 500 index for the banks
+#|   in our sample from February 1, 2023 to March 17, 2023 as the outcome. In Column (1), we report
+#|   the bivariate relationship with the tier 1 capital ratio measured in 2022q4. Column (2) reports the
+#|   coefficient with the non-performing loan ratio (non-performing loans scaled by total loans) measured
+#|   in 2022q4. Column (3) combines Column (1) and (2). Column (4) adds uninsured deposit share
+#|   to Column (3). Column (5) interacts uninsured deposit share with non-performing loans and tier
+#|   1 capital. All variables (except for the cumulative returns) are mean zero and standarized to have
+#|   standard deviation one, prior to interactions.
+table4_data <- bank_cumul_ret_linked_y9c_early %>%
+  ungroup() %>%
+  mutate(
+    dep_unins_share_std = standardize(dep_unins_share),
+    npl_ratio_std = standardize(npl_ratio),
+    tier1capratio_std = standardize(tier1capratio)
+  )
+
+table4_dict <- c(
+  tier1capratio_std = "Tier 1 Capital Ratio",
+  npl_ratio_std = "Non-Performing Loans / Total Loans",
+  dep_unins_share_std = "Uninsured Deposit Share"
+)
+
+tbl4_est1 <- feols(
+  cumul_abnormal ~ tier1capratio_std,
+  data = table4_data,
+  vcov = "HC1"
+)
+tbl4_est2 <- feols(
+  cumul_abnormal ~ npl_ratio_std,
+  data = table4_data,
+  vcov = "HC1"
+)
+tbl4_est3 <- feols(
+  cumul_abnormal ~ tier1capratio_std + npl_ratio_std,
+  data = table4_data,
+  vcov = "HC1"
+)
+tbl4_est4 <- feols(
+  cumul_abnormal ~ tier1capratio_std + npl_ratio_std + dep_unins_share_std,
+  data = table4_data,
+  vcov = "HC1"
+)
+tbl4_est5 <- feols(
+  cumul_abnormal ~
+    tier1capratio_std +
+    npl_ratio_std +
+    dep_unins_share_std +
+    tier1capratio_std:dep_unins_share_std +
+    npl_ratio_std:dep_unins_share_std,
+  data = table4_data,
+  vcov = "HC1"
+)
+
+etable(
+  tbl4_est1, tbl4_est2, tbl4_est3, tbl4_est4, tbl4_est5,
+  tex = TRUE,
+  title = "",
+  depvar = FALSE,
+  digits = 3,
+  digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.05,
+  dict = table4_dict
+)
+```
+
+```{r}
 #| include: false
 # Figure 2 ----
 # Panel A: 2022
@@ -2301,22 +2375,6 @@ est5 <- feols(
     dep_unins_share_std +
     tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tab:npl_capital",
-  title = "Cumulative returns correlated with NPL and Tier 1 capital. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
-   In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
-   Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
-   Column (3) combines Column (1) and (2). %
-    Column (4) adds uninsured deposit share to Column (3). %
-    Column (5) interacts uninsured deposit share with non-performing loans and tier 1 capital. %
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table5.tex", replace = TRUE
 )
 
 feols(cumul_abnormal_capm ~ i(Date, npl_ratio_std) + i(Date, tier1capratio_std) + i(Date, dep_unins_share_std) | Date,
