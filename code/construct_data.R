@@ -1,4 +1,3 @@
-setwd("~/Dropbox/bank_returns")
 library(tidyverse)
 library(ggrepel)
 library(fixest)
@@ -13,8 +12,14 @@ early_date <- date_list[1]
 late_date <- date_list[2]
 # Load Data ----
 ## Ticker - RSSDID - PermCo Crosswalk
-permco_rssdid_xwalk <- fread("data/input/permco_rssdid_xwalk.csv") %>% filter(!is.na(entity))
-wrds_compustat_data <- fread("data/input/wrds_data/wrds_2022data.csv")
+permco_rssdid_xwalk <- read_csv(
+  unz("data/input.zip", "input/permco_rssdid_xwalk.csv"),
+  show_col_types = FALSE
+) %>% filter(!is.na(entity))
+wrds_compustat_data <- read_csv(
+  unz("data/input.zip", "input/wrds_data/wrds_2022data.csv"),
+  show_col_types = FALSE
+)
 
 ### LUTHER BURBANK CORP and SOUTH PLAINS FINANCIAL INC show up twice
 ### For Luther, we use the BHC RSSDID 3814208
@@ -25,7 +30,18 @@ bank_sample <- permco_rssdid_xwalk %>%
   filter(!(entity == 497570 | entity == 3382332))
 
 ## Y9C Data ----
-y9c_data_2022q4 <- fread("data/input/y9c_data/BHCF20211231.txt", sep = "^")
+y9c_data_2022q4 <- local({
+  tmp_dir <- tempfile("y9c_")
+  dir.create(tmp_dir)
+  on.exit(unlink(tmp_dir, recursive = TRUE), add = TRUE)
+  y9c_file <- unzip(
+    "data/input.zip",
+    files = "input/y9c_data/BHCF20211231.txt",
+    exdir = tmp_dir,
+    junkpaths = TRUE
+  )
+  fread(y9c_file, sep = "^")
+})
 y9c_data_2022q4_subsample <- bank_sample %>%
   inner_join(
     y9c_data_2022q4 %>%
@@ -108,14 +124,26 @@ y9c_data_2022q4_subsample <- bank_sample %>%
   filter(!is.na(assets))
 
 ## Call Report Data ----
-files <- dir("data/input/FFIEC CDR Call Bulk All Schedules 12312022/", pattern = ".txt", full.names = TRUE)
+input_zip <- "data/input.zip"
+files <- unzip(input_zip, list = TRUE)$Name %>%
+  .[grepl("^input/FFIEC CDR Call Bulk All Schedules 12312022/.*\\.txt$", .)] %>%
+  sort()
 
-call_report_data_vars <- fread(files[1])
-for (fn in files[2:48]) {
-  call_report_data_vars <- call_report_data_vars %>% left_join(fread(fn, fill = TRUE),
-    suffix = c("", ".y"),
-    by = c("IDRSSD")
-  )
+fread_zip_member <- function(zip_path, member_path, ...) {
+  con <- unz(zip_path, member_path)
+  on.exit(close(con), add = TRUE)
+  fread(text = readLines(con, warn = FALSE), ...)
+}
+
+call_report_data_vars <- fread_zip_member(input_zip, files[1])
+if (length(files) >= 2) {
+  for (fn in files[2:min(48, length(files))]) {
+    call_report_data_vars <- call_report_data_vars %>% left_join(
+      fread_zip_member(input_zip, fn, fill = TRUE),
+      suffix = c("", ".y"),
+      by = c("IDRSSD")
+    )
+  }
 }
 call_report_subsample_2022q4 <- bank_sample %>%
   filter(dt_end >= 20210930) %>%
@@ -160,7 +188,10 @@ call_report_subsample_2022q4 <- bank_sample %>%
 
 ## FDIC Deposit Data ----
 ### Roll up subsidiaries ----
-relationship_data_all <- fread("data/input/y9c_data/CSV_RELATIONSHIPS.csv") %>%
+relationship_data_all <- fread_zip_member(
+  input_zip,
+  "input/y9c_data/CSV_RELATIONSHIPS.CSV"
+) %>%
   filter(DT_END > 20230101)
 
 relationship_data <- bank_sample %>%
@@ -200,9 +231,9 @@ relationship_data <- relationship_data %>%
       mutate(ID_RSSD_OFFSPRING = top_holder)
   )
 
-call_report_data <- fread("data/input/callreport/CSV_ATTRIBUTES_ACTIVE.csv") %>%
+call_report_data <- fread_zip_member(input_zip, "input/callreport/CSV_ATTRIBUTES_ACTIVE.CSV") %>%
   select(ID_FDIC_CERT, ID_RSSD) %>%
-  bind_rows(fread("data/input/callreport/CSV_ATTRIBUTES_CLOSED.csv") %>%
+  bind_rows(fread_zip_member(input_zip, "input/callreport/CSV_ATTRIBUTES_CLOSED.CSV") %>%
     select(ID_FDIC_CERT, ID_RSSD))
 
 # All banks that show up in the relationship file
@@ -214,12 +245,13 @@ children_cert_num <- call_report_data %>%
 
 # write to file for FDIC pull
 ## Run Python Code after this to get bank deposit data
+dir.create("data/input/fdic", recursive = TRUE, showWarnings = FALSE)
 children_cert_num %>%
   filter(fdic_cert_num != 0) %>%
   write_csv("data/input/fdic/cert_nums.csv")
 
 # load FDIC deposit data
-fdic_deposit_data <- fread("data/input/fdic/bank_deposits.csv") %>%
+fdic_deposit_data <- fread_zip_member(input_zip, "input/fdic/bank_deposits.csv") %>%
   group_by(ID_RSSD_PARENT) %>%
   summarize(
     DEP = sum(DEP),
@@ -255,11 +287,11 @@ bank_data_ticker_list <- final_bank_data %>%
   select(ticker = TICKER) %>%
   pull(ticker)
 ## Stock Market Returns Data ----
-returns_data <- fread("data/input/yahoo/returns.csv") %>%
+returns_data <- fread_zip_member(input_zip, "input/yahoo/returns.csv") %>%
   gather(ticker, close_prc, -Date) %>%
   mutate(Date = as.Date(Date))
 
-returns_data_may25 <- fread("data/input/yahoo/returns_longrun.csv") %>%
+returns_data_may25 <- fread_zip_member(input_zip, "input/yahoo/returns_longrun.csv") %>%
   gather(ticker, close_prc_may25, -Date) %>%
   mutate(Date = as.Date(Date))
 
@@ -279,14 +311,28 @@ returns_data <- returns_data_may25 %>%
 
 
 ### S&P 500 Data
-sp_data <- read_csv("data/input/yahoo/sp_returns.csv") %>%
+sp_data <- read_csv(
+  unz(input_zip, "input/yahoo/sp_returns.csv"),
+  show_col_types = FALSE
+) %>%
   rename(close_prc = `Adj Close**`) %>%
   mutate(Date = as.Date(Date))
 
 
 ### Dow Jones Bank Index
 library(readxl)
-dowjonesbankindex <- read_excel("data/input/dowjonesbankindex.xlsx") %>%
+dowjonesbankindex <- local({
+  tmp_dir <- tempfile("djbank_")
+  dir.create(tmp_dir)
+  on.exit(unlink(tmp_dir, recursive = TRUE), add = TRUE)
+  xlsx_file <- unzip(
+    input_zip,
+    files = "input/dowjonesbankindex.xlsx",
+    exdir = tmp_dir,
+    junkpaths = TRUE
+  )
+  read_excel(xlsx_file)
+}) %>%
   mutate(
     Date = as.Date(`Effective date`),
     ticker = "DJBANK"
@@ -923,7 +969,11 @@ returns_data_parsed %>%
 returns_data_parsed %>%
   filter(ticker != "SIVB" & Date == as.Date("2023-03-08")) %>%
   ungroup() %>%
-  summarize(quantile = c(0.25, 0.75), quantile(cumul_abnormal, c(0.25, 0.75)), n = n())
+  reframe(
+    quantile = c(0.25, 0.75),
+    cumul_abnormal_quantile = quantile(cumul_abnormal, c(0.25, 0.75)),
+    n = n()
+  )
 
 sumtable(
   bank_cumul_ret_linked_y9c_early %>%
