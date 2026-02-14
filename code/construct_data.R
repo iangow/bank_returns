@@ -1,3 +1,20 @@
+---
+title: "TBD"
+author: TBD
+date: 2026-02-14
+date-format: "D MMMM YYYY"
+number-sections: true
+format-links: false
+pdf:
+    colorlinks: true
+geometry:
+    - left=2cm
+    - right=2cm
+---
+
+```{r}
+#| include: false
+
 library(tidyverse)
 library(ggrepel)
 library(fixest)
@@ -2225,3 +2242,4 @@ ggplot(
       color = ticker
     )
   )
+```
