@@ -611,6 +611,52 @@ theme_set(theme_minimal(base_size = 16))
 ```
 
 ```{r}
+#| label: fig-1
+#| fig-cap: >-
+#|   Aggregate cumulative returns for the S&P 500 and banking sector.
+#|   This figure plots cumulative returns for three sets of stock indices:
+#|   the S&P 500 index, the Dow Jones U.S. Banks Index, and the asset-weighted
+#|   average of the banks in our sample. The top panel reports the cumulative
+#|   return from February 1, 2022, until January 31, 2023. The bottom panel
+#|   reports the cumulative return from February 1, 2023, until May 25, 2023.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 5
+
+# Figure 1 ----
+ggplot(data = sp_data_parsed_2022 %>%
+  left_join(sample_bank_return_2022) %>%
+  mutate(group = "Feb 2022-Feb 2023") %>% bind_rows(
+    sp_data_parsed %>% left_join(sample_bank_return) %>%
+      mutate(group = "Feb 2023 - May 2023")
+  ) %>% select(Date, cumul_mkt_ret, cumul_bankidx_ret, cumul_ret, group) %>%
+  gather(index_name, cumul_ret, -group, -Date) %>%
+  mutate(index_name = factor(index_name,
+    levels = c(
+      "cumul_mkt_ret",
+      "cumul_bankidx_ret",
+      "cumul_ret"
+    ),
+    labels = c(
+      "S&P 500",
+      "DJ Bank Index",
+      "Asset-Weighted\nSample Average"
+    )
+  ))) +
+  geom_line(aes(x = Date, y = cumul_ret, color = index_name)) +
+  facet_wrap(~group, nrow = 2, scales = "free_x") +
+  theme(legend.position = c(.2, .2)) +
+  labs(
+    y = "Cumulative Return Over Period",
+    x = "Date",
+    color = ""
+  ) +
+  scale_color_brewer(palette = "Dark2")
+```
+
+```{r}
 #| label: fig-2
 #| fig-cap: >-
 #|   Bank Returns Over Time for Select Banks. This figure plots cumulative
@@ -705,52 +751,6 @@ ggplot(data = bank_cumul_ret_2022 %>%
     x = "Cumulative Abnormal Returns\n2022-02-01 to 2023-01-31",
     y = "Cumulative Abnormal Returns\n2023-02-01 to 2023-03-17"
   )
-```
-
-```{r}
-#| label: fig-1
-#| fig-cap: >-
-#|   Aggregate cumulative returns for the S&P 500 and banking sector.
-#|   This figure plots cumulative returns for three sets of stock indices:
-#|   the S&P 500 index, the Dow Jones U.S. Banks Index, and the asset-weighted
-#|   average of the banks in our sample. The top panel reports the cumulative
-#|   return from February 1, 2022, until January 31, 2023. The bottom panel
-#|   reports the cumulative return from February 1, 2023, until May 25, 2023.
-#| echo: false
-#| warning: false
-#| message: false
-#| fig-width: 8
-#| fig-height: 5
-
-# Figure 1 ----
-ggplot(data = sp_data_parsed_2022 %>%
-  left_join(sample_bank_return_2022) %>%
-  mutate(group = "Feb 2022-Feb 2023") %>% bind_rows(
-    sp_data_parsed %>% left_join(sample_bank_return) %>%
-      mutate(group = "Feb 2023 - May 2023")
-  ) %>% select(Date, cumul_mkt_ret, cumul_bankidx_ret, cumul_ret, group) %>%
-  gather(index_name, cumul_ret, -group, -Date) %>%
-  mutate(index_name = factor(index_name,
-    levels = c(
-      "cumul_mkt_ret",
-      "cumul_bankidx_ret",
-      "cumul_ret"
-    ),
-    labels = c(
-      "S&P 500",
-      "DJ Bank Index",
-      "Asset-Weighted\nSample Average"
-    )
-  ))) +
-  geom_line(aes(x = Date, y = cumul_ret, color = index_name)) +
-  facet_wrap(~group, nrow = 2, scales = "free_x") +
-  theme(legend.position = c(.2, .2)) +
-  labs(
-    y = "Cumulative Return Over Period",
-    x = "Date",
-    color = ""
-  ) +
-  scale_color_brewer(palette = "Dark2")
 ```
 
 ```{r}
