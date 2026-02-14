@@ -718,6 +718,237 @@ ggplot(data = returns_data_parsed %>%
 ```
 
 ```{r}
+#| label: fig-3
+#| fig-cap: >-
+#|   Distribution of abnormal returns by time period. This figure plots the
+#|   distribution of cumulative returns in excess of the S&P 500 index for the
+#|   banks in our sample over three periods. In Panel (a), we report the
+#|   distribution of cumulative returns as of January 31, 2023, measured since
+#|   February 1, 2022. In Panel (b), we report the distribution of cumulative
+#|   returns as of March 17, 2023, measured since February 1, 2023. In Panel
+#|   (c), we report the distribution of cumulative returns as of May 25, 2023,
+#|   measured since February 1, 2023. Panel (d) repeats Panel (c) excluding
+#|   First Citizens Bankgroup. We additionally report the Dow Jones U.S. Bank
+#|   Index cumulative return for each period as a vertical line, and the equal
+#|   weighted mean of the banks in our sample for each period.
+#| fig-subcap:
+#|   - "CAR since 2022-02-01"
+#|   - "CAR since 2023-02-01"
+#|   - "CAR since 2023-02-01"
+#|   - "CAR since 2023-02-01 (excluding FCNCA)"
+#| layout-ncol: 2
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 5
+label1 <- paste(
+  c(
+    "Bank Index Return\n Excess of Market:",
+    scales::percent(round(bank_cumul_ret_2022$cumul_abnormal_bankidx[1], 3))
+  ),
+  collapse = "\n"
+)
+label2 <- paste(
+  c(
+    "Equal-Weighted Bank Return\n Excess of Market:",
+    scales::percent(round(mean(bank_cumul_ret_2022$cumul_abnormal), 3))
+  ),
+  collapse = "\n"
+)
+p3a <- ggplot(data = bank_cumul_ret_2022) +
+  geom_density(aes(x = cumul_abnormal)) +
+  geom_vline(xintercept = 0, alpha = .2) +
+  geom_vline(
+    xintercept = bank_cumul_ret_2022$cumul_abnormal_bankidx[1],
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
+    linetype = 2
+  ) +
+  geom_vline(
+    xintercept = mean(bank_cumul_ret_2022$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    linetype = 3
+  ) +
+  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    x = "Cumulative Return in Excess of S&P500\n2022-02-01 to 2023-01-31",
+    y = "Bank Density",
+    color = "Stock Close Date"
+  ) +
+  annotate("text",
+    x = bank_cumul_ret_2022$cumul_abnormal_bankidx[1],
+    y = 2.5,
+    label = label1,
+    vjust = 1,
+    hjust = 1
+  ) +
+  annotate("text",
+    x = mean(bank_cumul_ret_2022$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    y = 3,
+    label = label2,
+    vjust = 1,
+    hjust = 1
+  )
+
+label1 <- paste(
+  c(
+    "Bank Index Return\nExcess of Market:",
+    scales::percent(round(bank_cumul_ret_early$cumul_abnormal_bankidx[1], 3))
+  ),
+  collapse = "\n"
+)
+label2 <- paste(
+  c(
+    "Equal Weighted Bank Return\nExcess of Market:",
+    scales::percent(round(mean(bank_cumul_ret_early$cumul_abnormal), 3))
+  ),
+  collapse = "\n"
+)
+p3b <- ggplot(data = bank_cumul_ret_early) +
+  geom_density(aes(x = cumul_abnormal)) +
+  geom_vline(xintercept = 0, alpha = .2) +
+  geom_vline(
+    xintercept = bank_cumul_ret_early$cumul_abnormal_bankidx[1],
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
+    linetype = 2
+  ) +
+  geom_vline(
+    xintercept = mean(bank_cumul_ret_early$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    linetype = 3
+  ) +
+  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    x = "Cumulative Return in Excess of S&P500\n2023-02-01 to 2023-03-17",
+    y = "Bank Density",
+    color = "Stock Close Date"
+  ) +
+  annotate("text",
+    x = bank_cumul_ret_early$cumul_abnormal_bankidx[1],
+    y = 3.25,
+    label = label1,
+    vjust = 1,
+    hjust = 1
+  ) +
+  annotate("text",
+    x = mean(bank_cumul_ret_early$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    y = 5,
+    label = label2,
+    vjust = 1,
+    hjust = 1
+  )
+
+label1 <- paste(
+  c(
+    "Bank Index Return\nExcess of Market:",
+    scales::percent(round(bank_cumul_ret$cumul_abnormal_bankidx[1], 3))
+  ),
+  collapse = "\n"
+)
+label2 <- paste(
+  c(
+    "Equal Weighted Bank Return\nExcess of Market:",
+    scales::percent(round(mean(bank_cumul_ret$cumul_abnormal), 3))
+  ),
+  collapse = "\n"
+)
+p3c <- ggplot(data = bank_cumul_ret) +
+  geom_density(aes(x = cumul_abnormal)) +
+  geom_vline(xintercept = 0, alpha = .2) +
+  geom_vline(
+    xintercept = bank_cumul_ret$cumul_abnormal_bankidx[1],
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
+    linetype = 2
+  ) +
+  geom_vline(
+    xintercept = mean(bank_cumul_ret$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    linetype = 3
+  ) +
+  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    x = "Cumulative Return in Excess of S&P500\n2023-02-01 to 2023-05-25",
+    y = "Bank Density",
+    color = "Stock Close Date"
+  ) +
+  annotate("text",
+    x = bank_cumul_ret$cumul_abnormal_bankidx[1],
+    y = 2,
+    label = label1,
+    vjust = 1,
+    hjust = 1
+  ) +
+  annotate("text",
+    x = mean(bank_cumul_ret$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    y = 3,
+    label = label2,
+    vjust = 1,
+    hjust = 1
+  )
+
+label1 <- paste(
+  c(
+    "Bank Index Return\nExcess of Market:",
+    scales::percent(round(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal_bankidx[1], 3))
+  ),
+  collapse = "\n"
+)
+label2 <- paste(
+  c(
+    "Equal Weighted Bank Return\nExcess of Market\n (Excluding FCNCA):",
+    scales::percent(round(mean(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal), 3))
+  ),
+  collapse = "\n"
+)
+p3d <- ggplot(data = bank_cumul_ret %>% filter(ticker != "FCNCA")) +
+  geom_density(aes(x = cumul_abnormal)) +
+  geom_vline(xintercept = 0, alpha = .2) +
+  geom_vline(
+    xintercept = bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal_bankidx[1],
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
+    linetype = 2
+  ) +
+  geom_vline(
+    xintercept = mean(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    linetype = 3
+  ) +
+  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    x = "Cumulative Return in Excess of S&P500\n2023-02-01 to 2023-05-25",
+    y = "Bank Density",
+    color = "Stock Close Date"
+  ) +
+  annotate("text",
+    x = bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal_bankidx[1],
+    y = 2,
+    label = label1,
+    vjust = 1,
+    hjust = 1
+  ) +
+  annotate("text",
+    x = mean(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal),
+    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
+    y = 3,
+    label = label2,
+    vjust = 1,
+    hjust = 1
+  )
+
+p3a
+p3b
+p3c
+p3d
+```
+
+```{r}
 #| label: fig-4
 #| fig-cap: >-
 #|   2022 bank excess returns vs 2023 bank excess returns. This figure compares
