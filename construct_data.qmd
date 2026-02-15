@@ -2622,26 +2622,6 @@ returns_data_parsed %>%
     n = n()
   )
 
-sumtable(
-  bank_cumul_ret_linked_y9c_early %>%
-    select(-cumul_abnormal) %>%
-    rename(cumul_abnormal = cumul_abnormal_2022) %>%
-    mutate(Date = as.Date("2023-01-31")) %>%
-    bind_rows(
-      bank_cumul_ret_linked_y9c_early
-    ) %>%
-    bind_rows(
-      bank_cumul_ret_linked_y9c
-    ),
-  labels = c("Cumulative Abnormal Returns"),
-  summ = c("mean(x)", "sd(x)", "pctile(x)[5]", "pctile(x)[25]", "median(x)", "pctile(x)[75]", "pctile(x)[95]"),
-  summ.names = c("Mean", "SD", "5th Pct.", "25th Pct.", "50th Pct.", "75th Pct.", "95th Pct."),
-  numformat = c("percent"),
-  vars = c("cumul_abnormal"), group = "Date", group.long = TRUE,
-  out = "latex",
-  file = "output/table2.tex",
-)
-
 # List of banks to grey out
 nonbank <- final_bank_data %>%
   filter(loans_asset_ratio < .2 | deposits_liabilities_ratio < .2) %>%
@@ -2681,7 +2661,6 @@ ggplot(
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_manual(values = c("black", "grey"))
-ggsave("output/htm_share_v_returns.pdf", width = 8, height = 6)
 
 ggplot(
   data = bank_cumul_ret_linked_y9c_early %>%
@@ -2699,7 +2678,6 @@ ggplot(
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_manual(values = c("black", "grey"))
-ggsave("output/htm_losses_v_returns.pdf", width = 8, height = 6)
 
 ### Table 2 ----
 var_dict <- c(
@@ -2864,8 +2842,7 @@ etable(est1, est2, est3, est4, est5,
 deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets
 as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-
 maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table3_short.tex", replace = TRUE
+  dict = var_dict
 )
 
 
@@ -3005,7 +2982,6 @@ ggplot(
   ) +
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format())
-ggsave("output/liquid_assets_ratio_v_returns.pdf", width = 8, height = 6)
 
 ### Cash  ----
 ggplot(
@@ -3024,7 +3000,6 @@ ggplot(
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_manual(values = c("black", "grey"))
-ggsave("output/cash_assets_ratio_v_returns.pdf", width = 8, height = 6)
 
 ### Securities  ----
 ggplot(
@@ -3043,7 +3018,6 @@ ggplot(
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_manual(values = c("black", "grey"))
-ggsave("output/securities_assets_ratio_v_returns.pdf", width = 8, height = 6)
 
 
 ### Table 3----
@@ -3102,7 +3076,6 @@ feols(cumul_abnormal_capm ~ i(Date, cash_asset_ratio_std) + i(Date, securities_a
   scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 1))
-ggsave("output/table4_over_time.pdf", width = 8, height = 6)
 
 est1 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
@@ -3219,7 +3192,6 @@ ggplot(
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_manual(values = c("black", "grey"))
-ggsave("output/tier1_capital_ratio_v_returns.pdf", width = 8, height = 6)
 
 ## NPLs ----
 ggplot(
@@ -3239,7 +3211,6 @@ ggplot(
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_manual(values = c("black", "grey")) +
   geom_hline(yintercept = 0, color = "black", linetype = 2)
-ggsave("output/NPL_v_returns.pdf", width = 8, height = 6)
 
 
 # Table 4 ----
@@ -3304,7 +3275,6 @@ feols(cumul_abnormal_capm ~ i(Date, npl_ratio_std) + i(Date, tier1capratio_std) 
   scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 1))
-ggsave("output/table5_over_time.pdf", width = 8, height = 6)
 
 
 est1 <- feols(cumul_abnormal_capm ~ tier1capratio_std,
@@ -3445,7 +3415,6 @@ ggplot(
   geom_hline(yintercept = 0, color = "black", linetype = 2) +
   geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
   geom_vline(xintercept = 250000000, color = "black", linetype = 3)
-ggsave("output/assets_v_returns.pdf", width = 8, height = 6)
 
 
 ggplot(
@@ -3466,7 +3435,6 @@ ggplot(
   geom_hline(yintercept = 0, color = "black", linetype = 2) +
   geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
   geom_vline(xintercept = 250000000, color = "black", linetype = 3)
-ggsave("output/assets_v_returns_late.pdf", width = 8, height = 6)
 
 reg_data <- bank_cumul_ret_linked_y9c_early %>%
   mutate(asset_bin = cut(as.numeric(assets),
@@ -3595,8 +3563,7 @@ etable(est1, est2, est3, est4, est5, est6,
    In Column (1), we report the relationship with binned indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all observations, and do not include a constant, so each coefficient is the average for each bin. %
    Column (2) includes the binned controls for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share, tier 1 capital ratio, cash/ total assets and unrealized hold-to-maturity losses. Column 3 adds the cumulative abnormal return from February 1, 2022 to January 31, 2023 to Column (2). Columns (1)-(3) use cumluative returns from February 1, 2023 to March 17, 2023 as the outcome. Columns (4)-(6) repeat Columns (1)-(3) and use cumluative returns from February 1, 2023 to May 25, 2023 as the outcome.
     All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table5_size_beta.tex", replace = TRUE
+  dict = var_dict
 )
 
 
@@ -3680,7 +3647,6 @@ feols(cumul_abnormal_capm ~ i(Date, asset_bin, ref2 = "(0,5e+06]") + i(Date, dep
   scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 1))
-ggsave("output/table6_size_over_time.pdf", width = 8, height = 6)
 
 
 feols(
@@ -3733,7 +3699,6 @@ feols(
   scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 1))
-ggsave("output/table6_all_char_over_time.pdf", width = 8, height = 6)
 
 
 ## CAPM (Single Index Model) Excess Returns around date ---
@@ -3774,6 +3739,51 @@ ggplot(
       color = ticker
     )
   )
+```
+
+```{r}
+#| eval: false
+#| echo: true
+#| warning: false
+#| message: false
+#| include: false
+# Legacy output exports retained for reference only; not used in rendering.
+sumtable(
+  bank_cumul_ret_linked_y9c_early %>%
+    select(-cumul_abnormal) %>%
+    rename(cumul_abnormal = cumul_abnormal_2022) %>%
+    mutate(Date = as.Date("2023-01-31")) %>%
+    bind_rows(bank_cumul_ret_linked_y9c_early) %>%
+    bind_rows(bank_cumul_ret_linked_y9c),
+  labels = c("Cumulative Abnormal Returns"),
+  summ = c("mean(x)", "sd(x)", "pctile(x)[5]", "pctile(x)[25]", "median(x)", "pctile(x)[75]", "pctile(x)[95]"),
+  summ.names = c("Mean", "SD", "5th Pct.", "25th Pct.", "50th Pct.", "75th Pct.", "95th Pct."),
+  numformat = c("percent"),
+  vars = c("cumul_abnormal"), group = "Date", group.long = TRUE,
+  out = "latex",
+  file = "output/table2.tex"
+)
+
+etable(est1, est2, est3, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl:dep_htm_short",
+  title = "Cumulative returns correlated with uninsured deposits and HTM, immediately after SVB shutdown.",
+  dict = var_dict,
+  file = "output/table3_short.tex", replace = TRUE
+)
+
+etable(est1, est2, est3, est4, est5, est6,
+  vcov = "HC1",
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl:dep_assets_beta",
+  title = "Cumulative returns correlated with asset size, adjusted for beta.",
+  dict = var_dict,
+  file = "output/table5_size_beta.tex", replace = TRUE
+)
 ```
 
 ```{=latex}
