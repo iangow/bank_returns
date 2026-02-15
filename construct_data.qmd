@@ -1220,8 +1220,10 @@ theme_set(theme_minimal(base_size = 16))
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 5
+#| fig-width: 10
+#| fig-height: 6.25
+#| out-width: "82%"
+#| fig-align: center
 
 # Figure 1 ----
 ggplot(data = sp_data_parsed_2022 %>%
@@ -1267,8 +1269,10 @@ ggplot(data = sp_data_parsed_2022 %>%
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 5
+#| fig-width: 10
+#| fig-height: 6.25
+#| out-width: "82%"
+#| fig-align: center
 ggplot(data = returns_data_parsed %>%
   filter(ticker %in% bank_list & ticker != "SI")) +
   geom_line(
@@ -1354,6 +1358,7 @@ label2 <- paste(
   ),
   collapse = "\n"
 )
+ann_text_size <- 3.4
 p3a <- ggplot(data = bank_cumul_ret_2022) +
   geom_density(aes(x = cumul_abnormal)) +
   geom_vline(xintercept = 0, alpha = .2) +
@@ -1378,6 +1383,7 @@ p3a <- ggplot(data = bank_cumul_ret_2022) +
     x = bank_cumul_ret_2022$cumul_abnormal_bankidx[1],
     y = 2.5,
     label = label1,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   ) +
@@ -1386,6 +1392,7 @@ p3a <- ggplot(data = bank_cumul_ret_2022) +
     color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
     y = 3,
     label = label2,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   )
@@ -1428,6 +1435,7 @@ p3b <- ggplot(data = bank_cumul_ret_early) +
     x = bank_cumul_ret_early$cumul_abnormal_bankidx[1],
     y = 3.25,
     label = label1,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   ) +
@@ -1436,6 +1444,7 @@ p3b <- ggplot(data = bank_cumul_ret_early) +
     color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
     y = 5,
     label = label2,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   )
@@ -1478,6 +1487,7 @@ p3c <- ggplot(data = bank_cumul_ret) +
     x = bank_cumul_ret$cumul_abnormal_bankidx[1],
     y = 2,
     label = label1,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   ) +
@@ -1486,6 +1496,7 @@ p3c <- ggplot(data = bank_cumul_ret) +
     color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
     y = 3,
     label = label2,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   )
@@ -1528,6 +1539,7 @@ p3d <- ggplot(data = bank_cumul_ret %>% filter(ticker != "FCNCA")) +
     x = bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal_bankidx[1],
     y = 2,
     label = label1,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   ) +
@@ -1536,6 +1548,7 @@ p3d <- ggplot(data = bank_cumul_ret %>% filter(ticker != "FCNCA")) +
     color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
     y = 3,
     label = label2,
+    size = ann_text_size,
     vjust = 1,
     hjust = 1
   )
@@ -1561,8 +1574,10 @@ p3d
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
 ggplot(data = bank_cumul_ret_2022 %>%
   select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
   inner_join(bank_cumul_ret_early,
@@ -1595,8 +1610,10 @@ ggplot(data = bank_cumul_ret_2022 %>%
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
 nonbank_fig5 <- final_bank_data %>%
   filter(loans_asset_ratio < .2 | deposits_liabilities_ratio < .2) %>%
   pull(TICKER)
@@ -1639,8 +1656,10 @@ ggplot(
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
 p6a <- ggplot(
   data = bank_cumul_ret_linked_y9c_early %>%
     mutate(nonbank = (ticker %in% nonbank_fig5)),
@@ -1690,8 +1709,10 @@ p6b
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
 feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Date, dep_unins_share_std) | Date,
   data = bank_returns_data_parsed_y9c,
   vcov = "HC1"
@@ -1744,8 +1765,10 @@ feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Dat
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
 feols(
   cumul_abnormal_capm ~ i(Date, cash_asset_ratio_std) + i(Date, securities_asset_ratio_std) + i(Date, dep_unins_share_std) | Date,
   data = bank_returns_data_parsed_y9c,
@@ -1803,8 +1826,10 @@ feols(
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
 feols(
   cumul_abnormal_capm ~ i(Date, npl_ratio_std) + i(Date, tier1capratio_std) + i(Date, dep_unins_share_std) | Date,
   data = bank_returns_data_parsed_y9c,
@@ -1877,7 +1902,7 @@ p10a <- ggplot(
   aes(x = assets, y = cumul_abnormal)
 ) +
   geom_point() +
-  geom_text_repel(aes(label = ticker)) +
+  geom_text_repel(aes(label = ticker), size = 2.5) +
   geom_smooth() +
   theme(legend.position = "none") +
   labs(
@@ -1889,14 +1914,18 @@ p10a <- ggplot(
   scale_color_manual(values = c("black", "grey")) +
   geom_hline(yintercept = 0, color = "black", linetype = 2) +
   geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
-  geom_vline(xintercept = 250000000, color = "black", linetype = 3)
+  geom_vline(xintercept = 250000000, color = "black", linetype = 3) +
+  theme(
+    axis.title = element_text(size = 9),
+    axis.text = element_text(size = 8)
+  )
 
 p10b <- ggplot(
   data = bank_cumul_ret_linked_y9c,
   aes(x = assets, y = cumul_abnormal)
 ) +
   geom_point() +
-  geom_text_repel(aes(label = ticker)) +
+  geom_text_repel(aes(label = ticker), size = 2.5) +
   geom_smooth() +
   theme(legend.position = "none") +
   labs(
@@ -1908,7 +1937,11 @@ p10b <- ggplot(
   scale_color_manual(values = c("black", "grey")) +
   geom_hline(yintercept = 0, color = "black", linetype = 2) +
   geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
-  geom_vline(xintercept = 250000000, color = "black", linetype = 3)
+  geom_vline(xintercept = 250000000, color = "black", linetype = 3) +
+  theme(
+    axis.title = element_text(size = 9),
+    axis.text = element_text(size = 8)
+  )
 
 p10a
 p10b
