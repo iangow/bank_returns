@@ -1,0 +1,216 @@
+[
+  {
+    "id": "AcharyaYorulmazer2008",
+    "type": "article-journal",
+    "author": [
+      { "family": "Acharya", "given": "Viral V." },
+      { "family": "Yorulmazer", "given": "Tanju" }
+    ],
+    "issued": { "date-parts": [[2008]] },
+    "title": "Information Contagion and Bank Herding",
+    "container-title": "Journal of Money, Credit and Banking",
+    "volume": "40",
+    "issue": "1",
+    "page": "215-231",
+    "DOI": "10.1111/j.1538-4616.2008.00103.x"
+  },
+  {
+    "id": "AllenGale1998",
+    "type": "article-journal",
+    "author": [
+      { "family": "Allen", "given": "Franklin" },
+      { "family": "Gale", "given": "Douglas" }
+    ],
+    "issued": { "date-parts": [[1998]] },
+    "title": "Optimal Financial Crises",
+    "container-title": "Journal of Finance",
+    "volume": "53",
+    "issue": "4",
+    "page": "1245-1284",
+    "DOI": "10.1111/0022-1082.00052"
+  },
+  {
+    "id": "AllenGale2000",
+    "type": "article-journal",
+    "author": [
+      { "family": "Allen", "given": "Franklin" },
+      { "family": "Gale", "given": "Douglas" }
+    ],
+    "issued": { "date-parts": [[2000]] },
+    "title": "Financial Contagion",
+    "container-title": "Journal of Political Economy",
+    "volume": "108",
+    "issue": "1",
+    "page": "1-33",
+    "DOI": "10.1086/262109"
+  },
+  {
+    "id": "BaiKrishnamurthyWeymuller2018",
+    "type": "article-journal",
+    "author": [
+      { "family": "Bai", "given": "Jennie" },
+      { "family": "Krishnamurthy", "given": "Arvind" },
+      { "family": "Weymuller", "given": "Charles-Henri" }
+    ],
+    "issued": { "date-parts": [[2018]] },
+    "title": "Measuring Liquidity Mismatch in the Banking Sector",
+    "container-title": "Journal of Finance",
+    "volume": "73",
+    "issue": "1",
+    "page": "51-93",
+    "DOI": "10.1111/jofi.12591"
+  },
+  {
+    "id": "DiamondDybvig1983",
+    "type": "article-journal",
+    "author": [
+      { "family": "Diamond", "given": "Douglas W." },
+      { "family": "Dybvig", "given": "Philip H." }
+    ],
+    "issued": { "date-parts": [[1983]] },
+    "title": "Bank Runs, Deposit Insurance, and Liquidity",
+    "container-title": "Journal of Political Economy",
+    "volume": "91",
+    "issue": "3",
+    "page": "401-419",
+    "DOI": "10.1086/261155"
+  },
+  {
+    "id": "DiamondRajan2001",
+    "type": "article-journal",
+    "author": [
+      { "family": "Diamond", "given": "Douglas W." },
+      { "family": "Rajan", "given": "Raghuram G." }
+    ],
+    "issued": { "date-parts": [[2001]] },
+    "title": "Liquidity Risk, Liquidity Creation, and Financial Fragility: A Theory of Banking",
+    "container-title": "Journal of Political Economy",
+    "volume": "109",
+    "issue": "2",
+    "page": "287-327",
+    "DOI": "10.1086/319552"
+  },
+  {
+    "id": "DrechslerSavovSchnabl2017",
+    "type": "article-journal",
+    "author": [
+      { "family": "Drechsler", "given": "Itamar" },
+      { "family": "Savov", "given": "Alexi" },
+      { "family": "Schnabl", "given": "Philipp" }
+    ],
+    "issued": { "date-parts": [[2017]] },
+    "title": "The Deposits Channel of Monetary Policy",
+    "container-title": "Quarterly Journal of Economics",
+    "volume": "132",
+    "issue": "4",
+    "page": "1819-1876",
+    "DOI": "10.1093/qje/qjx019"
+  },
+  {
+    "id": "DrechslerSavovSchnabl2021",
+    "type": "article-journal",
+    "author": [
+      { "family": "Drechsler", "given": "Itamar" },
+      { "family": "Savov", "given": "Alexi" },
+      { "family": "Schnabl", "given": "Philipp" }
+    ],
+    "issued": { "date-parts": [[2021]] },
+    "title": "Banking on Deposits: Maturity Transformation without Interest Rate Risk",
+    "container-title": "Journal of Finance",
+    "volume": "76",
+    "issue": "3",
+    "page": "1091-1143",
+    "DOI": "10.1111/jofi.12953"
+  },
+  {
+    "id": "DrechslerEtAl2023NBER",
+    "type": "report",
+    "author": [
+      { "family": "Drechsler", "given": "Itamar" },
+      { "family": "Savov", "given": "Alexi" },
+      { "family": "Schnabl", "given": "Philipp" },
+      { "family": "Wang", "given": "Oliver" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Banking on Uninsured Deposits",
+    "publisher": "National Bureau of Economic Research",
+    "number": "31138",
+    "DOI": "10.3386/w31138"
+  },
+  {
+    "id": "GatevStrahan2006",
+    "type": "article-journal",
+    "author": [
+      { "family": "Gatev", "given": "Evan" },
+      { "family": "Strahan", "given": "Philip E." }
+    ],
+    "issued": { "date-parts": [[2006]] },
+    "title": "Banks’ Advantage in Hedging Liquidity Risk",
+    "container-title": "Journal of Finance",
+    "volume": "61",
+    "issue": "2",
+    "page": "867-892",
+    "DOI": "10.1111/j.1540-6261.2006.00857.x"
+  },
+  {
+    "id": "GoldsteinPauzner2005",
+    "type": "article-journal",
+    "author": [
+      { "family": "Goldstein", "given": "Itay" },
+      { "family": "Pauzner", "given": "Ady" }
+    ],
+    "issued": { "date-parts": [[2005]] },
+    "title": "Demand–Deposit Contracts and the Probability of Bank Runs",
+    "container-title": "Journal of Finance",
+    "volume": "60",
+    "issue": "3",
+    "page": "1293-1327",
+    "DOI": "10.1111/j.1540-6261.2005.00762.x"
+  },
+  {
+    "id": "HansonEtAl2015",
+    "type": "article-journal",
+    "author": [
+      { "family": "Hanson", "given": "Samuel G." },
+      { "family": "Shleifer", "given": "Andrei" },
+      { "family": "Stein", "given": "Jeremy C." },
+      { "family": "Vishny", "given": "Robert W." }
+    ],
+    "issued": { "date-parts": [[2015]] },
+    "title": "Banks as Patient Fixed-Income Investors",
+    "container-title": "Journal of Financial Economics",
+    "volume": "117",
+    "issue": "3",
+    "page": "449-469",
+    "DOI": "10.1016/j.jfineco.2015.06.007"
+  },
+  {
+    "id": "IvashinaScharfstein2010",
+    "type": "article-journal",
+    "author": [
+      { "family": "Ivashina", "given": "Victoria" },
+      { "family": "Scharfstein", "given": "David" }
+    ],
+    "issued": { "date-parts": [[2010]] },
+    "title": "Bank Lending during the Financial Crisis of 2008",
+    "container-title": "Journal of Financial Economics",
+    "volume": "97",
+    "issue": "3",
+    "page": "319-338",
+    "DOI": "10.1016/j.jfineco.2009.12.001"
+  },
+  {
+    "id": "Metrick2024",
+    "type": "article-journal",
+    "author": [
+      { "family": "Metrick", "given": "Andrew" }
+    ],
+    "issued": { "date-parts": [[2024]] },
+    "title": "The Failure of Silicon Valley Bank and the Panic of 2023",
+    "container-title": "Journal of Economic Perspectives",
+    "volume": "38",
+    "issue": "1",
+    "page": "133-152",
+    "DOI": "10.1257/jep.38.1.133"
+  }
+]
