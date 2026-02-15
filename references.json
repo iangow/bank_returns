@@ -212,5 +212,441 @@
     "issue": "1",
     "page": "133-152",
     "DOI": "10.1257/jep.38.1.133"
+  },
+  {
+    "id": "AcharyaEtAl2023SVB",
+    "type": "report",
+    "author": [
+      { "family": "Acharya", "given": "Viral V." },
+      { "family": "Richardson", "given": "Matthew P." },
+      { "family": "Schoenholtz", "given": "Kermit L." },
+      { "family": "Tuckman", "given": "Bruce" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "SVB and Beyond: The Banking Stress of 2023"
+  },
+  {
+    "id": "BaronSchularickZimmermann2023",
+    "type": "report",
+    "author": [
+      { "family": "Baron", "given": "Matthew" },
+      { "family": "Schularick", "given": "Moritz" },
+      { "family": "Zimmermann", "given": "Kaspar" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Survival of the Biggest: Large Banks and Financial Crises"
+  },
+  {
+    "id": "BCBS2013",
+    "type": "report",
+    "author": [
+      { "literal": "Basel Committee on Banking Supervision" }
+    ],
+    "issued": { "date-parts": [[2013]] },
+    "title": "Basel III: The Liquidity Coverage Ratio and Liquidity Risk Monitoring Tools",
+    "publisher": "Bank for International Settlements"
+  },
+  {
+    "id": "BegenauPiazzesiSchneider2015",
+    "type": "report",
+    "author": [
+      { "family": "Begenau", "given": "Juliane" },
+      { "family": "Piazzesi", "given": "Monika" },
+      { "family": "Schneider", "given": "Martin" }
+    ],
+    "issued": { "date-parts": [[2015]] },
+    "title": "Banks’ Risk Exposures",
+    "publisher": "National Bureau of Economic Research",
+    "number": "21334",
+    "DOI": "10.3386/w21334"
+  },
+  {
+    "id": "BenmelechYangZator2023",
+    "type": "report",
+    "author": [
+      { "family": "Benmelech", "given": "Efraim" },
+      { "family": "Yang", "given": "Jialan" },
+      { "family": "Zator", "given": "Mark" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Bank Branch Density and Bank Runs"
+  },
+  {
+    "id": "BergerHanweckHumphrey1987",
+    "type": "article-journal",
+    "author": [
+      { "family": "Berger", "given": "Allen N." },
+      { "family": "Hanweck", "given": "Gerald A." },
+      { "family": "Humphrey", "given": "David B." }
+    ],
+    "issued": { "date-parts": [[1987]] },
+    "title": "Competitive Viability in Banking: Scale, Scope, and Product Mix Economies",
+    "container-title": "Journal of Monetary Economics",
+    "volume": "20",
+    "issue": "3",
+    "page": "501-520",
+    "DOI": "10.1016/0304-3932(87)90039-0"
+  },
+  {
+    "id": "BootMilbournSchmeits2006",
+    "type": "article-journal",
+    "author": [
+      { "family": "Boot", "given": "Arnoud W. A." },
+      { "family": "Milbourn", "given": "Todd T." },
+      { "family": "Schmeits", "given": "Anjolein" }
+    ],
+    "issued": { "date-parts": [[2006]] },
+    "title": "Credit Ratings as Coordination Mechanisms",
+    "container-title": "Review of Financial Studies",
+    "volume": "19",
+    "issue": "1",
+    "page": "81-118",
+    "DOI": "10.1093/rfs/hhj009"
+  },
+  {
+    "id": "CaglioDlugoszRezende2023",
+    "type": "report",
+    "author": [
+      { "family": "Caglio", "given": "Cecilia" },
+      { "family": "Dlugosz", "given": "Jennifer" },
+      { "family": "Rezende", "given": "Marcelo" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Flight to Safety in the Regional Bank Crisis of 2023",
+    "DOI": "10.2139/ssrn.4457140"
+  },
+  {
+    "id": "CalomirisGorton1991",
+    "type": "chapter",
+    "author": [
+      { "family": "Calomiris", "given": "Charles W." },
+      { "family": "Gorton", "given": "Gary" }
+    ],
+    "issued": { "date-parts": [[1991]] },
+    "title": "The Origins of Banking Panics: Models, Facts, and Bank Regulation",
+    "container-title": "Financial Markets and Financial Crises",
+    "publisher": "University of Chicago Press",
+    "page": "109-174"
+  },
+  {
+    "id": "CalomirisKahn1991",
+    "type": "article-journal",
+    "author": [
+      { "family": "Calomiris", "given": "Charles W." },
+      { "family": "Kahn", "given": "Charles M." }
+    ],
+    "issued": { "date-parts": [[1991]] },
+    "title": "The Role of Demandable Debt in Structuring Optimal Banking Arrangements",
+    "container-title": "American Economic Review",
+    "volume": "81",
+    "issue": "3",
+    "page": "497-513"
+  },
+  {
+    "id": "CampbellLoMacKinlay1998",
+    "type": "book",
+    "author": [
+      { "family": "Campbell", "given": "John Y." },
+      { "family": "Lo", "given": "Andrew W." },
+      { "family": "MacKinlay", "given": "A. Craig" }
+    ],
+    "issued": { "date-parts": [[1998]] },
+    "title": "The Econometrics of Financial Markets",
+    "publisher": "Princeton University Press"
+  },
+  {
+    "id": "ChariJagannathan1988",
+    "type": "article-journal",
+    "author": [
+      { "family": "Chari", "given": "V. V." },
+      { "family": "Jagannathan", "given": "Ravi" }
+    ],
+    "issued": { "date-parts": [[1988]] },
+    "title": "Banking Panics, Information, and Rational Expectations Equilibrium",
+    "container-title": "Journal of Finance",
+    "volume": "43",
+    "issue": "3",
+    "page": "749-761",
+    "DOI": "10.1111/j.1540-6261.1988.tb04593.x"
+  },
+  {
+    "id": "Chen1999",
+    "type": "article-journal",
+    "author": [
+      { "family": "Chen", "given": "Yong" }
+    ],
+    "issued": { "date-parts": [[1999]] },
+    "title": "Banking Panics: The Role of the First-Come, First-Served Rule and Information Externalities",
+    "container-title": "Journal of Political Economy",
+    "volume": "107",
+    "issue": "5",
+    "page": "946-968",
+    "DOI": "10.1086/250081"
+  },
+  {
+    "id": "CifuentesFerrucciShin2005",
+    "type": "article-journal",
+    "author": [
+      { "family": "Cifuentes", "given": "Rodrigo" },
+      { "family": "Ferrucci", "given": "Gianluigi" },
+      { "family": "Shin", "given": "Hyun Song" }
+    ],
+    "issued": { "date-parts": [[2005]] },
+    "title": "Liquidity Risk and Contagion",
+    "container-title": "Journal of the European Economic Association",
+    "volume": "3",
+    "issue": "2-3",
+    "page": "556-566",
+    "DOI": "10.1162/jeea.2005.3.2-3.556"
+  },
+  {
+    "id": "CooksonEtAl2023",
+    "type": "report",
+    "author": [
+      { "family": "Cookson", "given": "J. Anthony" },
+      { "family": "Fox", "given": "Caroline" },
+      { "family": "Gil-Bazo", "given": "Javier" },
+      { "family": "Imbet", "given": "Juan F." },
+      { "family": "Schiller", "given": "Christoph" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Social Media as a Bank Run Catalyst",
+    "DOI": "10.2139/ssrn.4422754"
+  },
+  {
+    "id": "DangGortonHolmstrom2020",
+    "type": "article-journal",
+    "author": [
+      { "family": "Dang", "given": "Tri Vi" },
+      { "family": "Gorton", "given": "Gary" },
+      { "family": "Holmstrom", "given": "Bengt" }
+    ],
+    "issued": { "date-parts": [[2020]] },
+    "title": "The Information View of Financial Crises",
+    "container-title": "Annual Review of Financial Economics",
+    "volume": "12",
+    "page": "39-65",
+    "DOI": "10.1146/annurev-financial-110119-100714"
+  },
+  {
+    "id": "DErcoleWagner2023",
+    "type": "article-journal",
+    "author": [
+      { "family": "D'Ercole", "given": "Francesco" },
+      { "family": "Wagner", "given": "Alexander F." }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "The Green Energy Transition and the 2023 Banking Crisis",
+    "container-title": "Finance Research Letters",
+    "page": "104493",
+    "DOI": "10.1016/j.frl.2023.104493"
+  },
+  {
+    "id": "DuKarolyiLi2023",
+    "type": "report",
+    "author": [
+      { "family": "Du", "given": "Dan" },
+      { "family": "Karolyi", "given": "Stephen A." },
+      { "family": "Li", "given": "Fangzhou" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Back to Basics: Bank Beta and Systemic Risk"
+  },
+  {
+    "id": "EisenbachEtAl2014",
+    "type": "article-journal",
+    "author": [
+      { "family": "Eisenbach", "given": "Thomas M." },
+      { "family": "Keister", "given": "Todd" },
+      { "family": "McAndrews", "given": "James" },
+      { "family": "Yorulmazer", "given": "Tanju" }
+    ],
+    "issued": { "date-parts": [[2014]] },
+    "title": "Stability of Funding Models: An Analytical Framework",
+    "container-title": "Federal Reserve Bank of New York Economic Policy Review",
+    "volume": "20",
+    "issue": "1",
+    "page": "29-49"
+  },
+  {
+    "id": "FlannerySorescu2023",
+    "type": "report",
+    "author": [
+      { "family": "Flannery", "given": "Mark J." },
+      { "family": "Sorescu", "given": "Sorin M." }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Partial Effects of Fed Tightening on US Banks' Capital",
+    "DOI": "10.2139/ssrn.4424139"
+  },
+  {
+    "id": "GaleYorulmazer2020",
+    "type": "article-journal",
+    "author": [
+      { "family": "Gale", "given": "Douglas" },
+      { "family": "Yorulmazer", "given": "Tanju" }
+    ],
+    "issued": { "date-parts": [[2020]] },
+    "title": "Bank Capital, Fire Sales, and the Social Value of Deposits",
+    "container-title": "Economic Theory",
+    "volume": "69",
+    "page": "919-963",
+    "DOI": "10.1007/s00199-019-01189-5"
+  },
+  {
+    "id": "GoldsmithPinkhamYorulmazer2010",
+    "type": "article-journal",
+    "author": [
+      { "family": "Goldsmith-Pinkham", "given": "Paul" },
+      { "family": "Yorulmazer", "given": "Tanju" }
+    ],
+    "issued": { "date-parts": [[2010]] },
+    "title": "Liquidity, Bank Runs, and Bailouts: Spillover Effects During the Northern Rock Episode",
+    "container-title": "Journal of Financial Services Research",
+    "volume": "37",
+    "page": "83-98",
+    "DOI": "10.1007/s10693-009-0079-2"
+  },
+  {
+    "id": "Gorton1988",
+    "type": "article-journal",
+    "author": [
+      { "family": "Gorton", "given": "Gary" }
+    ],
+    "issued": { "date-parts": [[1988]] },
+    "title": "Banking Panics and Business Cycles",
+    "container-title": "Oxford Economic Papers",
+    "volume": "40",
+    "issue": "4",
+    "page": "751-781"
+  },
+  {
+    "id": "GortonHuang2004",
+    "type": "article-journal",
+    "author": [
+      { "family": "Gorton", "given": "Gary" },
+      { "family": "Huang", "given": "Lixin" }
+    ],
+    "issued": { "date-parts": [[2004]] },
+    "title": "Liquidity, Efficiency, and Bank Bailouts",
+    "container-title": "American Economic Review",
+    "volume": "94",
+    "issue": "3",
+    "page": "455-483",
+    "DOI": "10.1257/0002828041464570"
+  },
+  {
+    "id": "HaddadHartmanGlaserMuir2023",
+    "type": "report",
+    "author": [
+      { "family": "Haddad", "given": "Valentin" },
+      { "family": "Hartman-Glaser", "given": "Barney" },
+      { "family": "Muir", "given": "Tyler" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Bank Fragility When Depositors Are the Asset",
+    "DOI": "10.2139/ssrn.4412256"
+  },
+  {
+    "id": "JiangMatvosPiskorskiSeru2023a",
+    "type": "report",
+    "author": [
+      { "family": "Jiang", "given": "Erica X." },
+      { "family": "Matvos", "given": "Gregor" },
+      { "family": "Piskorski", "given": "Tomasz" },
+      { "family": "Seru", "given": "Amit" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Limited Hedging and Gambling for Resurrection by US Banks During the 2022 Monetary Tightening"
+  },
+  {
+    "id": "JiangMatvosPiskorskiSeru2023b",
+    "type": "report",
+    "author": [
+      { "family": "Jiang", "given": "Erica X." },
+      { "family": "Matvos", "given": "Gregor" },
+      { "family": "Piskorski", "given": "Tomasz" },
+      { "family": "Seru", "given": "Amit" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Monetary Tightening and U.S. Bank Fragility in 2023: Mark-to-Market Losses and Uninsured Depositor Runs"
+  },
+  {
+    "id": "KangLandsbergLuckPlosser2023",
+    "type": "post-weblog",
+    "author": [
+      { "family": "Kang-Landsberg", "given": "Anna" },
+      { "family": "Luck", "given": "Stephan" },
+      { "family": "Plosser", "given": "Matthew" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Deposit Betas: Up, Up, and Away?",
+    "container-title": "Liberty Street Economics"
+  },
+  {
+    "id": "LuckPlosserYounger2023",
+    "type": "post-weblog",
+    "author": [
+      { "family": "Luck", "given": "Stephan" },
+      { "family": "Plosser", "given": "Matthew" },
+      { "family": "Younger", "given": "Joshua" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Bank Funding During the Current Monetary Policy Tightening Cycle",
+    "container-title": "Liberty Street Economics"
+  },
+  {
+    "id": "Nelson2023",
+    "type": "post-weblog",
+    "author": [
+      { "family": "Nelson", "given": "Bill" }
+    ],
+    "issued": { "date-parts": [[2023]] },
+    "title": "Silicon Valley Bank Would Have Passed the Liquidity Coverage Ratio Requirement",
+    "container-title": "Bank Policy Institute Blog"
+  },
+  {
+    "id": "OHaraShaw1990",
+    "type": "article-journal",
+    "author": [
+      { "family": "O'Hara", "given": "Maureen" },
+      { "family": "Shaw", "given": "Wayne" }
+    ],
+    "issued": { "date-parts": [[1990]] },
+    "title": "Deposit Insurance and Wealth Effects: The Value of Being 'Too Big to Fail'",
+    "container-title": "Journal of Finance",
+    "volume": "45",
+    "issue": "5",
+    "page": "1587-1600"
+  },
+  {
+    "id": "PenasUnal2004",
+    "type": "article-journal",
+    "author": [
+      { "family": "Penas", "given": "Maria Fabiana" },
+      { "family": "Unal", "given": "Haluk" }
+    ],
+    "issued": { "date-parts": [[2004]] },
+    "title": "Gains in Bank Mergers: Evidence from the Bond Markets",
+    "container-title": "Journal of Financial Economics",
+    "volume": "74",
+    "issue": "1",
+    "page": "149-179",
+    "DOI": "10.1016/j.jfineco.2003.05.004"
+  },
+  {
+    "id": "RochetVives2004",
+    "type": "article-journal",
+    "author": [
+      { "family": "Rochet", "given": "Jean-Charles" },
+      { "family": "Vives", "given": "Xavier" }
+    ],
+    "issued": { "date-parts": [[2004]] },
+    "title": "Coordination Failures and the Lender of Last Resort: Was Bagehot Right After All?",
+    "container-title": "Journal of the European Economic Association",
+    "volume": "2",
+    "issue": "6",
+    "page": "1116-1147",
+    "DOI": "10.1162/1542476042813850"
   }
 ]
