@@ -1,5 +1,5 @@
 ---
-title: "Contagion Effects of the Silicon Valley Bank Run"
+title: "Contagion Effects of the Silicon Valley Bank Run\\thanks{Choi: dong.choi@snu.ac.kr, Goldsmith-Pinkham: paul.goldsmith-pinkham@yale.edu, and Yorulmazer: tyorulmazer@ku.edu.tr. We thank Viral Acharya, Thomas Eisenbach, Douglas Gale, Samuel Hanson, Stephen Karolyi, Tyler Muir, Jonathan Parker, Adi Sunderam, Eric Zwick and seminar participants at the OCC for helpful comments.}"
 author:
   - name: Dong Beom Choi
     affiliation: Seoul National University
@@ -7,7 +7,8 @@ author:
     affiliation: Yale University and NBER
   - name: Tanju Yorulmazer
     affiliation: Koc University
-date: "May 2024"
+date: 2024-05-01
+date-format: "MMMM YYYY"
 keywords:
   - Contagion
   - Banking crisis
@@ -36,17 +37,25 @@ format:
 ---
 
 ::: {.abstract}
-This paper analyzes the contagion effects associated with the failure of Silicon Valley Bank (SVB) and identifies bank-specific vulnerabilities contributing to the subsequent declines in banks’ stock returns. 
+This paper analyzes the contagion effects associated with the failure of Silicon Valley Bank (SVB) and identifies bank-specific vulnerabilities contributing to the subsequent declines in banks' stock returns. 
 We find that uninsured deposits, unrealized losses in held-to-maturity securities, bank size, and cash holdings had a significant impact, while better-quality assets or holdings of liquid securities did not help mitigate the negative spillovers.
 Interestingly, banks whose stocks performed worse post-SVB also experienced lower returns in the previous year, following Federal Reserve interest rate hikes.
 Stock investors appeared to anticipate risks associated with uninsured deposit reliance, but did not foresee the realization of implied losses.
 While mid-sized banks experienced particular stress immediately after the SVB failure, over time negative spillovers became widespread except for the largest banks.
 :::
 
+```{=latex}
+\vfill
+\noindent\textbf{Keywords:} Contagion, Banking crisis, Bank run, Systemic risk, Interest rate risk, Implied losses, Held-to-maturity
+
+\noindent\textbf{JEL Codes:} G01, G21, G14, G28, E58, E43
+\clearpage
+```
+
 # Introduction
 
 On March 10th, 2023, Silicon Valley Bank (SVB) failed after a bank run.
-It was the sixteenth largest bank in the United States as of the end of 2022, with $209 billion in assets, which marked the largest bank failure since the Global Financial Crisis (GFC) of 2007–2009 and the second-largest bank failure in U.S. history, second only to Washington Mutual.^[See Acharya et al. (2023) for an extensive discussion and analysis of the SVB episode.]
+It was the sixteenth largest bank in the United States as of the end of 2022, with \$209 billion in assets, which marked the largest bank failure since the Global Financial Crisis (GFC) of 2007–2009 and the second-largest bank failure in U.S. history, second only to Washington Mutual.^[See Acharya et al. (2023) for an extensive discussion and analysis of the SVB episode.]
 As a response, a "systemic risk exception" was invoked by the policymakers, leading to a blanket guarantee on all deposits at SVB.^[The joint statement by the Secretary of the Treasury Janet Yellen, Federal Reserve Chairman Jerome Powell, and FDIC Chairman Martin Gruenberg on March 12th stated that all deposits at SVB, insured and uninsured, would be fully protected.]
 The failure of SVB, the subsequent bank failures, and the policy responses, such as the blanket deposit guarantee and the new central bank lending facility, underscore the continued significance of bank runs and contagion as important features of the global financial system, even after the implementation of regulatory reforms following the GFC.
 
@@ -61,10 +70,10 @@ In response to historic levels of U.S. inflation following the COVID-19 pandemic
 While rate hikes were initially expected to benefit the banking sector by allowing higher net interest margins for new loans (Drechsler et al. (2017)), they also introduced vulnerabilities associated with duration mismatch for existing fixed-rate assets.
 
 SVB was particularly exposed to duration risk due to a majority of its investments in highly rated government bonds with very long maturities.
-By the end of 2022, SVB's bond portfolio consisted of \$91.3 billion in held-to-maturity (HTM) and \$26.1 billion in available-for-sale (AFS) assets, with mark-to-market accounting unrealized losses for its HTM securities exceeding $15 billion.^["How crazy was Silicon Valley Bank's zero-hedge strategy?" *Financial Times*, March 17, 2023.]
+By the end of 2022, SVB's bond portfolio consisted of \$91.3 billion in held-to-maturity (HTM) and \$26.1 billion in available-for-sale (AFS) assets, with mark-to-market accounting unrealized losses for its HTM securities exceeding \$15 billion.^["How crazy was Silicon Valley Bank's zero-hedge strategy?" *Financial Times*, March 17, 2023.]
 However, these losses were considered "potential" and would only materialize if the bank was forced to sell the assets during liquidity stress events such as heavy deposit withdrawals.
 Amidst mounting concerns, SVB experienced a steady decline in deposits over the four quarters leading up to its eventual failure.
-The pace of withdrawals intensified during the week of March 6th, 2023, culminating in an abrupt outflow of $42 billion on a single day, March 9th.
+The pace of withdrawals intensified during the week of March 6th, 2023, culminating in an abrupt outflow of \$42 billion on a single day, March 9th.
 The run on SVB triggered its failure and subsequent takeover by FDIC on March 10th (Jiang et al. (2023b)).
 
 The run on SVB triggered significant spillover effects on the U.S. banking system.
@@ -74,11 +83,11 @@ Having more liquid securities did not help mitigate contagion; only cash holding
 Additionally, reliance on uninsured deposits exacerbated financial distress due to their potential for rapid withdrawal.
 
 The correlation of bank size with spillover effects was also noteworthy.
-Mid-sized banks, particularly those with assets in the \$50 billion to \$250 billion range referred to as “super-regional” banks, experienced heightened stress immediately after the run on SVB.
+Mid-sized banks, particularly those with assets in the \$50 billion to \$250 billion range referred to as "super-regional" banks, experienced heightened stress immediately after the run on SVB.
 These banks had previously been designated as systemically important by regulators but faced relaxed regulations after the 2018 regulatory rollback.
 Investors initially exhibited greater concerns with banks of a similar size to SVB, potentially due to regulatory differences.
 Over the next months, however, the negative effects spread to other banks as concerns about the entire banking system became more widespread.
-Surprisingly, very large banks, particularly those with assets over $1 trillion, outperformed the rest of the system.
+Surprisingly, very large banks, particularly those with assets over \$1 trillion, outperformed the rest of the system.
 This may be attributed to implicit too-big-to-fail (TBTF) guarantees and consequent deposit inflows, since these banks were perceived as safe havens during systemic instability (Caglio et al. (2023), Luck et al. (2023), Baron et al. (2023)).
 
 Market participants also seemed to anticipate these banks' vulnerabilities, as the same banks that suffered more after the SVB failure had also underperformed in the previous year.
@@ -122,7 +131,8 @@ Several other studies examine the implications of SVB's failure and the subseque
 Metrick (2024) documents the failure of SVB and how its balance sheet contributed to the bank run of 2023.
 Jiang et al. (2023b) and Flannery and Sorescu (2023) document substantial mark-to-market losses spread across the banking sector.
 Jiang et al. (2023b) assess how the run by uninsured depositors led to bank insolvency due to the realization of hidden mark-to-market losses.
-Haddad et al. (2023) present a theoretical model that characterizes the role of rapid rate hikes in bringing this vulnerability and offer empirical evidence supporting their predictions.^5
+Haddad et al. (2023) present a theoretical model that characterizes the role of rapid rate hikes in bringing this vulnerability and offer empirical evidence supporting their predictions.^[Focusing on the spillover mechanism, Benmelech et al. (2023) analyze the role of bank branch presence and Cookson et al. (2023) assess the impact of social media exposures. 
+D'Ercole and Wagner (2023) examine the stock price reactions of environmentally responsible stocks to the failure of SVB.]
 Caglio et al. (2023) present findings on depositors' flight to safety, whereby funds shift away from regional banks toward larger banks.
 
 In contrast to papers that focus on the effect of a specific factor on contagion, our study provides a comprehensive assessment of multiple factors contributing to negative spillovers.
@@ -135,7 +145,7 @@ Finally, we find that investors partially anticipated vulnerabilities associated
 First, we provide a background and a summary of the events that led to the failure of SVB.
 Then, we discuss the factors that might have played a role in the failure of SVB such as interest rate risk and implied losses, liquidity risk and unsecured deposits, and the rollback of regulation.
 
-## A Summary of the SVB Failure
+## A summary of the SVB failure
 
 SVB was founded in 1983 with a focus on the needs of startup companies.
 Its main strategy was to collect deposits from businesses financed through venture capital while it expanded into banking and financing venture capitalists.
@@ -143,19 +153,19 @@ During the 1980s, SVB grew with the local high-tech economy, which persisted dur
 In the 2000s, SVB entered into the private banking business, building on earlier experience and relationships with wealthy venture capitalists and entrepreneurs, and enjoyed an international expansion which continued in the 2010s.
 In 2015, the bank stated that it served 65% of all U.S. startups.
 
-During the loose monetary policy of the pandemic era and the investment boom in private technology companies, SVB enjoyed a significant increase in its deposits and asset size, where just in 2021 deposits surged from $102 billion to $189 billion.^6
-Awash with deposits, SVB increased its investment in highly rated government bonds in its portfolio to $120 billion, of which $91 billion consisted of fixed-rate mortgage bonds with very long maturities.
+During the loose monetary policy of the pandemic era and the investment boom in private technology companies, SVB enjoyed a significant increase in its deposits and asset size, where just in 2021 deposits surged from \$102 billion to \$189 billion.^[Deposits and assets of SVB tripled between 2019 and 2021.]
+Awash with deposits, SVB increased its investment in highly rated government bonds in its portfolio to \$120 billion, of which \$91 billion consisted of fixed-rate mortgage bonds with very long maturities.
 This, in turn, exposed SVB to interest rate risk.
 On the liability side, regulatory filings estimated that more than 90% of its deposits were uninsured, which exposed the bank to funding liquidity risk and a depositor run.
 
 In response to the spike in inflation following the COVID-19 pandemic, the Federal Reserve began to increase interest rates in March 2022.
 This led to SVB incurring heavy losses on its bond portfolio.
 While SVB deposits dropped for four straight quarters prior to its failure, deposit withdrawal was faster than expected in February and March of 2023.
-As a result, SVB had to liquidate some of its HTM assets and incurred a loss of $1.8 billion.
-To cover these losses, SVB announced a capital raise of $2.25 billion in the week of its failure.
-On March 8th, Moody's downgraded SVB.^7
-On March 9th, it was apparent that SVB was not able to raise the needed capital.
-This exacerbated a depositor run with withdrawals of $42 billion, equal to a quarter of bank deposits, on a single day.
+As a result, SVB had to liquidate some of its HTM assets and incurred a loss of \$1.8 billion.
+To cover these losses, SVB announced a capital raise of \$2.25 billion in the week of its failure.
+On March 8th Moody's downgraded SVB^[Boot et al. (2006) analyze the coordination role of credit ratings.]
+and it was apparent on March 9th that SVB was not being able to raise the needed capital.
+This exacerbated a depositor run with withdrawals of \$42 billion, equal to a quarter of bank deposits, on a single day.
 On March 10th, SVB failed as a result of the bank run and was put into receivership by the FDIC.
 On March 12th, in a joint statement by the Secretary of the Treasury, the Federal Reserve Chairman, and the FDIC Chairman, a blanket guarantee for insured and uninsured deposits at SVB was introduced.
 
@@ -163,44 +173,46 @@ On March 12th, in a joint statement by the Secretary of the Treasury, the Federa
 
 In this section, we discuss factors that played a role in the failure of SVB and the subsequent spillover effects such as interest rate risk and implied losses, liquidity risk arising from uninsured deposits, and an erosion of the regulatory framework governing mid-sized banks.
 
-### Interest Rate Risk and Implied Losses
+### Interest rate risk and implied losses
 
 To combat inflation, the Federal Reserve began hiking interest rates in March 2022.
 SVB had significant exposure to interest rate risk in its bond portfolio.
 SVB's bond portfolio was separated into HTM and AFS securities.
 HTM securities are planned to be held until maturity and can be carried at their nominal par value since they are being held until they are repaid in full.
 On the other hand, AFS securities are marked to market.
-At the end of 2022, SVB had $91.3 billion in HTM securities with very long maturities and $26.1 billion in AFS securities.
+At the end of 2022, SVB had \$91.3 billion in HTM securities with very long maturities and \$26.1 billion in AFS securities.
 Increasing interest rates led to losses in the market value of its bonds, with significant unrealized losses for its HTM securities.
 The rise in interest rates and the resulting losses in the securities portfolio of SVB, some of which were hidden due to HTM accounting, was a major contributor to the demise of SVB (Jiang et al., 2023b).
 
-### Liquidity Risk Due to Unsecured Deposits
+### Liquidity risk due to unsecured deposits
 
 During the GFC, a key lesson learned was the importance of differentiating between wholesale funding and deposits when assessing funding risk.
-While wholesale funding was highly vulnerable to runs during the crisis, deposits turned out to be relatively “sticky” and less likely to be withdrawn by panicked investors (see, e.g., Ivashina and Scharfstein (2010) and Hanson et al. (2015)).
+While wholesale funding was highly vulnerable to runs during the crisis, deposits turned out to be relatively "sticky" and less likely to be withdrawn by panicked investors (see, e.g., Ivashina and Scharfstein (2010) and Hanson et al. (2015)).
 This insight has been incorporated into regulatory reforms aimed at improving the resilience of the banking system such as the Liquidity Coverage Ratio (LCR) requirement of Basel III (BCBS (2013)).
-In particular, the LCR requirement mandates that banks must have sufficient high-quality liquid assets (HQLA) to meet net cash outflows for 30 days under a stress scenario.^8
-SVB's bond portfolio, which constituted a major part of its assets, would be considered HQLA in the context of the LCR.^9
+In particular, the LCR requirement mandates that banks must have sufficient high-quality liquid assets (HQLA) to meet net cash outflows for 30 days under a stress scenario.^[HQLAs mainly consist of reserve balances, Treasuries, agency debt and agency MBS.]
+SVB's bond portfolio, which constituted a major part of its assets, would be considered HQLA in the context of the LCR.^[Due to the rolling back of regulation, as we discuss next, SVB was not subject to the LCR requirement. 
+However, Nelson (2023) estimates that SVB would have satisfied the LCR requirement since a majority of its asset portfolio would be considered to be highly liquid.]
 Nevertheless, the securities in its portfolio had interest rate risk exposure.
 Even though both cash and most securities were treated as highly liquid in the LCR framework, cash ended up being significantly more valuable to banks, as we discuss in Section 4.2.2.
 
 LCR assumes a lower outflow rate for deposits compared to market funding, reflecting the greater stability and reliability of deposit funding.
-SVB largely financed itself via uninsured deposits, which turned out to be subject to severe runs even though they were expected to be less “flighty” compared to other wholesale funding sources under the LCR.
+SVB largely financed itself via uninsured deposits, which turned out to be subject to severe runs even though they were expected to be less "flighty" compared to other wholesale funding sources under the LCR.
 Heavy reliance on uninsured deposits exposed SVB to funding liquidity risk.
 As we argued above, potential losses becoming actual losses due to deposit withdrawals played a crucial role in the demise of SVB.
 
-### Rolling Back Regulation for Mid-Sized Banks
+### Rolling back regulation for mid-sized banks
 
 After the GFC, the Dodd-Frank Act introduced major reforms to the bank regulatory framework.
-However, on May 24th, 2018, the Economic Growth, Regulatory Relief, and Consumer Protection Act was signed into law and eased regulations for mid-sized banks by raising the threshold for systemically important financial institutions from $50 billion to $250 billion.^10
+However, on May 24th, 2018, the Economic Growth, Regulatory Relief, and Consumer Protection Act was signed into law and eased regulations for mid-sized banks by raising the threshold for systemically important financial institutions from \$50 billion to \$250 billion.^[The act gave the Federal Reserve discretion in determining regulations for financial institutions
+with assets between \$100 billion and \$250 billion.]
 One consequence of the regulatory rollback was that SVB was not subject to the LCR requirement.
-Furthermore, despite interest rate risk being the major factor in the failure of SVB, regulatory stress tests did not incorporate an interest rate risk scenario.^11
+Furthermore, despite interest rate risk being the major factor in the failure of SVB, regulatory stress tests did not incorporate an interest rate risk scenario.^[See <https://www.federalreserve.gov/publications/2023-Stress-Test-Scenarios.htm>.]
 
 # Data and Methods
 
 ## Data
 
-We start with the Federal Reserve Bank of New York's permanent company number (PERMCO)–RSSDID crosswalk.^12
+We start with the Federal Reserve Bank of New York's permanent company number (PERMCO)–RSSDID crosswalk.^[Available at <https://www.newyorkfed.org/research/banking_research/crsp-frb>.]
 This crosswalk provides the PERMCO identifier for most regulated banks in the United States.
 Using the Center for Research in Security Prices (CRSP) database, we link the PERMCO to each firm's stock ticker as of 2022q4.
 The linked list dataset of RSSDID and tickers has 327 banks.
@@ -210,14 +222,14 @@ We are able to pull this data for 324 of the tickers.
 We construct daily returns based on these measures, and a measure of market returns based on the close price of the S&P 500.
 We also construct a daily return measure for banks based on the Dow Jones U.S. Banks Index (DJUSBK).
 
-Then, for each of the 327 RSSDIDs in our initial list, we identify all subsidiaries of the bank using the National Information Center (NIC)'s relationship file.^13
-For each subsidiary, if they are regulated by the FDIC, we identify their FDIC Certificate Number and collect their total deposits, total uninsured deposits, and total assets using the FDIC's BankSuite tool.^14
+Then, for each of the 327 RSSDIDs in our initial list, we identify all subsidiaries of the bank using the National Information Center (NIC)'s relationship file.^[Available at <https://www.ffiec.gov/npw/FinancialReport/DataDownload>.]
+For each subsidiary, if they are regulated by the FDIC, we identify their FDIC Certificate Number and collect their total deposits, total uninsured deposits, and total assets using the FDIC's BankSuite tool.^[Available at <https://banks.data.fdic.gov/bankfind-suite>.]
 This is a sample of 318 top holders and banks.^[We omit Silvergate Bank from this analysis. This is due to its unique features, including its
 relatively small size, single industry concentration in crypto-currencies, and heavy reliance on FTX as its primary depositor.]
 
 Finally, for those top holder companies who report FR Y-9C data and for commercial banks that report Call Report data, we construct several financial balance sheet measures from their 2022q4 report.
 These include total assets, cash, securities, HTM and AFS securities, mark-to-market losses on HTM securities based on the difference between their book values and fair values, Tier 1 capital, and non-performing loans.
-This is a sample of 224 top holders and banks.^[A number of the original 318 banks report FR Y-9SP data because they have less than $3 billion
+This is a sample of 224 top holders and banks.^[A number of the original 318 banks report FR Y-9SP data because they have less than \$3 billion
 in assets. The FR Y-9SP reporting form reports significantly less than the FR Y-9C form for our
 main sample. As a result, we currently exclude the banks that only report FR Y-9SP data due to
 data limitations.]
@@ -238,10 +250,11 @@ R_i^{\text{early}}
 \label{eq:early}
 $$
 with March 17, 2023, a week after the SVB bank run, as the final date and is referred to as "early returns." 
-To assess the medium-term impact, we similarly define “late returns,” denoted as $R_{i}^{\text{late}}$, with May 25, 2023 as the final date.^[In general, we refer to any cumulative returns starting from February 1, 2023, as "2023 returns."]
+To assess the medium-term impact, we similarly define "late returns," denoted as $R_{i}^{\text{late}}$, with May 25, 2023 as the final date.^[In general, we refer to any cumulative returns starting from February 1, 2023, as "2023 returns."]
 
 We then consider the excess return for this cumulative return above the cumulative return
-of the S&P 500 over the same time period19 (denoted as $R_{i}^{\text{early}}$ and $R_{i}^{\text{late}}$, respectively), that
+of the S&P 500 over the same time period^[Our results remain similar when using β-adjusted excess returns, following Campbell et al. (1998).
+See the Appendix Tables for regression results using the $\beta$-adjusted returns.] (denoted as $R_{i}^{\text{early}}$ and $R_{i}^{\text{late}}$, respectively), that
 is,
 
 $$
@@ -252,17 +265,17 @@ R_i^{\text{early}}
 R_m^{\text{early}}
 \label{eq:excess-early}
 $$
+
 This measure can be interpreted as the cumulative return difference between investing a dollar long in bank $i$'s stock and a dollar short in the S&P500 on February 1, and holding the position until the final date.
 This differs slightly from traditional event study approaches by focusing on excess geometric returns, rather than arithmetic excess returns. 
 We also construct "2022 returns" between February 1, 2022 to January 31, 2023 to capture the pre-panic returns.
-We consider how the excess return 
-$\tilde{R}_i$ covaries with various bank-level characteristics using
-linear regression.
+We consider how the excess return $\tilde{R}_i$ covaries with various bank-level characteristics using linear regression.
 These regressions are run in the cross-section, using robust standard errors.
 
 # Results
 
-We first present the overall trends in bank stock returns since the commencement of the rate hikes by the Federal Reserve in early 2022. Next, we analyze the vulnerability factors associated with spillover effects following the SVB failure. 
+We first present the overall trends in bank stock returns since the commencement of the rate hikes by the Federal Reserve in early 2022. 
+Next, we analyze the vulnerability factors associated with spillover effects following the SVB failure. 
 Finally, we discuss whether market participants had anticipated such vulnerabilities ex ante.
 
 ## Overall trends
@@ -271,35 +284,38 @@ Figure 1 displays the cumulative returns for the S&P 500 index and the banking s
 The top panel plots the 2022 returns to illustrate the trends observed over the 12 months preceding the SVB's failure, while the bottom panel shows the 2023 returns focusing on the subsequent 3 months after the event.
 We plot two measures of banking sector return: the Dow-Jones U.S. Bank Index (DJUSBK) and the asset-weighted average of our sample banks.
 The two sectoral returns exhibit a correlation of 0.99 in 2022.
+
 Since the start of the rate hikes on March 17, 2022, there was a general decline in stock prices.
 Notably, the banking sector initially exhibited even weaker performance compared to the rest of the market, as indicated in the top panel. However, this trend partially reversed later in the same year as the stock market started to recover. 
 By early 2023, the cumulative impact of rate hikes was similar for banks and the overall market.
+
 Following the bank run of SVB in March 2023, the relative performance of the banking sector diverged sharply from the rest of the market, as depicted in the bottom panel of Figure 1.
 While the S&P index did not show distinct signs of stress following the SVB failure, the banking sector as a whole declined by 20%.
 Furthermore, in Figure 2, which plots individual banks' 2023 returns in the same time period as the Panel B of Figure 1, we observe a noticeable increase in cross-sectional variation in banks' stock performance after the SVB bank run. 
 The distribution of bank stock returns remained relatively tight prior to the FDIC takeover of SVB but widened significantly afterwards, indicating the presence of heterogeneous spillover effects.
-We highlight the eight banks with the largest declines as of March 17th. Some of these banks,
-including SVB and Signature Bank (SBNY), did not post market prices following their FDIC
-takeovers until later, and hence had fixed prices for several days. Several other banks, notably First Republic (FRC), also experienced substantial immediate declines.
+We highlight the eight banks with the largest declines as of March 17th. 
+Some of these banks, including SVB and Signature Bank (SBNY), did not post market prices following their FDIC takeovers until later, and hence had fixed prices for several days. Several other banks, notably First Republic (FRC), also experienced substantial immediate declines.
 Our empirical analysis primarily aims to identify the factors contributing to these differential spillovers.
 
 Figure 3 plots the full distribution of bank stock returns assessed across different time periods.
 Panel 3a, based on cumulative returns from February 1, 2022 to January 30, 2023, indicates that banks' relative returns compared to the market index were symmetrically distributed around 0. 
-This suggests the absence of a discernible aggregate shock unique to the banking industry. However, following the bank run, the distribution of bank excess returns
-shifted towards the left and exhibited wider dispersion at the left tail. Panel 3b presents the distribution of "early" returns from February 1, 2023, to March 17, 2023 (a week after the SVB bank run), aiming to assess the immediate spillover effect. 
+This suggests the absence of a discernible aggregate shock unique to the banking industry. 
+However, following the bank run, the distribution of bank excess returns
+shifted towards the left and exhibited wider dispersion at the left tail. 
+Panel 3b presents the distribution of "early" returns from February 1, 2023, to March 17, 2023 (a week after the SVB bank run), aiming to assess the immediate spillover effect. 
 Panel 3c displays the "late" returns up to May 25, capturing the medium-term effect, which shows a further shift to the left from that in Panel 3b, with the average return declining from -16% to -30%.
 
 Notably, in Panel 3d, we plot the same figure as 3c but exclude an outlier bank with a significant positive return.^[First Citizens Bank experienced a significant positive return following its acquisition of SVB's
 assets and deposits, see Figure 10b.]
 The shapes of the early and late return distributions in Panels 3b and 3d appear similar. 
-However, the composition of these two distributions differs significantly. As indicated by the difference between the value-weighted return (in blue) and the equal-weighted return (in red), banks with large assets generally underperformed compared
-to small banks in 2022 (Panel 3a) and immediately after the SVB bank run (Panel 3b). 
+However, the composition of these two distributions differs significantly.
+As indicated by the difference between the value-weighted return (in blue) and the equal-weighted return (in red), banks with large assets generally underperformed compared to small banks in 2022 (Panel 3a) and immediately after the SVB bank run (Panel 3b). 
 Interestingly, this trend reversed in Panel 3c, with the value-weighted returns significantly higher than the equal-weighted returns, indicating large banks outperforming small banks. 
 We delve into the implications of these effects in Section 4.2.3.
 
 Lastly, we examine whether banks experiencing larger negative spillovers also demonstrated poorer performance in 2022. 
 To do so, we compare the cumulative returns before and immediately after the SVB bank run, i.e., 2022 returns and 2023 early returns, as in Figure 4.
-Notably, there is a robust correlation between these two sets of returns across banks, with a bivariate R2 of 0.18, and a regression coefficient of 0.31 with a corresponding t-statistic of 4.5.
+Notably, there is a robust correlation between these two sets of returns across banks, with a bivariate $R^2$ of 0.18, and a regression coefficient of 0.31 with a corresponding $t$-statistic of 4.5.
 As the latter period captures the immediate negative spillovers associated with the SVB failure, this pattern suggests that market participants, to some extent, anticipated and factored in the risks associated with the banking crisis of 2023 ahead of time.
 
 ## Spillover effects – driving factors
@@ -310,10 +326,9 @@ capitalization, among others.^[See models such as Diamond and Dybvig (1983), All
 We begin by discussing two vulnerabilities: uninsured deposits and unrealized losses on securities.
 Then, we explore whether other conventional factors such as asset liquidity, leverage, asset quality or size are associated with the spillovers observed in this particular event.
 Finally, we discuss which of these vulnerabilities investors may have anticipated, and which
-factors emerged as a “surprise” following the occurrence of the bank run.
+factors emerged as a "surprise" following the occurrence of the bank run.
 
-### Unique factors - uninsured deposits and unrealized losses on securi-
-ties
+### Unique factors - uninsured deposits and unrealized losses on securities
 
 As discussed in Section 2, the primary reason for the failure of SVB was concerns over unrealized losses in its security holdings, which prompted uninsured depositors to withdraw their funds.
 In normal circumstances, banks can use their liquid securities as buffers to alleviate shocks from funding outflows. 
@@ -331,33 +346,28 @@ We begin by examining the link between banks' reliance on uninsured deposits and
 As shown in Figure 5, which compares banks' use of uninsured deposits to their stock performances (i.e., early returns), a clear negative relationship between the two can be observed.^[In assessing this relationship in Figure 5, we grey out and omit BHCs with atypical funding
 structures. 
 These include custodian banks (Bank of New York Mellon Corp (BK) and State Street Corp (STT)) and insurance providers (First American Financial Corp (FAF)).] 
-
 Notably, the three eventually failed banks---SVB, SBNY, and FRC---had exceptionally high uninsured deposit shares, with shares of 94%, 89%, and 67%, respectively, compared to the average share of 39%.
 
 Next, we investigate the relationship between unrealized losses for HTM securities and negative stock returns.
 This relationship is plotted in Figure 6, which includes two panels.
 Panel A shows the ratio of a bank's HTM securities to its total assets, while Panel B displays the ratio of a bank's unrealized losses in HTM securities to its Tier 1 capital.
 
-In Panel A, it can be seen that many banks have very small amounts of HTM securities,
-resulting in the HTM/asset shares being clustered around 0.
-However, there are several
-outliers with a large HTM/asset share, the most notable being SVB.
-Conditioning on larger
-shares of HTM securities, we observe a negative association between the shares of HTM securities and the stock returns.
+In Panel A, it can be seen that many banks have very small amounts of HTM securities, resulting in the HTM/asset shares being clustered around 0.
+However, there are several outliers with a large HTM/asset share, the most notable being SVB.
+Conditioning on larger shares of HTM securities, we observe a negative association between the shares of HTM securities and the stock returns.
 
 In Panel B, unrealized HTM losses to Tier 1 capital are predominantly clustered around 0.
-This is due to many banks having minimal exposure to HTM securities, thereby constraining
-their potential losses.
+This is due to many banks having minimal exposure to HTM securities, thereby constraining their potential losses.
 Additionally, certain banks may have opted for securities with lower duration risk compared to FRC or SVB. 
 However, there is a negative association between unrealized losses and the stock returns as illustrated in the figure.
-It is worth noting that the implied losses from HTM securities, once recognized, would have reduced FRC’s Tier 1 capital by almost 30 percent.
+It is worth noting that the implied losses from HTM securities, once recognized, would have reduced FRC's Tier 1 capital by almost 30 percent.
 
 Figure 7 illustrates the dynamic association between the two vulnerability factors and
-banks’ stock returns over time.
-For each date, we regress bank $i$’s cumulative return up to that date (derived from Equation (1)) on a constant term and two vulnerability factors, banks' uninsured deposit share and unrealized HTM losses scaled by Tier 1 capital. 
-These factors are standardized to be mean zero and standard deviation of one. We then plot the estimated
-coefficients of the respective vulnerability factor for each date. This allows us to assess how
-the impact of these factors jointly evolved over time.
+banks' stock returns over time.
+For each date, we regress bank $i$'s cumulative return up to that date (derived from Equation (1)) on a constant term and two vulnerability factors, banks' uninsured deposit share and unrealized HTM losses scaled by Tier 1 capital. 
+These factors are standardized to be mean zero and standard deviation of one. 
+We then plot the estimated coefficients of the respective vulnerability factor for each date. 
+This allows us to assess how the impact of these factors jointly evolved over time.
 
 The two trends indicate that while bank stock returns were not significantly associated with their reliance on uninsured deposits until early March, investors were aware of the existence of implied losses, which was public information, with declines correlated with them during the beginning of February. 
 However, following the SVB bank run, there arose large and immediate negative spillovers associated with these vulnerability factors, and these effects persisted thereafter, although the magnitude of the correlation declined for unrealized HTM losses.
@@ -366,91 +376,75 @@ To quantify the spillover effects following the bank run, we next regress banks'
 The only exception is when we assess the impact of bank size, which we discuss in Section 4.2.3.] 
 To ensure comparability, we standardize the control variables, which allows us to interpret the estimates as the changes in stock returns in response to a 1 standard deviation change in specific vulnerability factors.
 The regression results are reported in Table 2.
+
 Columns 1-3 of Table 2 represent linear regressions of excess cumulative returns on Uninsured Deposit Share, HTM Asset Share, and Unrealized HTM Losses/Tier 1 Capital, respectively. 
-Notably, all estimates are statistically significant in explaining the negative excess returns. However, the estimate in column 3 for unrealized HTM losses is both statistically
-and economically the most significant.
+Notably, all estimates are statistically significant in explaining the negative excess returns.
+However, the estimate in column 3 for unrealized HTM losses is both statistically and economically the most significant.
 
 In column 4, we include all three variables simultaneously. 
-The results show that while
-the uninsured deposit share and unrealized HTM losses continue to predict negative excess
-returns,the actual HTM holdings do not. Thisfindingalignswithearlierintuiti on,asinvestors
-would likely have greater concerns regarding the actual unrealized losses on HTM security
-portfolios rather than the holdings themselves. The estimates indicate that a one standard-
-deviation increase in unrealized HTM losses to Tier 1 capital (or uninsured deposit share)
+The results show that while the uninsured deposit share and unrealized HTM losses continue to predict negative excess returns,the actual HTM holdings do not. 
+This finding aligns with earlier intuition, as investors would likely have greater concerns regarding the actual unrealized losses on HTM security portfolios rather than the holdings themselves. 
+estimates indicate that a one standard-deviation increase in unrealized HTM losses to Tier 1 capital (or uninsured deposit share)
 would lead to a 4.8 (or 3.5) percentage point lower excess stock returns.^[We present similar results in the Appendix Tables when analyzing β-adjusted excess returns.]
 
-Note that the presence of unrealized losses in banks’ HTM securities alone may not have
-a significant impact unless banks are compelled to sell these securities as a result of deposit
-outflows(Jiangetal.(2023b)).
+Note that the presence of unrealized losses in banks' HTM securities alone may not have a significant impact unless banks are compelled to sell these securities as a result of deposit outflows (Jiangetal.(2023b)).
 This prediction is supported in column5, where we include the interaction term between uninsured deposit shares and unrealized HTM losses. 
 The estimate for the interaction term is negative and significant, while unrealized HTM losses by themselves are not significant.
 
 ### What was the same this time and what differed?
 
-The likelihood of depositors’ panic decreases when banks possess more liquid assets, more capital, or better-performing assets.
-Liquid assets, including cash and securities, can function as liquidity buffers to meet withdrawals, which helps to alleviate depositors’ concerns as well as losses from disorderly liquidations of illiquid assets (BCBS (2013)). 
-Higher capital buffers also mitigate depositors’ concerns by providing more loss absorption capacity.
-Furthermore, depositors have less reason to panic and withdraw when banks’ assets are safe and expected to generate greater future returns.
+The likelihood of depositors' panic decreases when banks possess more liquid assets, more capital, or better-performing assets.
+Liquid assets, including cash and securities, can function as liquidity buffers to meet withdrawals, which helps to alleviate depositors' concerns as well as losses from disorderly liquidations of illiquid assets (BCBS (2013)). 
+Higher capital buffers also mitigate depositors' concerns by providing more loss absorption capacity.
+Furthermore, depositors have less reason to panic and withdraw when banks' assets are safe and expected to generate greater future returns.
 We next investigate whether these factors contributed to the spillover effects associated with the failure of SVB.
 
 **Liquid assets**
 We begin by examining the role of liquid assets, consisting of both cash and securities.
 We then analyze the effects of cash and securities separately to assess whether they had differential impacts.
+
 We report the linear regression estimates of these relationships in Table 3, where the
-dependent variable is banks’ early excess returns as in Table 2.
-In Column 1, the results indicate that overall holdings of liquid assets are not significantly associated with banks’ performance in response to the shock from the bank run, which differs from the typical implications.
-We see the corresponding graphical relationship in Panel A of Figure A1 in the Appendix. In fact, despite SVB holding more than 60% of its assets in cash and securities,
-it failed to withstand deposit withdrawals. Unlike typical bank run scenarios, depositor
-withdrawals exacerbated financial distress not through fire-sale losses of illiquid assets, but
-rather by realizing accounting losses on highly liquid securities that were marked as held-to-
-maturity. This finding holds even when controlling for banks’ uninsured deposit reliance, as
-shown in column 3.
-However, notallliquidassetsyieldedsimilarresults. InColumn2, wefindthathighercash
-holdings were indeed associated with a significant mitigation of the negative shock, whereas
-this was not the case with securities. HTM securities, despite being liquid, proved problematic
-in this specific episode as their liquidation would lead to the recognition of unrealized losses,
-thereby exacerbating the distress. We see the corresponding graphical relationship in Panel
-B and C of Figure A1.
-The benefit of holding cash becomes more pronounced when we control for funding out-
-flow risks by incorporating uninsured deposit shares in column 4. This results in a significant
-increase in the explanatory power (both for the estimate’s economic and statistically signifi-
-cance and R2). The estimate indicates that a one-standard-deviation increase in cash to total
-assets would lead to a 3.2 percentage point increase in excess stock returns. In column 5, we
-additionally introduce an interaction term between cash (or securities) and uninsured deposit
-share. The estimate of the interaction term for cash is positive and significant, suggesting
-cash buffers effectively alleviate spillovers, particularly for banks facing higher funding outflow
-risks.
-Figure 8 illustrates the dynamic association between banks’ stock returns and different
-sources of liquid assets (cash or securities), as we did in Figure 7. Prior to the run, banks’
-cash holdings slowly began to predict higher cumulative returns across banks, but securities
-did not. However, following the run, the impact of cash holdings jumped immediately and
-more after the initial weekend. This effect becoming more pronounced over time. In contrast,
-banks’securitiesholdingsdidnotsignificantlyaffecttheirstockreturnsthroughoutthesample
-period.
+dependent variable is banks' early excess returns as in Table 2.
+In Column 1, the results indicate that overall holdings of liquid assets are not significantly associated with banks' performance in response to the shock from the bank run, which differs from the typical implications.
+We see the corresponding graphical relationship in Panel A of Figure A1 in the Appendix.
+In fact, despite SVB holding more than 60% of its assets in cash and securities, it failed to withstand deposit withdrawals.
+Unlike typical bank run scenarios, depositor withdrawals exacerbated financial distress not through fire-sale losses of illiquid assets, but rather by realizing accounting losses on highly liquid securities that were marked as held-to-maturity.
+This finding holds even when controlling for banks' uninsured deposit reliance, as shown in column 3.
+
+However, not all liquid assets yielded similar results.
+In Column 2, we find that higher cash holdings were indeed associated with a significant mitigation of the negative shock, whereas this was not the case with securities. 
+HTM securities, despite being liquid, proved problematic in this specific episode as their liquidation would lead to the recognition of unrealized losses, thereby exacerbating the distress.
+We see the corresponding graphical relationship in Panel B and C of Figure A1.
+
+The benefit of holding cash becomes more pronounced when we control for funding outflow risks by incorporating uninsured deposit shares in column 4.
+This results in a significant increase in the explanatory power (both for the estimate's economic and statistically significance and $R^2$). 
+The estimate indicates that a one-standard-deviation increase in cash to total assets would lead to a 3.2 percentage point increase in excess stock returns. 
+In column 5, we additionally introduce an interaction term between cash (or securities) and uninsured deposit share. 
+The estimate of the interaction term for cash is positive and significant, suggesting cash buffers effectively alleviate spillovers, particularly for banks facing higher funding outflow risks.
+
+Figure 8 illustrates the dynamic association between banks' stock returns and different sources of liquid assets (cash or securities), as we did in Figure 7. 
+Prior to the run, banks' cash holdings slowly began to predict higher cumulative returns across banks, but securities did not. However, following the run, the impact of cash holdings jumped immediately and more after the initial weekend. 
+This effect becoming more pronounced over time. 
+In contrast, banks' securities holdings did not significantly affect their stock returns throughout the sample period.
 
 **Capitalization**
-Next, we examine whether banks’ capitalization, as measured by the ratio of Tier 1 capital to risk-weighted assets (RWA), played a role in mitigating the spillover effects.
+Next, we examine whether banks' capitalization, as measured by the ratio of Tier 1 capital to risk-weighted assets (RWA), played a role in mitigating the spillover effects.
 As shown in Figure A2, we observe that, consistent with typical banking crises, higher capital levels were associated with relatively higher returns, especially among undercapitalized banks.
-It is worth noting that SVB does not appear to be specifically undercapitalized in this figure; but one should note that this capitalization measure does not account for the unrealized HTM
-losses.
+It is worth noting that SVB does not appear to be specifically undercapitalized in this figure; but one should note that this capitalization measure does not account for the unrealized HTM losses.
 
-We can confirm this relationship from the regression result reported in column 1 of Table 4, where a one-standard-deviation increase in the Tier 1 capital ratio is associated with a
-3.2 percentage point increase in excess early returns.
-The significance of capitalization in
-mitigating spillovers persists even when controlling for funding outflow risks, as shown in column 4, although the effect is less  pronounced bothstatistically and economically. 
+We can confirm this relationship from the regression result reported in column 1 of Table 4, where a one-standard-deviation increase in the Tier 1 capital ratio is associated with a 3.2 percentage point increase in excess early returns.
+The significance of capitalization in mitigating spillovers persists even when controlling for funding outflow risks, as shown in column 4, although the effect is less  pronounced bothstatistically and economically. 
 In column 5, we include the interaction terms to examine whether the stability effect of capitalization is more pronounced for banks facing higher funding outflow risks. 
-While the coefficient for the interaction of capitalization and uninsured deposit shares is positive and sizable, its statistical significance is somewhat marginal, with a t-statistic of 1.3.
+While the coefficient for the interaction of capitalization and uninsured deposit shares is positive and sizable, its statistical significance is somewhat marginal, with a $t$-statistic of 1.3.
 
 In Figure 9, we plot the dynamic correlations of the factors over time. 
 Through February,
 bank capitalization has a growing positive correlation with cumulative returns, and this effect jumps significantly following the weekend after the SVB run.
 
-**Asset quality** Finally,we examine whether asset quality,as measured by the non-performing
-loan (NPL) ratio, contributed the contagion effect. 
-In typical banking crises, concerns about
-bank asset quality, or “fundamentals,” can exacerbate depositor panic and bank runs (Rochet and Vives, 2004; Goldstein and Pauzner, 2005). 
-However, in the case of the 2023 crisis, depositor panic stemmed from implied losses due to duration mismatch rather than credit risk
-exposures.
+**Asset quality** 
+Finally,we examine whether asset quality,as measured by the non-performing loan (NPL) ratio, contributed the contagion effect. 
+In typical banking crises, concerns about bank asset quality, or "fundamentals," can exacerbate depositor panic and bank runs (Rochet and Vives, 2004; Goldstein and Pauzner, 2005). 
+However, in the case of the 2023 crisis, depositor panic stemmed from implied losses due to duration mismatch rather than credit risk exposures.
 As illustrated in Figure A3, there was no discernible effect of better-performing assets in mitigating the negative spillovers. 
 Moreover, the regression estimates in Table 4 indicate that the NPL ratio was not a statistically significant predictor in all of the specifications.
 The null effect is also confirmed in Figure 9 displaying the dynamic impact.
@@ -463,39 +457,39 @@ It was uninsured deposits that became problematic, in combination with the impli
 ### Did size matter? Immediate vs. medium-term effects
 
 Next, we investigate whether bank size was associated with negative returns. 
-Figure 10a displays the “early” cumulative returns plotted against bank assets. 
-The figure suggests the
-presence of differential spillover effects across different asset size categories.
+Figure 10a displays the "early" cumulative returns plotted against bank assets. 
+The figure suggests the presence of differential spillover effects across different asset size categories.
 A notable observation is the heightened stress experienced by mid-sized banks, particularly super-regional banks falling between assets of \$50 billion and \$250 billion, denoted by the two vertical lines. 
-As discussed in Section 2, these banks, including SVB, were initially designated as systemically important following the regulatory reforms implemented after the GFC, but faced relaxed regulations with the regulatory rollback in 2018. One possible interpretation is that investors exhibited greater concerns with banks of a similar size to SVB, particularly in the aftermath of its failure.^[This is consistent with the findings in Luck et al. (2023), indicating the deposit outflows were most acute among the super-regional banks, with some funds flowing into the larger banks.]
+As discussed in Section 2, these banks, including SVB, were initially designated as systemically important following the regulatory reforms implemented after the GFC, but faced relaxed regulations with the regulatory rollback in 2018.
+One possible interpretation is that investors exhibited greater concerns with banks of a similar size to SVB, particularly in the aftermath of its failure.^[This is consistent with the findings in Luck et al. (2023), indicating the deposit outflows were most acute among the super-regional banks, with some funds flowing into the larger banks.]
 
 The regression estimates presented in Table 5 provide further confirmation of the particular stress experienced by these regional banks with similar size immediately after the SVB failure.
-In Column 1, dummy variables are included for each of the six size buckets, where each estimate indicates the average “early” excess returns for that specific size group relative to the market returns. 
+In Column 1, dummy variables are included for each of the six size buckets, where each estimate indicates the average "early" excess returns for that specific size group relative to the market returns. 
 For only this column, we exclude the constant, so each coefficient should represent the average return in the size bucket. 
-Column2 incorporates the bank characteristics (i.e., vulnerability factors) that we identified as being associated with the spillovers, including uninsured deposit share, capitalization, cash holdings, and unrealized HTM security losses.
+Column 2 incorporates the bank characteristics (i.e., vulnerability factors) that we identified as being associated with the spillovers, including uninsured deposit share, capitalization, cash holdings, and unrealized HTM security losses.
 Here, a constant term is included and we exclude the size indicator variable for the smallest asset size group, such that the estimates for the asset groups reflect excess returns relative to banks with less than 5 billion dollars in assets. 
-Finally, we include “bank-beta,” which is defined as the individual banks’ factor loading on the Dow Jones U.S. Banks Index net of the S&P 500 index, estimated for stock returns in 2022. 
+Finally, we include "bank-beta," which is defined as the individual banks' factor loading on the Dow Jones U.S. Banks Index net of the S&P 500 index, estimated for stock returns in 2022. 
 This variable accounts for any systemic loading on the overall banking sector performance, assessed prior to the SVB failure.
 
-The estimates in columns 1 and 2 highlight the significant “early” stress experienced by the
+The estimates in columns 1 and 2 highlight the significant "early" stress experienced by the
 super-regional banks.
 When compared to banks with assets below \$5 billion, banks within the size range of \$50 billion and \$250 billion experienced significantly lower returns, with returns that were 11 percentage points lower conditional on observables, and 20 percentage points lower unconditionally.
 Interestingly, conditional on observables, the largest banks with assets greater than $1 trillion showed relative outperformance compared to smaller banks.
 The estimates in column 2 indicate that unrealized HTM losses were the most economically significant predictors of the scale of spillover effects immediately after the SVB failure, followed by uninsured deposits and cash. 
-These correlations held even after controlling for each bank’s bank-beta, which itself had a negative effect. 
+These correlations held even after controlling for each bank's bank-beta, which itself had a negative effect. 
 This suggests that banks that performed worse likely did load more on an overall banking sector factor, but the other observables explained additional variation.
 
 **Differential medium-term effect**
 The size effect, however, presents a different pattern over time. 
-Figure 10b displays banks’ “late” returns two months after the SVB failure, from February 1, 2023 to May 25, 2023.
+Figure 10b displays banks' "late" returns two months after the SVB failure, from February 1, 2023 to May 25, 2023.
 Unlike the immediate effect shown in Figure 10a, the substantial negative impact had spread beyond mid-sized banks in the \$50 billion and \$250 billion range to include smaller banks as well.
 
 The regression estimates reported in columns 4 and 5 of Table 5 repeats the exercise from column 1 and 2 for the late returns. 
 The banking sector, as a whole, experienced a further decline in stock prices over time (column 4) compared to immediately after the SVB failure
 (column 1).
 By late May, all banks had experienced negative returns of nearly 30%, except for the largest banks.
-While policy measures, such as the FDIC’s full protection of failed bank deposits and the Federal Reserve’s new lending facility, helped prevent additional bank runs, concerns about the soundness of the entire banking system spread. 
-This is potentially because the fundamental driver of banking stress was the unrealized losses in banks’ long-term assets, which included not only HTM securities but also fixed-rate mortgage loans, which affected a broad range of banks.^[Assessing the scale of banks’ mark-to-market losses encompassing both securities and mortgage loans, Jiang et al. (2023b) argue that the loss for the U.S. banking system amounts to $2 trillion and is widespread. 
+While policy measures, such as the FDIC's full protection of failed bank deposits and the Federal Reserve's new lending facility, helped prevent additional bank runs, concerns about the soundness of the entire banking system spread. 
+This is potentially because the fundamental driver of banking stress was the unrealized losses in banks' long-term assets, which included not only HTM securities but also fixed-rate mortgage loans, which affected a broad range of banks.^[Assessing the scale of banks' mark-to-market losses encompassing both securities and mortgage loans, Jiang et al. (2023b) argue that the loss for the U.S. banking system amounts to $2 trillion and is widespread. 
 Also see Flannery and Sorescu (2023) providing similar assessments.]
 The absence of any indication of a rate cut by the central bank further heightened these concerns, resulting in stress for the entire banking sector.
 
@@ -514,14 +508,14 @@ Why did investors treat these largest banks differently during a period of syste
 Evidently, these banks were subject to more robust regulation and supervision than small banks, including SVB, and thus were likely in better financial health. 
 However, such regulatory difference alone does not fully explain their outperformance. Note that relatively smaller
 large banks, with assets greater than $250 billion but smaller than $1 trillion, were also desig-
-nated as “systemically important,” to face similarly strict regulations. However, these banks
+nated as "systemically important," to face similarly strict regulations. However, these banks
 did not outperform the rest – only those larger than $1 trillion did so.
-One possible explanation for this pattern is the implicit guarantees associated with too-big-to-fail (TBTF) banks (O’Hara and Shaw (1990), Penas and Unal (2004), Baron et al.
+One possible explanation for this pattern is the implicit guarantees associated with too-big-to-fail (TBTF) banks (O'Hara and Shaw (1990), Penas and Unal (2004), Baron et al.
 (2023)). 
-Even among the similarly regulated “systemically important financial institutions”
+Even among the similarly regulated "systemically important financial institutions"
 larger than $250 billion in assets, investors seemed to have priced in greater TBTF benefits
 for the largest banks.
-In fact, being perceived as safe, these banks also experienced deposit inflows amid a flight to quality by depositors, which further helped them mitigate the system-wide stress (Caglio et al. (2023)).^[Examining historical data since 1870 across 17 advanced economies, Baron et al. (2023) found that during banking crises, regulators are significantly more inclined to rescue their largest (i.e., top-5) banks, and these banks’ deposits exhibit greater stability.] 
+In fact, being perceived as safe, these banks also experienced deposit inflows amid a flight to quality by depositors, which further helped them mitigate the system-wide stress (Caglio et al. (2023)).^[Examining historical data since 1870 across 17 advanced economies, Baron et al. (2023) found that during banking crises, regulators are significantly more inclined to rescue their largest (i.e., top-5) banks, and these banks' deposits exhibit greater stability.] 
 Those with deposit outflows, on the other hand, were
 forced to resort to more expensive funding sources, such as time deposits and borrowing from
 the Federal Reserve or Federal Home Loan Banks (Kang-Landsberg et al. (2023)).
@@ -531,10 +525,10 @@ the Federal Reserve or Federal Home Loan Banks (Kang-Landsberg et al. (2023)).
 Having established the factors associated with the spillovers, our next focus is to examine
 whether market participants had anticipated these vulnerabilities in advance or if they were
 caught by surprise following the SVB bank run. As discussed in Section 4.1, there was a
-strong association between banks’ stock returns in 2022 and those immediately after the SVB
+strong association between banks' stock returns in 2022 and those immediately after the SVB
 bank run, indicating investors had expectations of vulnerabilities before the run occurred.
 
-To assess this issue, we include each bank’s 2022 return as an additional control for the
+To assess this issue, we include each bank's 2022 return as an additional control for the
 regression specification of Table 5 and present the estimates in columns 3 and 6. Focusing on
 the early returns analyzed in column 3, note that bank-beta, which accounts for market per-
 ceptions of systematic exposures to the banking industry performance, no longer predicts the
@@ -545,13 +539,13 @@ To explore the specific factors investors priced in, we compare estimates in col
 We observe that vulnerabilities associated with uninsured deposit reliance or cash holdings were partly anticipated by investors, as indicated by their diminished significance when controlling for the 2022 returns. 
 However, the inclusion of the lagged returns has little effect on the explanatory power of HTM losses or the size dummy for the super-regional banks (50b-250), whose magnitude, in fact becomes
 larger.
-This indicates that investors were potentially surprised by these factors, leading to additional negative returns in response to the SVB bank run. Comparison of columns 5 and 6 for the late returns indicates that investors did not anticipate the “TBTF” benefit for the largest banks (greater than \$1 trillion), either.
+This indicates that investors were potentially surprised by these factors, leading to additional negative returns in response to the SVB bank run. Comparison of columns 5 and 6 for the late returns indicates that investors did not anticipate the "TBTF" benefit for the largest banks (greater than \$1 trillion), either.
 
-To further explore this, we evaluate the correlation between each bank’s stock return prior to the 2023 crisis (i.e., “2022 returns” from 2022-02-01 to 2023-01-31) and their vulnerability characteristics.
+To further explore this, we evaluate the correlation between each bank's stock return prior to the 2023 crisis (i.e., "2022 returns" from 2022-02-01 to 2023-01-31) and their vulnerability characteristics.
 A stronger correlation would indicate that investors had more pronounced concerns regarding specific vulnerabilities. 
 Note that we hold these vulnerability factors fixed to the observed measures from the 2022q4 filings.
 
-In Table 6, we regress banks’ 2022 returns on the respective vulnerability factors we have
+In Table 6, we regress banks' 2022 returns on the respective vulnerability factors we have
 previously assessed. 
 Focusing on the factors we identified to be relevant in Table 5, our results indicate that market investors to some degree accounted for possible losses associated with heavy reliance on uninsured deposits and limited cash holdings, as evidenced by their significant correlation with the 2022 returns.
 These losses could result from increases in
@@ -564,30 +558,30 @@ This indicates that investors considered the recognition of implied securities l
 
 How can we interpret these null results when all relevant information was publicly available? 
 The information view of banking panics (see, e.g., Gorton (1988), Dang et al. (2020)) can provide a plausible framework.
-The view argues that abrupt shifts in depositors’ risk perception of bank assets, triggered by the arrival of negative news such as a failure of a large institution or adverse macroeconomic perspectives, can cause widespread bank runs.
+The view argues that abrupt shifts in depositors' risk perception of bank assets, triggered by the arrival of negative news such as a failure of a large institution or adverse macroeconomic perspectives, can cause widespread bank runs.
 
-Even though the presence of unrealized losses in banks’ securities portfolios affects their fundamentals, this vulnerability would only materialize when banks were forced to liquidate these assets to generate cash in the face of severe deposit outflows.
+Even though the presence of unrealized losses in banks' securities portfolios affects their fundamentals, this vulnerability would only materialize when banks were forced to liquidate these assets to generate cash in the face of severe deposit outflows.
 Hence, unless depositors are concerned about these implied losses, stock investors have little reason to pay close attention to
 them, either. 
 While investors did take into account the possible negative impacts associated with uninsured deposits, whose supply can be more sensitive to rate hikes, they at least did not anticipate the implied losses to be realized with substantial withdrawals.
-The SVB episode, however, potentially caused a significant shift in this dynamic through depositors’ risk perceptions.
+The SVB episode, however, potentially caused a significant shift in this dynamic through depositors' risk perceptions.
 
 A similar argument can be made for bank size. While the size of a bank can influence its likelihood of survival, this factor becomes critical particularly when experiencing systemic instability.
 Following the SVB failure, investors became aware of the vulnerability faced by
 mid-sized banks and the relaxation of regulations that they experienced. 
-As concerns about the entire banking system grew over time, flying-to-quality investors sought safety in the largest “systemic” banks.
+As concerns about the entire banking system grew over time, flying-to-quality investors sought safety in the largest "systemic" banks.
 However, these effects are significant only when conditioned on the occurrence of a systemic disruption, which may have a small unconditional probability ex ante.
 
 It is important to note that lack of information was not a constraint. 
 The bank balance sheet information (including unrealized losses) had been announced for 2022q4 by the end of January 2023, and the accumulated HTM losses had been apparent prior to 2022q4 as well.^[Assessing systemic crisis episodes between 1972 and 2022, Du et al. (2023) find that narrative- based accounting measures associated with specific crises, despite being used for post-crisis regulatory reforms, are less informative in predicting subsequent crises compared to market-based measures.]
 Hence, there was no sense of hidden information on implied losses. 
-Rather, the SVB bank run seems to have served as a device to change investors’ risk perceptions to cause widespread spillovers.
+Rather, the SVB bank run seems to have served as a device to change investors' risk perceptions to cause widespread spillovers.
 
 # Conclusion
  
 This paper analyzes the SVB bank failure, focusing on the bank balance sheet factors associated with contagion on the rest of the banking system.
 
-Lessons from the GFC suggested that liquidity risks could be managed by holding liquid assets, including cash and “high-quality” securities, or funding with deposits rather than wholesale funding.
+Lessons from the GFC suggested that liquidity risks could be managed by holding liquid assets, including cash and "high-quality" securities, or funding with deposits rather than wholesale funding.
 However, the SVB episode showed that these measures may not always help prevent bank runs. 
 The panic was triggered by concerns about unrealized losses in their HTM securities portfolio, albeit of high-quality, which led uninsured depositors to panic.
 This forced the banks to sell their HTM securities, resulting in the realization of implied losses, exacerbating the run.
@@ -602,7 +596,7 @@ This highlights the challenges for regulators in devising comprehensive and robu
 
 In many respects, the SVB episode highlights new channels for bank failures and contagion, providing us with novel lessons.
 Some of the elegantly designed measures based on the experiences of the GFC did not effectively prevent the systemic instability this time.
-A major driver for the spillovers was implied losses in the banks’ securities portfolio, but this was not adequately considered in either the regulatory stress test scenarios or the investors’ risk pricing ex ante. 
+A major driver for the spillovers was implied losses in the banks' securities portfolio, but this was not adequately considered in either the regulatory stress test scenarios or the investors' risk pricing ex ante. 
 Moreover, the treatment and incorporation of these implied losses into regulatory measures would pose important challenges as such losses crystallize only when banks are forced to sell held-to-maturity assets at market prices.
 These are important topics for further research and, going forward, policymakers should incorporate these lessons into their policies to enhance the resilience of the financial system.
 
