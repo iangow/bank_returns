@@ -3948,3 +3948,98 @@ ggplot(
   scale_y_continuous(labels = scales::percent_format()) +
   geom_hline(yintercept = 0, color = "black", linetype = 2)
 ```
+
+```{=latex}
+\clearpage
+```
+
+```{r}
+#| include: false
+emit_tex_table <- function(path) {
+  lines <- readLines(path)
+  pattern <- "\\\\begin\\{adjustbox\\}\\{width\\s*=\\s*([0-9.]+)\\\\textwidth,\\s*center\\}"
+  m <- regexec(pattern, lines, perl = TRUE)
+  mm <- regmatches(lines, m)
+  has_match <- lengths(mm) > 0
+  if (any(has_match)) {
+    scales <- as.numeric(vapply(mm[has_match], function(x) x[2], character(1)))
+    scaled <- formatC(scales * 0.8, format = "f", digits = 2)
+    lines[has_match] <- paste0(
+      "\\begin{adjustbox}{width = ", scaled, "\\textwidth, center}"
+    )
+  }
+  cat(lines, sep = "\n")
+}
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table3_beta.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table3_late.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table3_late_beta.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table4_beta.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table4_late.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table4_late_beta.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table5_beta.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table5_late.tex")
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+#| message: false
+emit_tex_table("output/table5_late_beta.tex")
+```
