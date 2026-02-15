@@ -75,7 +75,7 @@ By the end of 2022, SVB's bond portfolio consisted of \$91.3 billion in held-to-
 However, these losses were considered "potential" and would only materialize if the bank was forced to sell the assets during liquidity stress events such as heavy deposit withdrawals.
 Amidst mounting concerns, SVB experienced a steady decline in deposits over the four quarters leading up to its eventual failure.
 The pace of withdrawals intensified during the week of March 6th, 2023, culminating in an abrupt outflow of \$42 billion on a single day, March 9th.
-The run on SVB triggered its failure and subsequent takeover by FDIC on March 10th ([@JiangMatvosPiskorskiSeru2023b]).
+The run on SVB triggered its failure and subsequent takeover by FDIC on March 10th [@JiangMatvosPiskorskiSeru2023b].
 
 The run on SVB triggered significant spillover effects on the U.S. banking system.
 One crucial factor that contributed to the spillover effects was the concern over unrealized losses in highly liquid securities.
@@ -89,7 +89,7 @@ These banks had previously been designated as systemically important by regulato
 Investors initially exhibited greater concerns with banks of a similar size to SVB, potentially due to regulatory differences.
 Over the next months, however, the negative effects spread to other banks as concerns about the entire banking system became more widespread.
 Surprisingly, very large banks, particularly those with assets over \$1 trillion, outperformed the rest of the system.
-This may be attributed to implicit too-big-to-fail (TBTF) guarantees and consequent deposit inflows, since these banks were perceived as safe havens during systemic instability ([@CaglioDlugoszRezende2023], [@LuckPlosserYounger2023], [@BaronSchularickZimmermann2023]).
+This may be attributed to implicit too-big-to-fail (TBTF) guarantees and consequent deposit inflows, since these banks were perceived as safe havens during systemic instability [@CaglioDlugoszRezende2023; @LuckPlosserYounger2023; @BaronSchularickZimmermann2023].
 
 Market participants also seemed to anticipate these banks' vulnerabilities, as the same banks that suffered more after the SVB failure had also underperformed in the previous year.
 We investigate which vulnerabilities were anticipated and which came as a "surprise" following the failure of SVB.
@@ -97,9 +97,9 @@ It is important to note that all information we use, including the unrealized lo
 Our analysis suggests that market participants had already factored in vulnerabilities associated with reliance on uninsured deposits and limited cash holdings.
 However, damages from implied losses and the impact of bank size were more of a surprise.
 If depositors do not perceive implied losses as problematic and do not run on the bank, stock investors may have had little reason to worry about them.
-Although, this changed abruptly with the failure of SVB, which aligns with the information view of banking panics ([@DangGortonHolmstrom2020]), where bank runs are caused by abrupt shifts in depositors' risk perceptions.^[According to the information view, a sudden realization of risks in bank assets can be triggered by
+Although, this changed abruptly with the failure of SVB, which aligns with the information view of banking panics [@DangGortonHolmstrom2020], where bank runs are caused by abrupt shifts in depositors' risk perceptions.^[According to the information view, a sudden realization of risks in bank assets can be triggered by
 an arrival of new information such as the failure of a large institution or negative news on aggregate
-fundamentals ([@Gorton1988]).]
+fundamentals [@Gorton1988].]
 
 The SVB episode has similarities with the Savings and Loans (S&L) crisis and the GFC, as well as important differences.
 When inflation reached historic levels in the United States, the Federal Reserve started to increase interest rates in October 1979.
@@ -120,13 +120,13 @@ Overall, the unrealized losses in securities, the vulnerability of uninsured dep
 The neglected risk by investors further underscores the challenges for policymakers in crafting robust stress scenarios that comprehensively account for all pertinent vulnerabilities beforehand.
 These are important insights for policymakers and will help them in designing new policies to make the financial system more resilient.
 
-**Related literature:** The paper is related to the vast literature on bank runs (e.g., [@DiamondDybvig1983], [@ChariJagannathan1988], [@CalomirisKahn1991], [@AllenGale1998], and [@GoldsteinPauzner2005]) and their origins ([@Gorton1988], [@CalomirisGorton1991]). 
+**Related literature:** The paper is related to the vast literature on bank runs, e.g., [@DiamondDybvig1983; @ChariJagannathan1988; @CalomirisKahn1991; @AllenGale1998; @GoldsteinPauzner2005], and their origins [@Gorton1988; @CalomirisGorton1991]. 
 It also contributes to the literature on the channels of contagion, such as direct exposures via interbank linkages [@AllenGale2000]; information
-contagion ([@Chen1999], [@AcharyaYorulmazer2008]); and illiquidity and asset prices ([@DiamondRajan2001], [@GortonHuang2004], and [@CifuentesFerrucciShin2005]).
+contagion [@Chen1999; @AcharyaYorulmazer2008]; and illiquidity and asset prices [@DiamondRajan2001; @GortonHuang2004; @CifuentesFerrucciShin2005].
 
 The paper is also related to the literature on banks' interest rate risk.
 A recent study by @DrechslerSavovSchnabl2021 suggests that banks' deposit franchise can act as a natural hedge against interest rate risks, while @DrechslerEtAl2023NBER argue that a bank run equilibrium can emerge when banks heavily rely on uninsured deposits during rate increases.
-Investigating the 2022 monetary tightening period, [@JiangMatvosPiskorskiSeru2023a] find significant exposures to interest rate risk with limited use of hedging (see also [@BegenauPiazzesiSchneider2015]).
+Investigating the 2022 monetary tightening period, @JiangMatvosPiskorskiSeru2023a find significant exposures to interest rate risk with limited use of hedging; see also [@BegenauPiazzesiSchneider2015].
 
 Several other studies examine the implications of SVB's failure and the subsequent banking crisis.
 @Metrick2024 documents the failure of SVB and how its balance sheet contributed to the bank run of 2023.
@@ -183,13 +183,13 @@ HTM securities are planned to be held until maturity and can be carried at their
 On the other hand, AFS securities are marked to market.
 At the end of 2022, SVB had \$91.3 billion in HTM securities with very long maturities and \$26.1 billion in AFS securities.
 Increasing interest rates led to losses in the market value of its bonds, with significant unrealized losses for its HTM securities.
-The rise in interest rates and the resulting losses in the securities portfolio of SVB, some of which were hidden due to HTM accounting, was a major contributor to the demise of SVB ([@JiangMatvosPiskorskiSeru2023b]).
+The rise in interest rates and the resulting losses in the securities portfolio of SVB, some of which were hidden due to HTM accounting, was a major contributor to the demise of SVB [@JiangMatvosPiskorskiSeru2023b].
 
 ### Liquidity risk due to unsecured deposits
 
 During the GFC, a key lesson learned was the importance of differentiating between wholesale funding and deposits when assessing funding risk.
-While wholesale funding was highly vulnerable to runs during the crisis, deposits turned out to be relatively "sticky" and less likely to be withdrawn by panicked investors (see, e.g., [@IvashinaScharfstein2010; @HansonEtAl2015]).
-This insight has been incorporated into regulatory reforms aimed at improving the resilience of the banking system such as the Liquidity Coverage Ratio (LCR) requirement of Basel III ([@BCBS2013]).
+While wholesale funding was highly vulnerable to runs during the crisis, deposits turned out to be relatively "sticky" and less likely to be withdrawn by panicked investors; see, e.g., [@IvashinaScharfstein2010; @HansonEtAl2015].
+This insight has been incorporated into regulatory reforms aimed at improving the resilience of the banking system such as the Liquidity Coverage Ratio (LCR) requirement of Basel III [@BCBS2013].
 In particular, the LCR requirement mandates that banks must have sufficient high-quality liquid assets (HQLA) to meet net cash outflows for 30 days under a stress scenario.^[HQLAs mainly consist of reserve balances, Treasuries, agency debt and agency MBS.]
 SVB's bond portfolio, which constituted a major part of its assets, would be considered HQLA in the context of the LCR.^[Due to the rolling back of regulation, as we discuss next, SVB was not subject to the LCR requirement. 
 However, [@Nelson2023] estimates that SVB would have satisfied the LCR requirement since a majority of its asset portfolio would be considered to be highly liquid.]
@@ -335,11 +335,11 @@ As discussed in Section 2, the primary reason for the failure of SVB was concern
 In normal circumstances, banks can use their liquid securities as buffers to alleviate shocks from funding outflows. 
 However, with unrealized losses due to rate increases, liquidation of the HTM securities, while still "liquid", would force banks to mark losses, exacerbating financial distress.
 
-Deposits, even uninsured ones, typically serve as a reliable source of funding for banks as they are often considered less flighty than other market funding sources ([@IvashinaScharfstein2010], [@HansonEtAl2015], and [@BaiKrishnamurthyWeymuller2018]). 
-Thanks to the deposit franchise, banks can also attract deposits at a lower cost than other sources ([@BergerHanweckHumphrey1987], [@GaleYorulmazer2020], [@GatevStrahan2006], and [@DrechslerSavovSchnabl2017; @DrechslerSavovSchnabl2021]).
-This conventional wisdom is also reflected in the liquidity regulation, where the LCR adopts relatively low run-off rates for deposit sources than other market funding ([@BCBS2013]).
+Deposits, even uninsured ones, typically serve as a reliable source of funding for banks as they are often considered less flighty than other market funding sources [@IvashinaScharfstein2010; @HansonEtAl2015; @BaiKrishnamurthyWeymuller2018]. 
+Thanks to the deposit franchise, banks can also attract deposits at a lower cost than other sources [@BergerHanweckHumphrey1987; @GaleYorulmazer2020; @GatevStrahan2006; @DrechslerSavovSchnabl2017; @DrechslerSavovSchnabl2021].
+This conventional wisdom is also reflected in the liquidity regulation, where the LCR adopts relatively low run-off rates for deposit sources than other market funding [@BCBS2013].
 
-However, during the 2023 crisis, banks could not easily exploit the deposit franchise as they needed to offer significant interest rates to attract or retain depositors ([@KangLandsbergLuckPlosser2023]).
+However, during the 2023 crisis, banks could not easily exploit the deposit franchise as they needed to offer significant interest rates to attract or retain depositors [@KangLandsbergLuckPlosser2023].
 They also faced competition from other investment options, such as money market funds, which had access to the Fed's reverse repo facility and were perceived as safe while offering high interest rates.
 
 We begin by examining the link between banks' reliance on uninsured deposits and negative stock returns in the aftermath of the SVB failure. 
@@ -387,14 +387,14 @@ This finding aligns with earlier intuition, as investors would likely have great
 estimates indicate that a one standard-deviation increase in unrealized HTM losses to Tier 1 capital (or uninsured deposit share)
 would lead to a 4.8 (or 3.5) percentage point lower excess stock returns.^[We present similar results in the Appendix Tables when analyzing β-adjusted excess returns.]
 
-Note that the presence of unrealized losses in banks' HTM securities alone may not have a significant impact unless banks are compelled to sell these securities as a result of deposit outflows ([@JiangMatvosPiskorskiSeru2023b]).
+Note that the presence of unrealized losses in banks' HTM securities alone may not have a significant impact unless banks are compelled to sell these securities as a result of deposit outflows [@JiangMatvosPiskorskiSeru2023b].
 This prediction is supported in column5, where we include the interaction term between uninsured deposit shares and unrealized HTM losses. 
 The estimate for the interaction term is negative and significant, while unrealized HTM losses by themselves are not significant.
 
 ### What was the same this time and what differed?
 
 The likelihood of depositors' panic decreases when banks possess more liquid assets, more capital, or better-performing assets.
-Liquid assets, including cash and securities, can function as liquidity buffers to meet withdrawals, which helps to alleviate depositors' concerns as well as losses from disorderly liquidations of illiquid assets ([@BCBS2013]). 
+Liquid assets, including cash and securities, can function as liquidity buffers to meet withdrawals, which helps to alleviate depositors' concerns as well as losses from disorderly liquidations of illiquid assets [@BCBS2013]. 
 Higher capital buffers also mitigate depositors' concerns by providing more loss absorption capacity.
 Furthermore, depositors have less reason to panic and withdraw when banks' assets are safe and expected to generate greater future returns.
 We next investigate whether these factors contributed to the spillover effects associated with the failure of SVB.
@@ -443,7 +443,7 @@ bank capitalization has a growing positive correlation with cumulative returns, 
 
 **Asset quality** 
 Finally,we examine whether asset quality,as measured by the non-performing loan (NPL) ratio, contributed the contagion effect. 
-In typical banking crises, concerns about bank asset quality, or "fundamentals," can exacerbate depositor panic and bank runs ([@RochetVives2004; @GoldsteinPauzner2005]). 
+In typical banking crises, concerns about bank asset quality, or "fundamentals," can exacerbate depositor panic and bank runs [@RochetVives2004; @GoldsteinPauzner2005]. 
 However, in the case of the 2023 crisis, depositor panic stemmed from implied losses due to duration mismatch rather than credit risk exposures.
 As illustrated in Figure A3, there was no discernible effect of better-performing assets in mitigating the negative spillovers. 
 Moreover, the regression estimates in Table 4 indicate that the NPL ratio was not a statistically significant predictor in all of the specifications.
@@ -510,14 +510,14 @@ However, such regulatory difference alone does not fully explain their outperfor
 large banks, with assets greater than $250 billion but smaller than $1 trillion, were also desig-
 nated as "systemically important," to face similarly strict regulations. However, these banks
 did not outperform the rest – only those larger than $1 trillion did so.
-One possible explanation for this pattern is the implicit guarantees associated with too-big-to-fail (TBTF) banks ([@OHaraShaw1990], [@PenasUnal2004], [@BaronSchularickZimmermann2023]). 
+One possible explanation for this pattern is the implicit guarantees associated with too-big-to-fail (TBTF) banks [@OHaraShaw1990; @PenasUnal2004; @BaronSchularickZimmermann2023]. 
 Even among the similarly regulated "systemically important financial institutions"
 larger than $250 billion in assets, investors seemed to have priced in greater TBTF benefits
 for the largest banks.
-In fact, being perceived as safe, these banks also experienced deposit inflows amid a flight to quality by depositors, which further helped them mitigate the system-wide stress ([@CaglioDlugoszRezende2023]).^[Examining historical data since 1870 across 17 advanced economies, [@BaronSchularickZimmermann2023] found that during banking crises, regulators are significantly more inclined to rescue their largest (i.e., top-5) banks, and these banks' deposits exhibit greater stability.] 
+In fact, being perceived as safe, these banks also experienced deposit inflows amid a flight to quality by depositors, which further helped them mitigate the system-wide stress [@CaglioDlugoszRezende2023].^[Examining historical data since 1870 across 17 advanced economies, [@BaronSchularickZimmermann2023] found that during banking crises, regulators are significantly more inclined to rescue their largest (i.e., top-5) banks, and these banks' deposits exhibit greater stability.] 
 Those with deposit outflows, on the other hand, were
 forced to resort to more expensive funding sources, such as time deposits and borrowing from
-the Federal Reserve or Federal Home Loan Banks ([@KangLandsbergLuckPlosser2023]).
+the Federal Reserve or Federal Home Loan Banks [@KangLandsbergLuckPlosser2023].
 
 ## What was expected by the market and what was a surprise?
 
@@ -556,7 +556,7 @@ did not appear to be reflected in the 2022 returns.
 This indicates that investors considered the recognition of implied securities loss, which would materialize only if banks were forced to sell these securities, to be unlikely.
 
 How can we interpret these null results when all relevant information was publicly available? 
-The information view of banking panics (see, e.g., [@Gorton1988], [@DangGortonHolmstrom2020]) can provide a plausible framework.
+The information view of banking panics can provide a plausible framework; see, e.g., [@Gorton1988; @DangGortonHolmstrom2020].
 The view argues that abrupt shifts in depositors' risk perception of bank assets, triggered by the arrival of negative news such as a failure of a large institution or adverse macroeconomic perspectives, can cause widespread bank runs.
 
 Even though the presence of unrealized losses in banks' securities portfolios affects their fundamentals, this vulnerability would only materialize when banks were forced to liquidate these assets to generate cash in the face of severe deposit outflows.
