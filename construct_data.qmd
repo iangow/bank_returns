@@ -3499,3 +3499,12 @@ ggplot(
     )
   )
 ```
+
+```{=latex}
+\clearpage
+```
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
