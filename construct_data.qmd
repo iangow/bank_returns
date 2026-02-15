@@ -883,7 +883,9 @@ final_bank_data <- fdic_deposit_data %>%
     by = c("TICKER" = "TICKER")
   ) %>%
   mutate(
-    assets_imp = as.numeric(as.character(coalesce(assets, ASSETS_FDIC))),
+    # Normalize assets once so downstream plots/models avoid integer64 issues.
+    assets = as.numeric(as.character(coalesce(assets, ASSETS_FDIC))),
+    assets_imp = assets,
     dep_unins_share = (1 - DEPINS / DEP)
   )
 
@@ -1723,6 +1725,247 @@ feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Dat
   labs(
     y = "Marginal effect of 1 std. dev. on cumul. returns",
     x = "Date", color = "Characteristic", shape = "Characteristic"
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 1))
+```
+
+```{r}
+#| label: fig-8
+#| fig-cap: >-
+#|   Cumulative returns correlated with liquid assets, over time. This graph
+#|   plots the coefficients for cash and securities (Column 4 of Table 3) for
+#|   every trading day, holding fixed uninsured deposit share. We omit day
+#|   fixed effects, which correspond to the constant for each cross-sectional
+#|   regression.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 6
+feols(
+  cumul_abnormal_capm ~ i(Date, cash_asset_ratio_std) + i(Date, securities_asset_ratio_std) + i(Date, dep_unins_share_std) | Date,
+  data = bank_returns_data_parsed_y9c,
+  vcov = "HC1"
+) %>%
+  broom::tidy() %>%
+  filter(str_detect(term, "cash_asset_ratio_std|securities_asset_ratio_std")) %>%
+  separate(term, c(NA, NA, "date", "characteristic"), sep = ":") %>%
+  mutate(
+    characteristic = factor(
+      characteristic,
+      levels = c("cash_asset_ratio_std", "securities_asset_ratio_std"),
+      labels = c("Cash / Assets", "Securities / Assets")
+    ),
+    date = as.Date(date)
+  ) %>%
+  ggplot(aes(
+    x = date,
+    y = estimate,
+    color = characteristic,
+    shape = characteristic
+  )) +
+  geom_point() +
+  geom_pointrange(
+    aes(
+      ymin = estimate - 1.96 * std.error,
+      ymax = estimate + 1.96 * std.error
+    ),
+    position = position_dodge2(width = 1),
+    alpha = 0.5
+  ) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
+  labs(
+    y = "Marginal effect of 1 std. dev. on cumul. returns",
+    x = "Date",
+    color = "Characteristic",
+    shape = "Characteristic"
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 1))
+```
+
+```{r}
+#| label: fig-9
+#| fig-cap: >-
+#|   Cumulative returns correlated with NPL and Tier 1 capital, over time. This
+#|   graph plots the coefficients for NPL and Tier 1 Capital ratios (Column 4
+#|   of Table 4) for every trading day, holding fixed uninsured deposit share.
+#|   We omit day fixed effects, which correspond to the constant for each
+#|   cross-sectional regression.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 6
+feols(
+  cumul_abnormal_capm ~ i(Date, npl_ratio_std) + i(Date, tier1capratio_std) + i(Date, dep_unins_share_std) | Date,
+  data = bank_returns_data_parsed_y9c,
+  vcov = "HC1"
+) %>%
+  broom::tidy() %>%
+  filter(str_detect(term, "tier1capratio_std|npl_ratio_std")) %>%
+  separate(term, c(NA, NA, "date", "characteristic"), sep = ":") %>%
+  mutate(
+    characteristic = factor(
+      characteristic,
+      levels = c("tier1capratio_std", "npl_ratio_std"),
+      labels = c("Tier 1 Capital Ratio", "NPL Ratio")
+    ),
+    date = as.Date(date)
+  ) %>%
+  ggplot(aes(
+    x = date,
+    y = estimate,
+    color = characteristic,
+    shape = characteristic
+  )) +
+  geom_point() +
+  geom_pointrange(
+    aes(
+      ymin = estimate - 1.96 * std.error,
+      ymax = estimate + 1.96 * std.error
+    ),
+    position = position_dodge2(width = 1),
+    alpha = 0.5
+  ) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
+  labs(
+    y = "Marginal effect of 1 std. dev. on cumul. returns",
+    x = "Date",
+    color = "Characteristic",
+    shape = "Characteristic"
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 1))
+```
+
+```{r}
+#| label: fig-10
+#| fig-cap: >-
+#|   Cumulative returns explained by total assets. Panel (a) of this figure
+#|   plots the cumulative returns in excess of the S&P 500 index for the banks
+#|   in our sample from February 1, 2023 to March 17, 2023 against the assets
+#|   measured in 2022q4. Panel (b) of this figure plots the cumulative returns
+#|   in excess of the S&P 500 index for the banks in our sample from February
+#|   1, 2023 to May 25, 2023 against the assets measured in 2022q4. See Section
+#|   3.1 for details on the data construction. The fitted lines are local
+#|   linear regression (loess) curves. Stocks are denoted by their ticker
+#|   symbol; Silicon Valley Bank's ticker is SIVB.
+#| fig-subcap:
+#|   - "Panel (a)"
+#|   - "Panel (b)"
+#| layout-ncol: 1
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 3
+p10a <- ggplot(
+  data = bank_cumul_ret_linked_y9c_early,
+  aes(x = assets, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker)) +
+  geom_smooth() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Assets (000s)",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(-1, 0.5)) +
+  scale_color_manual(values = c("black", "grey")) +
+  geom_hline(yintercept = 0, color = "black", linetype = 2) +
+  geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
+  geom_vline(xintercept = 250000000, color = "black", linetype = 3)
+
+p10b <- ggplot(
+  data = bank_cumul_ret_linked_y9c,
+  aes(x = assets, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker)) +
+  geom_smooth() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Assets (000s)",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-05-25"
+  ) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(-1, 0.5)) +
+  scale_color_manual(values = c("black", "grey")) +
+  geom_hline(yintercept = 0, color = "black", linetype = 2) +
+  geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
+  geom_vline(xintercept = 250000000, color = "black", linetype = 3)
+
+p10a
+p10b
+```
+
+```{r}
+#| label: fig-11
+#| fig-cap: >-
+#|   Cumulative returns correlated with asset size, over time. This graph plots
+#|   the cumulative return by asset size bin (Column 2 of Table 5) for every
+#|   trading day, relative to the [0-5b] size category, and controlling for the
+#|   other observables in Column 2.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 6
+feols(
+  cumul_abnormal_capm ~ i(Date, asset_bin, ref2 = "(0,5e+06]") + i(Date, dep_unins_share_std) + i(Date, tier1capratio_std) + i(Date, cash_asset_ratio_std) + i(Date, unrealized_htm_losses_rat_tier1_std) | Date,
+  data = bank_returns_data_parsed_y9c %>%
+    mutate(asset_bin = cut(as.numeric(assets),
+      breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
+    )),
+  vcov = "HC1"
+) %>%
+  broom::tidy() %>%
+  filter(str_detect(term, "asset_bin")) %>%
+  separate(term, c(NA, NA, "date", "characteristic", NA, "size"), sep = ":") %>%
+  mutate(size = str_replace(size, "0,5e\\+06]\\\"\\)", "")) %>%
+  mutate(size = factor(
+    size,
+    levels = c("(0,5e+06]", "(5e+06,1e+07]", "(1e+07,5e+07]", "(5e+07,2.5e+08]", "(2.5e+08,1e+09]", "(1e+09,5e+09]"),
+    labels = c("0-5b", "5b-10b", "10b-50b", "50b-250b", "250b-1tr", "1tr-10tr")
+  )) %>%
+  mutate(date = as.Date(date)) %>%
+  ggplot(aes(
+    x = date,
+    y = estimate,
+    color = size,
+    shape = size
+  )) +
+  geom_point() +
+  geom_pointrange(
+    aes(
+      ymin = estimate - 1.96 * std.error,
+      ymax = estimate + 1.96 * std.error
+    ),
+    position = position_dodge2(width = 1),
+    alpha = 0.5
+  ) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
+  labs(
+    y = "Change in cumul returns by asset size relative to (0,5b)",
+    x = "Date",
+    color = "Asset Size",
+    shape = "Asset Size"
   ) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_color_brewer(palette = "Dark2") +
