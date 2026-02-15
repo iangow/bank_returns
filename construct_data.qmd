@@ -56,7 +56,7 @@ While mid-sized banks experienced particular stress immediately after the SVB fa
 # Introduction
 
 On March 10th, 2023, Silicon Valley Bank (SVB) failed after a bank run.
-It was the sixteenth largest bank in the United States as of the end of 2022, with \$209 billion in assets, which marked the largest bank failure since the Global Financial Crisis (GFC) of 2007–2009 and the second-largest bank failure in U.S. history, second only to Washington Mutual.^[See [@AcharyaEtAl2023SVB] for an extensive discussion and analysis of the SVB episode.]
+It was the sixteenth largest bank in the United States as of the end of 2022, with \$209 billion in assets, which marked the largest bank failure since the Global Financial Crisis (GFC) of 2007–2009 and the second-largest bank failure in U.S. history, second only to Washington Mutual.^[See @AcharyaEtAl2023SVB for an extensive discussion and analysis of the SVB episode.]
 As a response, a "systemic risk exception" was invoked by the policymakers, leading to a blanket guarantee on all deposits at SVB.^[The joint statement by the Secretary of the Treasury Janet Yellen, Federal Reserve Chairman Jerome Powell, and FDIC Chairman Martin Gruenberg on March 12th stated that all deposits at SVB, insured and uninsured, would be fully protected.]
 The failure of SVB, the subsequent bank failures, and the policy responses, such as the blanket deposit guarantee and the new central bank lending facility, underscore the continued significance of bank runs and contagion as important features of the global financial system, even after the implementation of regulatory reforms following the GFC.
 
@@ -97,9 +97,7 @@ It is important to note that all information we use, including the unrealized lo
 Our analysis suggests that market participants had already factored in vulnerabilities associated with reliance on uninsured deposits and limited cash holdings.
 However, damages from implied losses and the impact of bank size were more of a surprise.
 If depositors do not perceive implied losses as problematic and do not run on the bank, stock investors may have had little reason to worry about them.
-Although, this changed abruptly with the failure of SVB, which aligns with the information view of banking panics [@DangGortonHolmstrom2020], where bank runs are caused by abrupt shifts in depositors' risk perceptions.^[According to the information view, a sudden realization of risks in bank assets can be triggered by
-an arrival of new information such as the failure of a large institution or negative news on aggregate
-fundamentals [@Gorton1988].]
+Although, this changed abruptly with the failure of SVB, which aligns with the information view of banking panics [@DangGortonHolmstrom2020], where bank runs are caused by abrupt shifts in depositors' risk perceptions.^[According to the information view, a sudden realization of risks in bank assets can be triggered by an arrival of new information such as the failure of a large institution or negative news on aggregate fundamentals [@Gorton1988].]
 
 The SVB episode has similarities with the Savings and Loans (S&L) crisis and the GFC, as well as important differences.
 When inflation reached historic levels in the United States, the Federal Reserve started to increase interest rates in October 1979.
@@ -126,15 +124,15 @@ contagion [@Chen1999; @AcharyaYorulmazer2008]; and illiquidity and asset prices 
 
 The paper is also related to the literature on banks' interest rate risk.
 A recent study by @DrechslerSavovSchnabl2021 suggests that banks' deposit franchise can act as a natural hedge against interest rate risks, while @DrechslerEtAl2023NBER argue that a bank run equilibrium can emerge when banks heavily rely on uninsured deposits during rate increases.
-Investigating the 2022 monetary tightening period, @JiangMatvosPiskorskiSeru2023a find significant exposures to interest rate risk with limited use of hedging; see also [@BegenauPiazzesiSchneider2015].
+Investigating the 2022 monetary tightening period, @JiangMatvosPiskorskiSeru2023a find significant exposures to interest rate risk with limited use of hedging; see also @BegenauPiazzesiSchneider2015.
 
 Several other studies examine the implications of SVB's failure and the subsequent banking crisis.
 @Metrick2024 documents the failure of SVB and how its balance sheet contributed to the bank run of 2023.
-[@JiangMatvosPiskorskiSeru2023b] and [@FlannerySorescu2023] document substantial mark-to-market losses spread across the banking sector.
-[@JiangMatvosPiskorskiSeru2023b] assess how the run by uninsured depositors led to bank insolvency due to the realization of hidden mark-to-market losses.
-[@HaddadHartmanGlaserMuir2023] present a theoretical model that characterizes the role of rapid rate hikes in bringing this vulnerability and offer empirical evidence supporting their predictions.^[Focusing on the spillover mechanism, [@BenmelechYangZator2023] analyze the role of bank branch presence and [@CooksonEtAl2023] assess the impact of social media exposures. 
-[@DErcoleWagner2023] examine the stock price reactions of environmentally responsible stocks to the failure of SVB.]
-[@CaglioDlugoszRezende2023] present findings on depositors' flight to safety, whereby funds shift away from regional banks toward larger banks.
+@JiangMatvosPiskorskiSeru2023b and @FlannerySorescu2023 document substantial mark-to-market losses spread across the banking sector.
+@JiangMatvosPiskorskiSeru2023b assess how the run by uninsured depositors led to bank insolvency due to the realization of hidden mark-to-market losses.
+@HaddadHartmanGlaserMuir2023 present a theoretical model that characterizes the role of rapid rate hikes in bringing this vulnerability and offer empirical evidence supporting their predictions.^[Focusing on the spillover mechanism, [@BenmelechYangZator2023] analyze the role of bank branch presence and [@CooksonEtAl2023] assess the impact of social media exposures. 
+@DErcoleWagner2023 examine the stock price reactions of environmentally responsible stocks to the failure of SVB.]
+@CaglioDlugoszRezende2023 present findings on depositors' flight to safety, whereby funds shift away from regional banks toward larger banks.
 
 In contrast to papers that focus on the effect of a specific factor on contagion, our study provides a comprehensive assessment of multiple factors contributing to negative spillovers.
 We emphasize the unique characteristics of the 2023 crisis compared to the GFC, offering valuable insights for regulatory objectives.
