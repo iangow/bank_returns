@@ -3784,3 +3784,167 @@ ggplot(
 
 ::: {#refs}
 :::
+
+```{=latex}
+\clearpage
+```
+
+```{=latex}
+\appendix
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{A\arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+```
+
+```{r}
+#| label: fig-a1
+#| fig-cap: >-
+#|   Early cumulative returns explained by liquid assets. Panel (a) plots the
+#|   cumulative returns in excess of the S&P 500 index for the banks in our
+#|   sample from February 1, 2023 to March 17, 2023 against the liquid asset
+#|   share (sum of liquid securities and cash scaled by total assets) measured
+#|   in 2022q4. Panel (b) plots against cash scaled by total assets. Panel (c)
+#|   plots against liquid securities scaled by total assets. See Section 3.1
+#|   for details on the data construction. The fitted lines are local linear
+#|   regression (loess) curves. Stocks are denoted by their ticker symbol;
+#|   Silicon Valley Bank's ticker is SIVB.
+#| fig-subcap:
+#|   - "Liquid assets / total assets"
+#|   - "Cash / total assets"
+#|   - "Securities / total assets"
+#| layout-ncol: 2
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 4
+#| fig-height: 3
+pA1a <- ggplot(
+  data = bank_cumul_ret_linked_y9c_early,
+  aes(x = liquid_asset_ratio, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker), size = 1.8) +
+  geom_smooth() +
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 8),
+    axis.text = element_text(size = 7)
+  ) +
+  labs(
+    x = "Liquid Assets / Total Assets",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format())
+
+pA1b <- ggplot(
+  data = bank_cumul_ret_linked_y9c_early,
+  aes(x = cash_asset_ratio, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker), size = 1.8) +
+  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 8),
+    axis.text = element_text(size = 7)
+  ) +
+  labs(
+    x = "Cash Assets / Total Assets",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format())
+
+pA1c <- ggplot(
+  data = bank_cumul_ret_linked_y9c_early,
+  aes(x = securities_asset_ratio, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker), size = 1.8) +
+  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 8),
+    axis.text = element_text(size = 7)
+  ) +
+  labs(
+    x = "Securities / Total Assets",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format())
+
+pA1a
+pA1b
+pA1c
+```
+
+```{r}
+#| label: fig-a2
+#| fig-cap: >-
+#|   Early cumulative returns explained by Tier 1 Capital ratio. This figure
+#|   plots the cumulative returns in excess of the S&P 500 index for the banks
+#|   in our sample from February 1, 2023 to March 17, 2023 against the Tier 1
+#|   capital ratio measured in 2022q4. See Section 3.1 for details on the data
+#|   construction. The fitted line is a local linear regression (loess) curve.
+#|   Stocks are denoted by their ticker symbol; Silicon Valley Bank's ticker
+#|   is SIVB.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
+ggplot(
+  data = bank_cumul_ret_linked_y9c_early,
+  aes(x = tier1capratio, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker), size = 2.8) +
+  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
+  theme(legend.position = "none") +
+  labs(
+    x = "Tier 1 Capital Ratio",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  geom_hline(yintercept = 0, color = "black", linetype = 2)
+```
+
+```{r}
+#| label: fig-a3
+#| fig-cap: >-
+#|   Early cumulative returns explained by non-performing loan ratio. This
+#|   figure plots the cumulative returns in excess of the S&P 500 index for the
+#|   banks in our sample from February 1, 2023 to March 17, 2023 against the
+#|   non-performing loan ratio (non-performing loans scaled by total loans)
+#|   measured in 2022q4. See Section 3.1 for details on the data construction.
+#|   The fitted line is a local linear regression (loess) curve. Stocks are
+#|   denoted by their ticker symbol; Silicon Valley Bank's ticker is SIVB.
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 10
+#| fig-height: 7.5
+#| out-width: "82%"
+#| fig-align: center
+ggplot(
+  data = bank_cumul_ret_linked_y9c_early,
+  aes(x = npl_ratio, y = cumul_abnormal)
+) +
+  geom_point() +
+  geom_text_repel(aes(label = ticker), size = 2.8) +
+  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
+  theme(legend.position = "none") +
+  labs(
+    x = "Non-Performing Loan Ratio",
+    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
+  ) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  geom_hline(yintercept = 0, color = "black", linetype = 2)
+```
