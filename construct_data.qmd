@@ -252,7 +252,7 @@ with March 17, 2023, a week after the SVB bank run, as the final date and is ref
 To assess the medium-term impact, we similarly define "late returns," denoted as $R_{i}^{\text{late}}$, with May 25, 2023 as the final date.^[In general, we refer to any cumulative returns starting from February 1, 2023, as "2023 returns."]
 
 We then consider the excess return for this cumulative return above the cumulative return
-of the S&P 500 over the same time period^[Our results remain similar when using β-adjusted excess returns, following [@CampbellLoMacKinlay1998].
+of the S&P 500 over the same time period^[Our results remain similar when using $\beta$-adjusted excess returns, following [@CampbellLoMacKinlay1998].
 See the Appendix Tables for regression results using the $\beta$-adjusted returns.] (denoted as $R_{i}^{\text{early}}$ and $R_{i}^{\text{late}}$, respectively), that
 is,
 
