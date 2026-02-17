@@ -232,7 +232,7 @@ This is a sample of 224 top holders and banks.^[A number of the original 318 ban
 in assets. The FR Y-9SP reporting form reports significantly less than the FR Y-9C form for our
 main sample. As a result, we currently exclude the banks that only report FR Y-9SP data due to
 data limitations.]
-Our final sample is described in Table 1.
+Our final sample is described in @tbl-1.
 For several of our banks, neither their regulatory Tier 1 capital ratios nor amounts of Tier 1 capital are reported.
 In regressions using these measures, we lose 2 and 8 observations, respectively.^[This crosswalked data (and replication code for the paper) is available at <http://github.com/paulgp/bank_returns/>.]
 
@@ -373,9 +373,9 @@ However, following the SVB bank run, there arose large and immediate negative sp
 To quantify the spillover effects following the bank run, we next regress banks' excess early returns (from Equation (2)) on these bank characteristics.^[Regression results based on late returns are similar to those using early returns and we report them in the Appendix.
 The only exception is when we assess the impact of bank size, which we discuss in Section 4.2.3.] 
 To ensure comparability, we standardize the control variables, which allows us to interpret the estimates as the changes in stock returns in response to a 1 standard deviation change in specific vulnerability factors.
-The regression results are reported in Table 2.
+The regression results are reported in @tbl-2.
 
-Columns 1-3 of Table 2 represent linear regressions of excess cumulative returns on Uninsured Deposit Share, HTM Asset Share, and Unrealized HTM Losses/Tier 1 Capital, respectively. 
+Columns 1-3 of @tbl-2 represent linear regressions of excess cumulative returns on Uninsured Deposit Share, HTM Asset Share, and Unrealized HTM Losses/Tier 1 Capital, respectively. 
 Notably, all estimates are statistically significant in explaining the negative excess returns.
 However, the estimate in column 3 for unrealized HTM losses is both statistically and economically the most significant.
 
@@ -401,8 +401,8 @@ We next investigate whether these factors contributed to the spillover effects a
 We begin by examining the role of liquid assets, consisting of both cash and securities.
 We then analyze the effects of cash and securities separately to assess whether they had differential impacts.
 
-We report the linear regression estimates of these relationships in Table 3, where the
-dependent variable is banks' early excess returns as in Table 2.
+We report the linear regression estimates of these relationships in @tbl-3, where the
+dependent variable is banks' early excess returns as in @tbl-2.
 In Column 1, the results indicate that overall holdings of liquid assets are not significantly associated with banks' performance in response to the shock from the bank run, which differs from the typical implications.
 We see the corresponding graphical relationship in Panel A of Figure A1 in the Appendix.
 In fact, despite SVB holding more than 60% of its assets in cash and securities, it failed to withstand deposit withdrawals.
@@ -430,7 +430,7 @@ Next, we examine whether banks' capitalization, as measured by the ratio of Tier
 As shown in Figure A2, we observe that, consistent with typical banking crises, higher capital levels were associated with relatively higher returns, especially among undercapitalized banks.
 It is worth noting that SVB does not appear to be specifically undercapitalized in this figure; but one should note that this capitalization measure does not account for the unrealized HTM losses.
 
-We can confirm this relationship from the regression result reported in column 1 of Table 4, where a one-standard-deviation increase in the Tier 1 capital ratio is associated with a 3.2 percentage point increase in excess early returns.
+We can confirm this relationship from the regression result reported in column 1 of @tbl-4, where a one-standard-deviation increase in the Tier 1 capital ratio is associated with a 3.2 percentage point increase in excess early returns.
 The significance of capitalization in mitigating spillovers persists even when controlling for funding outflow risks, as shown in column 4, although the effect is less  pronounced bothstatistically and economically. 
 In column 5, we include the interaction terms to examine whether the stability effect of capitalization is more pronounced for banks facing higher funding outflow risks. 
 While the coefficient for the interaction of capitalization and uninsured deposit shares is positive and sizable, its statistical significance is somewhat marginal, with a $t$-statistic of 1.3.
@@ -444,7 +444,7 @@ Finally,we examine whether asset quality,as measured by the non-performing loan 
 In typical banking crises, concerns about bank asset quality, or "fundamentals," can exacerbate depositor panic and bank runs [@RochetVives2004; @GoldsteinPauzner2005]. 
 However, in the case of the 2023 crisis, depositor panic stemmed from implied losses due to duration mismatch rather than credit risk exposures.
 As illustrated in Figure A3, there was no discernible effect of better-performing assets in mitigating the negative spillovers. 
-Moreover, the regression estimates in Table 4 indicate that the NPL ratio was not a statistically significant predictor in all of the specifications.
+Moreover, the regression estimates in @tbl-4 indicate that the NPL ratio was not a statistically significant predictor in all of the specifications.
 The null effect is also confirmed in Figure 9 displaying the dynamic impact.
 
 In sum, asset liquidity in general or better-performing assets did not help mitigate the spillovers during the bank runs of 2023. 
@@ -461,7 +461,7 @@ A notable observation is the heightened stress experienced by mid-sized banks, p
 As discussed in Section 2, these banks, including SVB, were initially designated as systemically important following the regulatory reforms implemented after the GFC, but faced relaxed regulations with the regulatory rollback in 2018.
 One possible interpretation is that investors exhibited greater concerns with banks of a similar size to SVB, particularly in the aftermath of its failure.^[This is consistent with the findings in [@LuckPlosserYounger2023], indicating the deposit outflows were most acute among the super-regional banks, with some funds flowing into the larger banks.]
 
-The regression estimates presented in Table 5 provide further confirmation of the particular stress experienced by these regional banks with similar size immediately after the SVB failure.
+The regression estimates presented in @tbl-5 provide further confirmation of the particular stress experienced by these regional banks with similar size immediately after the SVB failure.
 In Column 1, dummy variables are included for each of the six size buckets, where each estimate indicates the average "early" excess returns for that specific size group relative to the market returns. 
 For only this column, we exclude the constant, so each coefficient should represent the average return in the size bucket. 
 Column 2 incorporates the bank characteristics (i.e., vulnerability factors) that we identified as being associated with the spillovers, including uninsured deposit share, capitalization, cash holdings, and unrealized HTM security losses.
@@ -482,7 +482,7 @@ The size effect, however, presents a different pattern over time.
 Figure 10b displays banks' "late" returns two months after the SVB failure, from February 1, 2023 to May 25, 2023.
 Unlike the immediate effect shown in Figure 10a, the substantial negative impact had spread beyond mid-sized banks in the \$50 billion and \$250 billion range to include smaller banks as well.
 
-The regression estimates reported in columns 4 and 5 of Table 5 repeats the exercise from column 1 and 2 for the late returns. 
+The regression estimates reported in columns 4 and 5 of @tbl-5 repeats the exercise from column 1 and 2 for the late returns. 
 The banking sector, as a whole, experienced a further decline in stock prices over time (column 4) compared to immediately after the SVB failure
 (column 1).
 By late May, all banks had experienced negative returns of nearly 30%, except for the largest banks.
@@ -526,7 +526,7 @@ strong association between banks' stock returns in 2022 and those immediately af
 bank run, indicating investors had expectations of vulnerabilities before the run occurred.
 
 To assess this issue, we include each bank's 2022 return as an additional control for the
-regression specification of Table 5 and present the estimates in columns 3 and 6. Focusing on
+regression specification of @tbl-5 and present the estimates in columns 3 and 6. Focusing on
 the early returns analyzed in column 3, note that bank-beta, which accounts for market per-
 ceptions of systematic exposures to the banking industry performance, no longer predicts the
 spillovers; only 2022 returns do. This suggests that investors priced in certain vulnerabilities
@@ -542,9 +542,9 @@ To further explore this, we evaluate the correlation between each bank's stock r
 A stronger correlation would indicate that investors had more pronounced concerns regarding specific vulnerabilities. 
 Note that we hold these vulnerability factors fixed to the observed measures from the 2022q4 filings.
 
-In Table 6, we regress banks' 2022 returns on the respective vulnerability factors we have
+In @tbl-6, we regress banks' 2022 returns on the respective vulnerability factors we have
 previously assessed. 
-Focusing on the factors we identified to be relevant in Table 5, our results indicate that market investors to some degree accounted for possible losses associated with heavy reliance on uninsured deposits and limited cash holdings, as evidenced by their significant correlation with the 2022 returns.
+Focusing on the factors we identified to be relevant in @tbl-5, our results indicate that market investors to some degree accounted for possible losses associated with heavy reliance on uninsured deposits and limited cash holdings, as evidenced by their significant correlation with the 2022 returns.
 These losses could result from increases in
 funding costs or deposit outflows in the face of central bank tightening.^[See, e.g., @DrechslerEtAl2023NBER or @KangLandsbergLuckPlosser2023.] 
 Furthermore, the inclusion of these factors as regression controls leads to a distinct increase in the $R^2$ value.
@@ -1703,7 +1703,7 @@ p6b
 #| fig-cap: >-
 #|   Cumulative returns correlated with uninsured deposits and HTM losses, over
 #|   time. This graph plots the coefficients for uninsured deposit share and
-#|   unrealized HTM losses scaled by Tier 1 capital (Column 3 of Table 2) for
+#|   unrealized HTM losses scaled by Tier 1 capital (Column 3 of @tbl-2) for
 #|   every trading day. We omit day fixed effects, which correspond to the
 #|   constant for each cross-sectional regression.
 #| echo: false
@@ -1758,7 +1758,7 @@ feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Dat
 #| label: fig-8
 #| fig-cap: >-
 #|   Cumulative returns correlated with liquid assets, over time. This graph
-#|   plots the coefficients for cash and securities (Column 4 of Table 3) for
+#|   plots the coefficients for cash and securities (Column 4 of @tbl-3) for
 #|   every trading day, holding fixed uninsured deposit share. We omit day
 #|   fixed effects, which correspond to the constant for each cross-sectional
 #|   regression.
@@ -1820,7 +1820,7 @@ feols(
 #| fig-cap: >-
 #|   Cumulative returns correlated with NPL and Tier 1 capital, over time. This
 #|   graph plots the coefficients for NPL and Tier 1 Capital ratios (Column 4
-#|   of Table 4) for every trading day, holding fixed uninsured deposit share.
+#|   of @tbl-4) for every trading day, holding fixed uninsured deposit share.
 #|   We omit day fixed effects, which correspond to the constant for each
 #|   cross-sectional regression.
 #| echo: false
@@ -1951,7 +1951,7 @@ p10b
 #| label: fig-11
 #| fig-cap: >-
 #|   Cumulative returns correlated with asset size, over time. This graph plots
-#|   the cumulative return by asset size bin (Column 2 of Table 5) for every
+#|   the cumulative return by asset size bin (Column 2 of @tbl-5) for every
 #|   trading day, relative to the [0-5b] size category, and controlling for the
 #|   other observables in Column 2.
 #| echo: false
@@ -2267,6 +2267,7 @@ etable(
 ```
 
 ```{r}
+#| label: tbl-dep-assets
 #| include: false
 #| warning: false
 #| message: false
@@ -2341,11 +2342,7 @@ etable(
   digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tab:dep_assets",
-  title = "Cumulative returns correlated with asset size. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample. %
-   In Column (1), we report the relationship with binned indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all observations, and do not include a constant, so each coefficient is the average for each bin. %
-   Column (2) includes the binned controls for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share, tier 1 capital ratio, cash/ total assets and unrealized hold-to-maturity losses. Column 3 adds the cumulative abnormal return from February 1, 2022 to January 31, 2023 to Column (2). Columns (1)-(3) use cumluative returns from February 1, 2023 to March 17, 2023 as the outcome. Columns (4)-(6) repeat Columns (1)-(3) and use cumluative returns from February 1, 2023 to May 10, 2023 as the outcome.
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  title = "",
   dict = table56_dict,
   file = "output/table5_size.tex",
   replace = TRUE
@@ -2353,6 +2350,7 @@ etable(
 ```
 
 ```{r}
+#| label: tbl-dep-2022
 #| include: false
 #| warning: false
 #| message: false
@@ -2392,13 +2390,7 @@ etable(
   digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1,
-  label = "tab:dep_2022",
-  title = "Cumulative returns in 2022 correlations. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2022 to January 31, 2023. %
-   In Column (1), we report the relationship with binned indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all observations, and do not include a constant, so each coefficient is the average for each bin. %
-   Column (2) includes the binned controls for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share, hold-to-maturity asset share, and unrealized hold-to-maturity losses.
-   Column (3) includes  cash/ total assets and securities / total assets.
-   Column (4) includes  tier 1 capital ratio and non-performing loan ratio.
-    All variables are mean zero and standarized to have standard deviation one, prior to interactions.",
+  title = "",
   dict = table56_dict,
   file = "output/table6_2022.tex",
   replace = TRUE
@@ -2406,11 +2398,28 @@ etable(
 ```
 
 ```{r}
+#| label: tbl-5
 #| results: asis
 #| echo: false
 #| warning: false
 #| message: false
+#| tbl-cap: >-
+#|   Cumulative returns correlated with asset size. This table reports estimated coefficients of
+#|   regressions with the cumulative returns in excess of the S&P 500 index for the banks in our
+#|   sample. In Column (1), we report the relationship with binned indicator variables of total assets
+#|   measured in 2022q4. The bins exhaustively bin out all observations, and do not include a
+#|   constant, so each coefficient is the average for each bin. Column (2) includes the binned controls
+#|   for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a
+#|   constant, as well as the controls for uninsured deposit share, tier 1 capital ratio, cash/ total
+#|   assets and unrealized hold-to-maturity losses. Column (3) adds the cumulative abnormal return
+#|   from February 1, 2022 to January 31, 2023 to Column (2). Columns (1)-(3) use cumluative
+#|   returns from February 1, 2023 to March 17, 2023 as the outcome. Columns (4)-(6) repeat
+#|   Columns (1)-(3) and use cumluative returns from February 1, 2023 to May 10, 2023 as the
+#|   outcome. All variables (except for the cumulative returns) are mean zero and standarized to have
+#|   standard deviation one, prior to interactions.
 table5_tex <- readLines("output/table5_size.tex")
+table5_tex <- gsub("\\\\caption\\{.*\\}", "", table5_tex)
+table5_tex <- gsub("\\\\label\\{[^}]+\\}", "", table5_tex)
 table5_tex <- gsub(
   "width = 1\\.2\\\\textwidth, center",
   "width = \\\\textwidth, center",
@@ -2420,11 +2429,26 @@ cat(table5_tex, sep = "\n")
 ```
 
 ```{r}
+#| label: tbl-6
 #| results: asis
 #| echo: false
 #| warning: false
 #| message: false
+#| tbl-cap: >-
+#|   Cumulative returns in 2022 correlations. This table reports estimated coefficients of regressions
+#|   with the cumulative returns in excess of the S&P 500 index for the banks in our sample from
+#|   February 1, 2022 to January 31, 2023. In Column (1), we report the relationship with binned
+#|   indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all
+#|   observations, and do not include a constant, so each coefficient is the average for each bin.
+#|   Column (2) includes the binned controls for assets (excluding the bin for banks with total assets
+#|   less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share,
+#|   hold-to-maturity asset share, and unrealized hold-to-maturity losses. Column (3) includes cash/
+#|   total assets and securities / total assets. Column (4) includes tier 1 capital ratio and
+#|   non-performing loan ratio. All variables are mean zero and standarized to have standard deviation
+#|   one, prior to interactions.
 table6_tex <- readLines("output/table6_2022.tex")
+table6_tex <- gsub("\\\\caption\\{.*\\}", "", table6_tex)
+table6_tex <- gsub("\\\\label\\{[^}]+\\}", "", table6_tex)
 table6_tex <- gsub(
   "width = 1\\\\textwidth, center",
   "width = 0.90\\\\textwidth, center",
@@ -2976,7 +3000,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:dep_htm_short",
+  label = "tbl-dep-htm-short",
   title = "Cumulative returns correlated with uninsured deposits and HTM, immediately after SVB shutdown. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to March 10, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total
 deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets
 as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-
@@ -3017,7 +3041,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:dep_htm_beta",
+  label = "tbl-dep-htm-beta",
   title = "Cumulative returns correlated with uninsured deposits and HTM, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusting for beta estimated in 2022, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
   dict = var_dict,
   file = "output/table3_beta.tex", replace = TRUE
@@ -3058,7 +3082,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:dep_htm_late",
+  label = "tbl-dep-htm-late",
   title = "Cumulative returns correlated with uninsured deposits and HTM, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusting for beta estimated in 2022, for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
   dict = var_dict,
   file = "output/table3_late.tex", replace = TRUE
@@ -3097,7 +3121,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:dep_htm_late_beta",
+  label = "tbl-dep-htm-late-beta",
   title = "Cumulative returns correlated with uninsured deposits and HTM, long run and adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
   dict = var_dict,
   file = "output/table3_late_beta.tex", replace = TRUE
@@ -3236,7 +3260,7 @@ etable(est1, est3, est2, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:liquid_assets_beta",
+  label = "tbl-liquid-assets-beta",
   title = "Cumulative returns correlated with liquid assets, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
    In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
 assets) measured in 2022q4. %
@@ -3268,7 +3292,7 @@ etable(est1, est3, est2, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:liquid_assets_late",
+  label = "tbl-liquid-assets-late",
   title = "Cumulative returns correlated with liquid assets, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
    In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
 assets) measured in 2022q4. %
@@ -3300,7 +3324,7 @@ etable(est1, est3, est2, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:liquid_assets_late_beta",
+  label = "tbl-liquid-assets-late-beta",
   title = "Cumulative returns correlated with liquid assets, adjusted for beta, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
    In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
 assets) measured in 2022q4. %
@@ -3443,7 +3467,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:npl_capital_beta",
+  label = "tbl-npl-capital-beta",
   title = "Cumulative returns correlated with NPL and Tier 1 capital, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
    In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
    Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
@@ -3483,7 +3507,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:npl_capital_late",
+  label = "tbl-npl-capital-late",
   title = "Cumulative returns correlated with NPL and Tier 1 capital, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome. %
    In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
    Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
@@ -3522,7 +3546,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:npl_capital_late_beta",
+  label = "tbl-npl-capital-late-beta",
   title = "Cumulative returns correlated with NPL and Tier 1 capital, adjusted for beta, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome. %
    In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
    Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
@@ -3698,7 +3722,7 @@ etable(est1, est2, est3, est4, est5, est6,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:dep_assets_beta",
+  label = "tbl-dep-assets-beta",
   title = "Cumulative returns correlated with asset size, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample. %
    In Column (1), we report the relationship with binned indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all observations, and do not include a constant, so each coefficient is the average for each bin. %
    Column (2) includes the binned controls for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share, tier 1 capital ratio, cash/ total assets and unrealized hold-to-maturity losses. Column 3 adds the cumulative abnormal return from February 1, 2022 to January 31, 2023 to Column (2). Columns (1)-(3) use cumluative returns from February 1, 2023 to March 17, 2023 as the outcome. Columns (4)-(6) repeat Columns (1)-(3) and use cumluative returns from February 1, 2023 to May 25, 2023 as the outcome.
@@ -3909,7 +3933,7 @@ etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:dep_htm_short",
+  label = "tbl-dep-htm-short",
   title = "Cumulative returns correlated with uninsured deposits and HTM, immediately after SVB shutdown.",
   dict = var_dict,
   file = "output/table3_short.tex", replace = TRUE
@@ -3920,7 +3944,7 @@ etable(est1, est2, est3, est4, est5, est6,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
   adjustbox = 1.2,
-  label = "tbl:dep_assets_beta",
+  label = "tbl-dep-assets-beta",
   title = "Cumulative returns correlated with asset size, adjusted for beta.",
   dict = var_dict,
   file = "output/table5_size_beta.tex", replace = TRUE
