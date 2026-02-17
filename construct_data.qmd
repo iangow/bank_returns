@@ -246,8 +246,7 @@ R_i^{\text{early}}
 =
 \prod_{t \ge 2023\text{-}02\text{-}01}
 (1 + r_{it}) - 1
-\label{eq:early}
-$$
+$$ {#eq-raw-returns}
 with March 17, 2023, a week after the SVB bank run, as the final date and is referred to as "early returns." 
 To assess the medium-term impact, we similarly define "late returns," denoted as $R_{i}^{\text{late}}$, with May 25, 2023 as the final date.^[In general, we refer to any cumulative returns starting from February 1, 2023, as "2023 returns."]
 
@@ -262,8 +261,7 @@ $$
 R_i^{\text{early}}
 -
 R_m^{\text{early}}
-\label{eq:excess-early}
-$$
+$$ {#eq-excess-returns}
 
 This measure can be interpreted as the cumulative return difference between investing a dollar long in bank $i$'s stock and a dollar short in the S&P500 on February 1, and holding the position until the final date.
 This differs slightly from traditional event study approaches by focusing on excess geometric returns, rather than arithmetic excess returns. 
@@ -362,7 +360,7 @@ It is worth noting that the implied losses from HTM securities, once recognized,
 
 @fig-7 illustrates the dynamic association between the two vulnerability factors and
 banks' stock returns over time.
-For each date, we regress bank $i$'s cumulative return up to that date (derived from Equation (1)) on a constant term and two vulnerability factors, banks' uninsured deposit share and unrealized HTM losses scaled by Tier 1 capital. 
+For each date, we regress bank $i$'s cumulative return up to that date (derived from @eq-raw-returns) on a constant term and two vulnerability factors, banks' uninsured deposit share and unrealized HTM losses scaled by Tier 1 capital. 
 These factors are standardized to be mean zero and standard deviation of one. 
 We then plot the estimated coefficients of the respective vulnerability factor for each date. 
 This allows us to assess how the impact of these factors jointly evolved over time.
@@ -370,7 +368,7 @@ This allows us to assess how the impact of these factors jointly evolved over ti
 The two trends indicate that while bank stock returns were not significantly associated with their reliance on uninsured deposits until early March, investors were aware of the existence of implied losses, which was public information, with declines correlated with them during the beginning of February. 
 However, following the SVB bank run, there arose large and immediate negative spillovers associated with these vulnerability factors, and these effects persisted thereafter, although the magnitude of the correlation declined for unrealized HTM losses.
 
-To quantify the spillover effects following the bank run, we next regress banks' excess early returns (from Equation (2)) on these bank characteristics.^[Regression results based on late returns are similar to those using early returns and we report them in the Appendix.
+To quantify the spillover effects following the bank run, we next regress banks' excess early returns (from @eq-excess-returns) on these bank characteristics.^[Regression results based on late returns are similar to those using early returns and we report them in the Appendix.
 The only exception is when we assess the impact of bank size, which we discuss in @sec-size-effects.] 
 To ensure comparability, we standardize the control variables, which allows us to interpret the estimates as the changes in stock returns in response to a 1 standard deviation change in specific vulnerability factors.
 The regression results are reported in @tbl-2.
