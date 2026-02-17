@@ -45,6 +45,16 @@ Stock investors appeared to anticipate risks associated with uninsured deposit r
 While mid-sized banks experienced particular stress immediately after the SVB failure, over time negative spillovers became widespread except for the largest banks.
 :::
 
+::: {.callout-caution}
+## Unofficial version alert
+
+This is not an official version of *Contagion Effects of the Silicon Valley Bank Run*.
+This PDF was created by me ([Ian D. Gow](mailto:iandgow@gmail.com)) independently of the authors (Choi, Goldsmith-Pinkham, and Yorulmazer) using code available in <https://github.com/iangow/bank_returns>.
+The purpose of this PDF is pedagogical and is intended simply to demonstrate that "real" papers can be produced from Quarto markdown source code.
+The goal is not to produce an exact replica of the original paper and any discrepancies between this document and the version of the (May 2024) paper on which it was based can be attributed to errors by me.
+:::
+
+
 ```{=latex}
 \vfill
 \noindent\textbf{Keywords:} Contagion, Banking crisis, Bank run, Systemic risk, Interest rate risk, Implied losses, Held-to-maturity
