@@ -48,9 +48,9 @@ While mid-sized banks experienced particular stress immediately after the SVB fa
 ::: {.callout-caution}
 ## Unofficial version alert
 
-This is not an official version of *Contagion Effects of the Silicon Valley Bank Run*.
-This PDF was created by me ([Ian D. Gow](mailto:iandgow@gmail.com)) independently of the authors (Choi, Goldsmith-Pinkham, and Yorulmazer) using code available in <https://github.com/iangow/bank_returns>.
-The purpose of this PDF is pedagogical and is intended simply to demonstrate that "real" papers can be produced from Quarto markdown source code.
+This is **not an official version** of *Contagion Effects of the Silicon Valley Bank Run*.
+This PDF was created by me ([Ian D. Gow](mailto:iandgow@gmail.com)) independently of the authors (Choi, Goldsmith-Pinkham, and Yorulmazer) using code available in <https://github.com/iangow/bank_returns>, a fork of <https://github.com/paulgp/bank_returns>.
+The purpose of this PDF is pedagogical and is intended simply to demonstrate that "real" papers can be produced from Quarto markdown source code without needing to learn (much) LaTeX or living in the copy-paste hellscape of Microsoft Word.
 The goal is not to produce an exact replica of the original paper and any discrepancies between this document and the version of the (May 2024) paper on which it was based can be attributed to errors by me.
 :::
 
@@ -1216,6 +1216,10 @@ bank_list <- c(bank_cumul_ret_early[1:8, ] %>% pull(ticker))
 theme_set(theme_minimal(base_size = 16))
 ```
 
+```{=latex}
+\clearpage
+```
+
 ```{r}
 #| label: fig-1
 #| fig-cap: >-
@@ -2013,6 +2017,10 @@ feols(
   scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 1))
+```
+
+```{=latex}
+\clearpage
 ```
 
 ```{r}
