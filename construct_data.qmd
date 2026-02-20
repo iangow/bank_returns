@@ -801,48 +801,37 @@ call_report_subsample_2022q4 <- bank_sample %>%
 
 ## FDIC Deposit Data ----
 ### Roll up subsidiaries ----
-relationship_data_all <- fread_zip_member(
-  input_zip,
-  "input/y9c_data/CSV_RELATIONSHIPS.CSV"
-) %>%
-  filter(DT_END > 20230101)
+library(igraph)
 
-relationship_data <- bank_sample %>%
-  select(entity) %>%
-  inner_join(relationship_data_all,
-    by = c("entity" = "ID_RSSD_PARENT")
-  ) %>%
-  select(ID_RSSD_PARENT = entity, ID_RSSD_OFFSPRING) %>%
-  mutate(top_holder = ID_RSSD_PARENT)
+g <- 
+    fread_zip_member(input_zip, "input/y9c_data/CSV_RELATIONSHIPS.CSV") |>
+    filter(DT_END > 20230101) |>
+    transmute(
+        to = ID_RSSD_PARENT,
+        from   = ID_RSSD_OFFSPRING
+    ) |>
+    filter(!is.na(from), !is.na(to)) |>
+    distinct() |>
+    graph_from_data_frame(directed = TRUE)
 
-child_relationship_data <- relationship_data %>%
-  select(entity = ID_RSSD_OFFSPRING, top_holder) %>%
-  inner_join(relationship_data_all,
-    by = c("entity" = "ID_RSSD_PARENT")
-  ) %>%
-  select(ID_RSSD_OFFSPRING, top_holder)
-relationship_data <- relationship_data %>%
-  select(top_holder, ID_RSSD_OFFSPRING) %>%
-  bind_rows(child_relationship_data)
-for (i in seq(1, 25)) {
-  child_relationship_data <- child_relationship_data %>%
-    select(entity = ID_RSSD_OFFSPRING, top_holder) %>%
-    inner_join(relationship_data_all,
-      by = c("entity" = "ID_RSSD_PARENT")
-    ) %>%
-    select(ID_RSSD_OFFSPRING, top_holder)
-  dim(child_relationship_data)
-  relationship_data <- relationship_data %>%
-    select(top_holder, ID_RSSD_OFFSPRING) %>%
-    bind_rows(child_relationship_data)
+get_descendants <- function(th, g) {
+    th_chr <- as.character(th)
+    vnames <- igraph::V(g)$name
+    
+    if (!(th_chr %in% vnames)) return(th)
+    
+    d_idx <- igraph::subcomponent(g, v = th_chr, mode = "out")
+    unique(as.integer(vnames[d_idx]))
 }
 
-relationship_data <- relationship_data %>%
-  bind_rows(
-    bank_sample %>%
-      select(top_holder = entity) %>%
-      mutate(ID_RSSD_OFFSPRING = top_holder)
-  )
+get_descendants <- Vectorize(get_descendants, vectorize.args = "th")
+
+relationship_data <-
+    bank_sample |>
+    mutate(ID_RSSD_OFFSPRING = get_descendants(entity, g)) |>
+    select(entity, ID_RSSD_OFFSPRING) |>
+    rename(top_holder = entity) |>
+    tidyr::unnest(ID_RSSD_OFFSPRING)
 
 call_report_data <- fread_zip_member(input_zip, "input/callreport/CSV_ATTRIBUTES_ACTIVE.CSV") %>%
   select(ID_FDIC_CERT, ID_RSSD) %>%
