@@ -611,30 +611,52 @@ library(tidyverse)
 library(ggrepel)
 library(fixest)
 library(data.table)
+library(vtable)
+library(ggfixest)
 ```
 
 ```{r}
 #| include: false
-#| cache: true
+#| cache: false
 date_list <- c(
   as.Date("2023-03-17"),
   as.Date("2023-05-25")
 )
 early_date <- date_list[1]
 late_date <- date_list[2]
+cutoff_date <- as.Date("2023-02-01")
 
 input_zip <- "data/input.zip"
+```
+
+```{r}
+#| label: permco_rssdid_xwalk
+#| include: false
+#| cache: true
 # Load Data ----
 ## Ticker - RSSDID - PermCo Crosswalk
 permco_rssdid_xwalk <- read_csv(
   unz(input_zip, "input/permco_rssdid_xwalk.csv"),
   show_col_types = FALSE
 ) %>% filter(!is.na(entity))
+```
+
+```{r}
+#| label: wrds_compustat_data
+#| cache: true
+#| include: false
 wrds_compustat_data <- read_csv(
   unz(input_zip, "input/wrds_data/wrds_2022data.csv"),
   show_col_types = FALSE
 )
+```
 
+
+```{r}
+#| label: bank_sample
+#| dependson: permco_rssdid_xwalk, wrds_compustat_data
+#| cache: true
+#| include: false
 ### LUTHER BURBANK CORP and SOUTH PLAINS FINANCIAL INC show up twice
 ### For Luther, we use the BHC RSSDID 3814208
 ### For South Plains, we use RSSDID 2033226 b/c the other RSSDID is a stock plan according to the NIC
@@ -642,7 +664,12 @@ bank_sample <- permco_rssdid_xwalk %>%
   inner_join(wrds_compustat_data, by = c("permco" = "PERMCO")) %>%
   filter(dt_end >= 20210930) %>%
   filter(!(entity == 497570 | entity == 3382332))
+```
 
+```{r}
+#| label: y9c_data_2022q4
+#| cache: true
+#| include: false
 ## Y9C Data ----
 y9c_data_2022q4 <- local({
   tmp_dir <- tempfile("y9c_")
@@ -656,6 +683,14 @@ y9c_data_2022q4 <- local({
   )
   fread(y9c_file, sep = "^")
 })
+```
+
+
+```{r}
+#| label: y9c_data_2022q4_subsample
+#| dependson: bank_sample, y9c_data_2022q4
+#| cache: true
+#| include: false
 y9c_data_2022q4_subsample <- bank_sample %>%
   inner_join(
     y9c_data_2022q4 %>%
@@ -736,7 +771,14 @@ y9c_data_2022q4_subsample <- bank_sample %>%
     deposits_liabilities_ratio = deposits / liabilties
   ) %>%
   filter(!is.na(assets))
+```
 
+
+```{r}
+#| label: call_report_subsample_2022q4
+#| dependson: bank_sample, y9c_data_2022q4
+#| cache: true
+#| include: false
 ## Call Report Data ----
 files <- unzip(input_zip, list = TRUE)$Name %>%
   .[grepl("^input/FFIEC CDR Call Bulk All Schedules 12312022/.*\\.txt$", .)] %>%
@@ -798,7 +840,13 @@ call_report_subsample_2022q4 <- bank_sample %>%
     loans_asset_ratio = total_loans / assets
   ) %>%
   filter(!is.na(assets))
+```
 
+```{r}
+#| label: fdic_deposit_data
+#| dependson: bank_sample
+#| cache: true
+#| include: false
 ## FDIC Deposit Data ----
 ### Roll up subsidiaries ----
 library(igraph)
@@ -861,14 +909,26 @@ fdic_deposit_data <- fread_zip_member(input_zip, "input/fdic/bank_deposits.csv")
     ASSETS_FDIC = sum(ASSETS)
   ) %>%
   inner_join(bank_sample %>% select(entity, TICKER), by = c("ID_RSSD_PARENT" = "entity"))
+```
 
+```{r}
+#| label: bank_balance_sheet_sample
+#| dependson: y9c_data_2022q4_subsample, call_report_subsample_2022q4
+#| cache: true
+#| include: false
 ## Final FRB-Call Report-FDIC Data ----
 # final bank balance sheet data (y9c + call report)
 # 224 banks
 bank_balance_sheet_sample <- y9c_data_2022q4_subsample %>%
   bind_rows(call_report_subsample_2022q4) %>%
   mutate(tier1capratio = coalesce(tier1capratio / 100, tier1capratio_cr))
+```
 
+```{r}
+#| label: final_bank_data
+#| dependson: fdic_deposit_data, bank_balance_sheet_sample
+#| cache: true
+#| include: false
 # final bank data (data from 2022q4) (FRB + FDIC)
 # 224 banks
 # THese three BHCs get lost (don't have FDIC data for some reason)
@@ -885,17 +945,30 @@ final_bank_data <- fdic_deposit_data %>%
     assets_imp = assets,
     dep_unins_share = (1 - DEPINS / DEP)
   )
+```
 
-
+```{r}
+#| label: bank_data_ticker_list
+#| dependson: final_bank_data
+#| cache: true
+#| include: false
 bank_data_ticker_list <- final_bank_data %>%
   select(ticker = TICKER) %>%
   pull(ticker)
+```
+
+```{r}
+#| label: returns_data
+#| cache: true
+#| include: false
 ## Stock Market Returns Data ----
-returns_data <- fread_zip_member(input_zip, "input/yahoo/returns.csv") %>%
+returns_data <- 
+  fread_zip_member(input_zip, "input/yahoo/returns.csv") %>%
   gather(ticker, close_prc, -Date) %>%
   mutate(Date = as.Date(Date))
 
-returns_data_may25 <- fread_zip_member(input_zip, "input/yahoo/returns_longrun.csv") %>%
+returns_data_may25 <-
+  fread_zip_member(input_zip, "input/yahoo/returns_longrun.csv") %>%
   gather(ticker, close_prc_may25, -Date) %>%
   mutate(Date = as.Date(Date))
 
@@ -911,9 +984,12 @@ returns_data <- returns_data_may25 %>%
     ticker == "SIVB" & Date >= as.Date("2023-03-10") ~ 0,
     TRUE ~ close_prc
   ))
+```
 
-
-
+```{r}
+#| label: sp_data
+#| cache: true
+#| include: false
 ### S&P 500 Data
 sp_data <- read_csv(
   unz(input_zip, "input/yahoo/sp_returns.csv"),
@@ -921,8 +997,12 @@ sp_data <- read_csv(
 ) %>%
   rename(close_prc = `Adj Close**`) %>%
   mutate(Date = as.Date(Date))
+```
 
-
+```{r}
+#| label: dowjonesbankindex
+#| cache: true
+#| include: false
 ### Dow Jones Bank Index
 library(readxl)
 dowjonesbankindex <- local({
@@ -946,12 +1026,14 @@ dowjonesbankindex <- local({
   mutate(daily_return_bankindex = (close_prc / lag(close_prc)) - 1) %>%
   ungroup() %>%
   select(Date, daily_return_bankindex)
+```
 
-
-
+```{r}
+#| label: sp_data_parsed
+#| dependson: sp_data, dowjonesbankindex
+#| cache: true
+#| include: false
 ### calculate returns ----
-
-cutoff_date <- as.Date("2023-02-01")
 sp_data_parsed <- sp_data %>%
   group_by(ticker) %>%
   arrange(ticker, Date) %>%
@@ -970,9 +1052,15 @@ sp_data_parsed <- sp_data %>%
     cumul_bankidx_ret = exp(cumsum(log(1 + daily_return_bankindex))) - 1,
     cumul_abnormal_bankidx = exp(cumsum(log(1 + daily_return_bankindex))) - 1
   )
+```
 
-
-returns_data_parsed <- returns_data %>%
+```{r}
+#| label: returns_data_parsed_pre
+#| dependson: returns_data, bank_sample, sp_data_parsed
+#| cache: true
+#| include: false
+returns_data_parsed_pre <- 
+  returns_data %>%
   inner_join(bank_sample %>%
     select(ticker = TICKER)) %>%
   left_join(sp_data_parsed, by = "Date") %>%
@@ -990,16 +1078,26 @@ returns_data_parsed <- returns_data %>%
   mutate(cumul_abnormal = cumul_ret - cumul_mkt_ret)
 # mutate(cumul_abnormal = cumsum(abnormal, na.rm = TRUE))
 # utate(cumul_abnormal = replace_na(cumul_abnormal, -1))
+```
 
-
-
-sample_bank_return <- returns_data_parsed %>%
+```{r}
+#| label: sample_bank_return
+#| dependson: final_bank_data, returns_data_parsed_pre
+#| cache: true
+#| include: false
+sample_bank_return <- 
+  returns_data_parsed_pre %>%
   left_join(final_bank_data %>%
     select(assets_imp, ticker = TICKER)) %>%
   group_by(Date) %>%
   summarize(cumul_ret = weighted.mean(cumul_ret, assets_imp))
+```
 
-
+```{r}
+#| label: sp_data_parsed_2022
+#| dependson: sp_data, dowjonesbankindex
+#| cache: true
+#| include: false
 # Construct measure of excess returns from Feb 2022 to Feb 2023
 sp_data_parsed_2022 <- sp_data %>%
   group_by(ticker) %>%
@@ -1019,7 +1117,13 @@ sp_data_parsed_2022 <- sp_data %>%
     cumul_bankidx_ret = exp(cumsum(log(1 + daily_return_bankindex))) - 1,
     cumul_abnormal_bankidx = exp(cumsum(log(1 + daily_return_bankindex))) - 1
   )
+```
 
+```{r}
+#| label: returns_data_parsed_2022
+#| dependson: returns_data, bank_sample, sp_data_parsed_2022
+#| cache: true
+#| include: false
 returns_data_parsed_2022 <- returns_data %>%
   inner_join(bank_sample %>%
     select(ticker = TICKER)) %>%
@@ -1046,9 +1150,13 @@ sample_bank_return_2022 <- returns_data_parsed_2022 %>%
     cumul_ret = weighted.mean(cumul_ret, assets_imp),
     cumul_ret_unw = mean(cumul_ret)
   )
+```
 
-
-
+```{r}
+#| label: ticker_betas
+#| dependson: returns_data_parsed_2022
+#| cache: true
+#| include: false
 ### Construct betas
 ticker_betas <- as_tibble(returns_data_parsed_2022) %>%
   filter(year(Date) == 2022) %>%
@@ -1060,7 +1168,13 @@ ticker_betas <- as_tibble(returns_data_parsed_2022) %>%
     slope = map_dbl(coef, 2)
   ) %>%
   select(ticker, beta = slope)
+```
 
+```{r}
+#| label: ticker_bankbetas
+#| dependson: returns_data_parsed_2022
+#| cache: true
+#| include: false
 ticker_bankbetas <- as_tibble(returns_data_parsed_2022) %>%
   filter(year(Date) == 2022) %>%
   select(ticker, daily_return, daily_return_mkt, abnormal_bank_idx) %>%
@@ -1076,55 +1190,103 @@ ticker_bankbetas <- as_tibble(returns_data_parsed_2022) %>%
     beta_bank = slope,
     # beta_bank_se = slope_se
   )
+```
 
-
-returns_data_parsed_feb15 <- returns_data_parsed %>%
+```{r}
+#| label: returns_data_parsed_feb15
+#| dependson: returns_data_parsed_pre, ticker_betas, ticker_bankbetas
+#| cache: true
+#| include: false
+returns_data_parsed_feb15 <- returns_data_parsed_pre %>%
   filter(Date >= as.Date("2023-02-15")) %>%
   left_join(ticker_betas, by = "ticker") %>%
   left_join(ticker_bankbetas, by = "ticker") %>%
   mutate(abnormal_capm = daily_return - (daily_return_mkt * beta)) %>%
   mutate(cumul_abnormal_capm = exp(cumsum(log(1 + abnormal_capm))) - 1)
-returns_data_parsed <- returns_data_parsed %>%
+```
+
+```{r}
+#| label: returns_data_parsed
+#| dependson: returns_data_parsed_pre, ticker_betas, ticker_bankbetas
+#| cache: true
+#| include: false
+returns_data_parsed <- 
+  returns_data_parsed_pre %>%
   left_join(ticker_betas, by = "ticker") %>%
   left_join(ticker_bankbetas, by = "ticker") %>%
   mutate(abnormal_capm = daily_return - (daily_return_mkt * beta)) %>%
   mutate(cumul_abnormal_capm = exp(cumsum(log(1 + abnormal_capm))) - 1)
+```
 
-bank_cumul_ret_multiple <- returns_data_parsed %>%
+```{r}
+#| label: bank_cumul_ret_multiple
+#| dependson: returns_data_parsed
+#| cache: true
+#| include: false
+bank_cumul_ret_multiple <-
+  returns_data_parsed %>%
   group_by(ticker) %>%
   # filter(row_number() == n())  %>%
   filter(Date >= as.Date("2023-03-03") &
     Date <= as.Date("2023-04-30")) %>%
   arrange(cumul_abnormal) %>%
   filter(Date %in% date_list)
+```
 
-bank_cumul_ret_early <- returns_data_parsed %>%
+```{r}
+#| label: bank_cumul_ret_early
+#| dependson: returns_data_parsed
+#| cache: true
+#| include: false
+bank_cumul_ret_early <-
+  returns_data_parsed %>%
   group_by(ticker) %>%
   # filter(row_number() == n())  %>%
   filter(Date == early_date) %>%
   arrange(cumul_abnormal)
+```
 
+```{r}
+#| label: bank_cumul_ret_short
+#| dependson: returns_data_parsed
+#| cache: true
+#| include: false
 bank_cumul_ret_short <- returns_data_parsed %>%
   group_by(ticker) %>%
   # filter(row_number() == n())  %>%
   filter(Date == as.Date("2023-03-10")) %>%
   arrange(cumul_abnormal)
+```
 
-
-bank_cumul_ret <- returns_data_parsed %>%
+```{r}
+#| label: bank_cumul_ret
+#| dependson: returns_data_parsed
+#| cache: true
+#| include: false
+bank_cumul_ret <- 
+  returns_data_parsed %>%
   group_by(ticker) %>%
   filter(Date == late_date) %>%
   arrange(cumul_abnormal)
+```
 
+```{r}
+#| label: bank_cumul_ret_2022
+#| dependson: returns_data_parsed_2022
+#| cache: true
+#| include: false
 bank_cumul_ret_2022 <- returns_data_parsed_2022 %>%
   group_by(ticker) %>%
   # filter(row_number() == n())  %>%
   filter(row_number() == n()) %>%
   arrange(cumul_abnormal)
+```
 
 
-
-
+```{r}
+#| dependson: bank_cumul_ret_2022, bank_cumul_ret_early, final_bank_data
+#| cache: true
+#| include: false
 feols(cumul_abnormal ~ cumul_abnormal_2022,
   data = bank_cumul_ret_2022 %>%
     select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
@@ -1136,47 +1298,104 @@ feols(cumul_abnormal ~ cumul_abnormal_2022,
       select(assets_imp, ticker = TICKER)),
   vcov = "hetero"
 )
+```
 
-
+```{r}
+#| label: bank_cumul_ret_linked_y9c
+#| dependson: bank_cumul_ret, final_bank_data, bank_cumul_ret_2022
+#| cache: true
+#| include: false
 ## Linked FRB-Call-FDIC-Return Sample ----
 bank_cumul_ret_linked_y9c <- bank_cumul_ret %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER")) %>%
   left_join(bank_cumul_ret_2022 %>%
     select(ticker, cumul_abnormal_2022 = cumul_abnormal))
-bank_cumul_ret_linked_fdic <- bank_cumul_ret %>%
+```
+
+```{r}
+#| label: bank_cumul_ret_linked_fdic
+#| dependson: bank_cumul_ret, fdic_deposit_data, bank_cumul_ret_2022
+#| cache: true
+#| include: false
+bank_cumul_ret_linked_fdic <- 
+  bank_cumul_ret %>%
   inner_join(fdic_deposit_data, by = c("ticker" = "TICKER")) %>%
   mutate(dep_unins_share = (1 - DEPINS / DEP)) %>%
   left_join(bank_cumul_ret_2022 %>%
     select(ticker, cumul_abnormal_2022 = cumul_abnormal))
+```
 
-bank_cumul_ret_linked_y9c_early <- bank_cumul_ret_early %>%
+```{r}
+#| label: bank_cumul_ret_linked_y9c_early
+#| dependson: bank_cumul_ret_early, final_bank_data, bank_cumul_ret_2022
+#| cache: true
+#| include: false
+bank_cumul_ret_linked_y9c_early <-
+  bank_cumul_ret_early %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER")) %>%
   left_join(bank_cumul_ret_2022 %>%
     select(ticker, cumul_abnormal_2022 = cumul_abnormal))
+```
+
+```{r}
+#| label: bank_cumul_ret_linked_y9c_short
+#| dependson: bank_cumul_ret_short, final_bank_data, bank_cumul_ret_2022
+#| cache: true
+#| include: false
 bank_cumul_ret_linked_y9c_short <- bank_cumul_ret_short %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER")) %>%
   left_join(bank_cumul_ret_2022 %>%
     select(ticker, cumul_abnormal_2022 = cumul_abnormal))
-bank_cumul_ret_linked_fdic_early <- bank_cumul_ret_early %>%
+```
+
+```{r}
+#| label: bank_cumul_ret_linked_fdic_early
+#| dependson: bank_cumul_ret_early, fdic_deposit_data
+#| cache: true
+#| include: false
+bank_cumul_ret_linked_fdic_early <-
+  bank_cumul_ret_early %>%
   inner_join(fdic_deposit_data, by = c("ticker" = "TICKER")) %>%
   mutate(dep_unins_share = (1 - DEPINS / DEP))
+```
 
-
-bank_multiple_cumul_ret_linked_y9c <- bank_cumul_ret_multiple %>%
+```{r}
+#| label: bank_multiple_cumul_ret_linked_y9c
+#| dependson: bank_cumul_ret_multiple, final_bank_data
+#| cache: true
+#| include: false
+bank_multiple_cumul_ret_linked_y9c <-
+  bank_cumul_ret_multiple %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER"))
-bank_multiple_cumul_ret_linked_fdic <- bank_cumul_ret_multiple %>%
+```
+
+```{r}
+#| label: bank_multiple_cumul_ret_linked_fdic
+#| dependson: bank_cumul_ret_multiple, fdic_deposit_data
+#| cache: true
+#| include: false
+bank_multiple_cumul_ret_linked_fdic <- 
+  bank_cumul_ret_multiple %>%
   inner_join(fdic_deposit_data, by = c("ticker" = "TICKER")) %>%
   mutate(dep_unins_share = (1 - DEPINS / DEP))
+```
 
-bank_returns_data_parsed_y9c <-
-  returns_data_parsed %>%
-  inner_join(final_bank_data, by = c("ticker" = "TICKER"))
-
+```{r}
+#| include: false
 # Effects over time prep (needed by Figure 7+)
 standardize <- function(x) {
   (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
 }
-bank_returns_data_parsed_y9c <- bank_returns_data_parsed_y9c %>%
+```
+
+```{r}
+#| label: bank_returns_data_parsed_y9c
+#| dependson: returns_data_parsed, final_bank_data
+#| cache: true
+#| include: false
+bank_returns_data_parsed_y9c <-
+  returns_data_parsed %>%
+  inner_join(final_bank_data, by = c("ticker" = "TICKER")) |>
   ungroup() %>%
   mutate(
     dep_unins_share_std = standardize(dep_unins_share),
@@ -1188,9 +1407,10 @@ bank_returns_data_parsed_y9c <- bank_returns_data_parsed_y9c %>%
     npl_ratio_std = standardize(npl_ratio),
     tier1capratio_std = standardize(tier1capratio)
   )
+```
 
-
-
+```{r}
+#| include: false
 # Counts of Sample for Data Description
 dim(bank_sample)
 dim(bank_cumul_ret)
@@ -1259,6 +1479,8 @@ ggplot(data = sp_data_parsed_2022 %>%
 
 ```{r}
 #| label: fig-2
+#| cache: true
+#| dependson: returns_data_parsed, sp_data_parsed
 #| fig-cap: >-
 #|   Bank Returns Over Time for Select Banks. This figure plots cumulative
 #|   returns in excess of the S&P 500 index from February 1, 2023, until
@@ -1322,6 +1544,8 @@ ggplot(data = returns_data_parsed %>%
 
 ```{r}
 #| label: fig-3
+#| cache: true
+#| dependson: bank_cumul_ret_2022, bank_cumul_ret_early, bank_cumul_ret
 #| fig-cap: >-
 #|   Distribution of abnormal returns by time period. This figure plots the
 #|   distribution of cumulative returns in excess of the S&P 500 index for the
@@ -1562,6 +1786,8 @@ p3d
 
 ```{r}
 #| label: fig-4
+#| cache: true
+#| dependson: bank_cumul_ret_2022
 #| fig-cap: >-
 #|   2022 bank excess returns vs 2023 bank excess returns. This figure compares
 #|   cumulative returns in excess of the S&P 500 index for the banks in our
@@ -1599,7 +1825,20 @@ ggplot(data = bank_cumul_ret_2022 %>%
 ```
 
 ```{r}
+#| label: nonbank_fig5
+#| include: false
+#| cache: true
+#| dependson: final_bank_data, bank_cumul_ret_linked_y9c_early
+nonbank_fig5 <- final_bank_data %>%
+  filter(loans_asset_ratio < .2 | deposits_liabilities_ratio < .2) %>%
+  pull(TICKER)
+```
+
+
+```{r}
 #| label: fig-5
+#| cache: true
+#| dependson: nonbank_fig5, bank_cumul_ret_linked_y9c_early
 #| fig-cap: >-
 #|   Cumulative returns vs. uninsured deposit share. This figure plots the
 #|   cumulative returns in excess of the S&P 500 index for the banks in our
@@ -1615,10 +1854,6 @@ ggplot(data = bank_cumul_ret_2022 %>%
 #| fig-height: 7.5
 #| out-width: "82%"
 #| fig-align: center
-nonbank_fig5 <- final_bank_data %>%
-  filter(loans_asset_ratio < .2 | deposits_liabilities_ratio < .2) %>%
-  pull(TICKER)
-
 ggplot(
   data = bank_cumul_ret_linked_y9c_early %>%
     mutate(nonbank = (ticker %in% nonbank_fig5)),
@@ -1640,6 +1875,8 @@ ggplot(
 
 ```{r}
 #| label: fig-6
+#| cache: true
+#| dependson: nonbank_fig5, bank_cumul_ret_linked_y9c_early
 #| fig-cap: >-
 #|   Early cumulative returns explained by held-to-maturity assets. Panel (a)
 #|   plots the cumulative returns in excess of the S&P 500 index for the banks
@@ -1701,6 +1938,8 @@ p6b
 
 ```{r}
 #| label: fig-7
+#| cache: true
+#| dependson: bank_returns_data_parsed_y9c
 #| fig-cap: >-
 #|   Cumulative returns correlated with uninsured deposits and HTM losses, over
 #|   time. This graph plots the coefficients for uninsured deposit share and
@@ -1757,6 +1996,8 @@ feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Dat
 
 ```{r}
 #| label: fig-8
+#| cache: true
+#| dependson: bank_returns_data_parsed_y9c
 #| fig-cap: >-
 #|   Cumulative returns correlated with liquid assets, over time. This graph
 #|   plots the coefficients for cash and securities (Column 4 of @tbl-3) for
@@ -1818,6 +2059,8 @@ feols(
 
 ```{r}
 #| label: fig-9
+#| cache: true
+#| dependson: bank_returns_data_parsed_y9c
 #| fig-cap: >-
 #|   Cumulative returns correlated with NPL and Tier 1 capital, over time. This
 #|   graph plots the coefficients for NPL and Tier 1 Capital ratios (Column 4
@@ -1879,6 +2122,8 @@ feols(
 
 ```{r}
 #| label: fig-10
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early, bank_cumul_ret_linked_y9c
 #| fig-cap: >-
 #|   Cumulative returns explained by total assets. Panel (a) of this figure
 #|   plots the cumulative returns in excess of the S&P 500 index for the banks
@@ -1950,6 +2195,8 @@ p10b
 
 ```{r}
 #| label: fig-11
+#| cache: true
+#| dependson: bank_returns_data_parsed_y9c
 #| fig-cap: >-
 #|   Cumulative returns correlated with asset size, over time. This graph plots
 #|   the cumulative return by asset size bin (Column 2 of @tbl-5) for every
@@ -2014,17 +2261,19 @@ feols(
 
 ```{r}
 #| label: tbl-1
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 #| results: asis
 #| echo: false
 #| warning: false
 #| message: false
 #| tbl-cap: Sample Composition and Summary Statistics. This table reports summary statistics of the main bank characteristics in our sample, measured as of 2022q4.
-library(vtable)
 
 table1_vars <- c(
   "assets_imp", "cash_asset_ratio", "securities_asset_ratio", "liquid_asset_ratio",
   "unrealized_htm_losses_rat_tier1", "htm_ratio", "dep_unins_share", "tier1capratio"
 )
+
 table1_labels <- c(
   "Assets (000)",
   "Cash / Assets",
@@ -2035,7 +2284,9 @@ table1_labels <- c(
   "Unisured Deposit Share",
   "Tier 1 Capital Ratio"
 )
-table1_data <- bank_cumul_ret_linked_y9c_early %>%
+
+table1_data <- 
+  bank_cumul_ret_linked_y9c_early %>%
   select(all_of(table1_vars))
 
 st(table1_data,
@@ -2050,6 +2301,8 @@ st(table1_data,
 
 ```{r}
 #| label: tbl-2
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 #| results: asis
 #| echo: false
 #| warning: false
@@ -2124,6 +2377,8 @@ etable(
 
 ```{r}
 #| label: tbl-3
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 #| results: asis
 #| echo: false
 #| warning: false
@@ -2199,6 +2454,8 @@ etable(
 
 ```{r}
 #| label: tbl-4
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 #| results: asis
 #| echo: false
 #| warning: false
@@ -2272,7 +2529,9 @@ etable(
 ```
 
 ```{r}
-#| label: tbl-dep-assets
+#| label: table5_size_tex
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early, bank_cumul_ret_linked_y9c
 #| include: false
 #| warning: false
 #| message: false
@@ -2355,7 +2614,9 @@ etable(
 ```
 
 ```{r}
-#| label: tbl-dep-2022
+#| label: table6_2022_tex
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early, bank_cumul_ret_linked_y9c
 #| include: false
 #| warning: false
 #| message: false
@@ -2404,6 +2665,8 @@ etable(
 
 ```{r}
 #| label: tbl-5
+#| cache: true
+#| dependson: table5_size_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -2435,6 +2698,8 @@ cat(table5_tex, sep = "\n")
 
 ```{r}
 #| label: tbl-6
+#| cache: true
+#| dependson: table6_2022_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -2673,179 +2938,22 @@ ggplot(data = bank_cumul_ret %>% filter(ticker != "FCNCA")) +
     vjust = 1,
     hjust = 1
   )
-# Figure 3 ----
+```
 
-ggplot(data = bank_cumul_ret_2022 %>%
-  select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
-  inner_join(bank_cumul_ret_early,
-    by = c("ticker")
-  )) +
-  geom_point(
-    aes(y = cumul_abnormal, x = cumul_abnormal_2022)
-  ) +
-  geom_smooth(
-    aes(y = cumul_abnormal, x = cumul_abnormal_2022),
-    method = "lm"
-  ) +
-  geom_text_repel(aes(y = cumul_abnormal, x = cumul_abnormal_2022, label = ticker)) +
-  labs(
-    x = "Cumulative Abnormal Returns\n2022-02-01 to 2023-01-31",
-    y = "Cumulative Abnormal Returns\n2023-02-01 to 2023-03-17"
-  )
-### Trying out bank beta
-ggplot(data = bank_cumul_ret_2022 %>%
-  select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
-  inner_join(bank_cumul_ret_early,
-    by = c("ticker")
-  )) +
-  geom_point(
-    aes(y = cumul_abnormal, x = beta_bank)
-  ) +
-  geom_smooth(
-    aes(y = cumul_abnormal, x = beta_bank),
-    method = "lm"
-  ) +
-  geom_text_repel(aes(y = cumul_abnormal, x = beta_bank, label = ticker)) +
-  labs(
-    x = "Factor loading on Bank Index in Excess of S&P500\n2022-02-01 to 2023-01-31",
-    y = "Cumulative Abnormal Returns\n2023-02-01 to 2023-03-17"
-  )
-
-feols(cumul_abnormal ~ beta_bank + cumul_abnormal_2022,
-  data = bank_cumul_ret_2022 %>%
-    select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
-    inner_join(bank_cumul_ret_early,
-      by = c("ticker")
-    )
-)
-
-
-
-# Figure 4 ----
-ggplot(data = returns_data_parsed %>%
-  filter(ticker %in% bank_list & ticker != "SI")) +
-  geom_line(
-    data = returns_data_parsed %>% filter(!(ticker %in% bank_list)),
-    aes(y = cumul_abnormal, x = Date, group = ticker),
-    color = "grey",
-    alpha = 0.1
-  ) +
-  geom_line(
-    data = sp_data_parsed,
-    aes(
-      y = cumul_abnormal_bankidx,
-      x = Date
-    ),
-    color = "black",
-  ) +
-  geom_line(aes(y = cumul_abnormal, x = Date, color = ticker)) +
-  # geom_point(aes(y = cumul_abnormal, x = Date, color = ticker)) +
-  geom_text_repel(
-    data = returns_data_parsed %>%
-      filter(ticker %in% bank_list &
-        Date == as.Date("2023-05-25")),
-    aes(y = cumul_abnormal, x = Date, label = ticker, color = ticker),
-    hjust = -1,
-    vjust = -1
-  ) +
-  scale_y_continuous(labels = scales::percent_format(), limits = c(-1.2, .4)) +
-  scale_x_date(limits = c(cutoff_date, as.Date("2023-05-30"))) +
-  scale_colour_brewer(palette = "Dark2") +
-  labs(
-    y = "Cumulative Return Excess of Market",
-    x = "Date"
-  ) +
-  theme_minimal(base_size = 18) +
-  theme(legend.position = "none") +
-  annotate("text",
-    x = as.Date("2023-03-30"), y = 0.1,
-    label = "Other Bank Returns in Grey"
-  ) +
-  annotate("text",
-    x = as.Date("2023-05-15"), y = -0.11,
-    label = "Bank Index\n Excess of S&P500"
-  ) +
-  geom_hline(yintercept = 0, linetype = 2) +
-  geom_hline(yintercept = -1, linetype = 2)
-returns_data_parsed %>%
-  filter(Date == as.Date("2023-03-16")) %>%
-  ungroup() %>%
-  summarize(weighted.mean(cumul_abnormal), n = n())
-
-# Summary Stats ----
-returns_data_parsed %>%
-  filter(ticker == "SIVB" & Date == as.Date("2023-03-08")) %>%
-  ungroup() %>%
-  summarize(weighted.mean(cumul_abnormal), n = n())
-returns_data_parsed %>%
-  filter(ticker != "SIVB" & Date == as.Date("2023-03-08")) %>%
-  ungroup() %>%
-  summarize(weighted.mean(cumul_abnormal), n = n())
-returns_data_parsed %>%
-  filter(ticker != "SIVB" & Date == as.Date("2023-03-08")) %>%
-  ungroup() %>%
-  reframe(
-    quantile = c(0.25, 0.75),
-    cumul_abnormal_quantile = quantile(cumul_abnormal, c(0.25, 0.75)),
-    n = n()
-  )
-
+```{r}
+#| label: nonbank
+#| cache: true
+#| dependson: final_bank_data
+#| include: false
 # List of banks to grey out
 nonbank <- final_bank_data %>%
   filter(loans_asset_ratio < .2 | deposits_liabilities_ratio < .2) %>%
   pull(TICKER)
-# Figure 5 -  Uninsured Deposit Share ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = dep_unins_share, y = cumul_abnormal)
-) +
-  geom_point(aes(colour = factor(nonbank))) +
-  geom_text_repel(aes(label = ticker, colour = factor(nonbank))) +
-  geom_smooth(data = bank_cumul_ret_linked_y9c_early %>%
-    filter(!(ticker %in% nonbank))) +
-  theme(legend.position = "none", ) +
-  labs(
-    x = "Uninsured Deposit Share",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_manual(values = c("black", "grey"))
-## HTM Securities and Hidden Losses ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = htm_ratio, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker), size = 8) +
-  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
-  theme(legend.position = "none", text = element_text(size = 28)) +
-  labs(
-    x = "Hold-to-Maturity Asset Share",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_manual(values = c("black", "grey"))
+```
 
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = unrealized_htm_losses_rat_tier1, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker), size = 8) +
-  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
-  theme(legend.position = "none", text = element_text(size = 28)) +
-  labs(
-    x = "Unrealized Hold-to-Maturity Losses / Tier 1 Capital",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_manual(values = c("black", "grey"))
+
+```{r}
+#| include: false
 
 ### Table 2 ----
 var_dict <- c(
@@ -2907,113 +3015,13 @@ bank_cumul_ret_linked_y9c <- bank_cumul_ret_linked_y9c %>%
     tier1capratio_std = scale(tier1capratio)
   )
 
-est1 <- feols(cumul_abnormal ~ dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal ~ htm_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal ~ unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
+```
 
-
-est5 <- feols(
-  cumul_abnormal ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    htm_ratio_std:dep_unins_share_std +
-    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-etable(est1, est2, est3, est4, est5, dict = var_dict)
-
-library(ggfixest)
-feols(cumul_abnormal_capm ~ i(Date, unrealized_htm_losses_rat_tier1_std) + i(Date, dep_unins_share_std) | Date,
-  data = bank_returns_data_parsed_y9c, vcov = "HC1"
-) %>%
-  broom::tidy() %>%
-  # check if term includes either "unrealized_htm_losses_rat_tier1_std" or "dep_unins_share_std"
-  filter(str_detect(term, "unrealized_htm_losses_rat_tier1_std|dep_unins_share_std")) %>%
-  # seperate on colon
-  separate(term, c(NA, NA, "date", "characteristic"), sep = ":") %>%
-  # create factor with var_dict
-  mutate(characteristic = factor(characteristic,
-    levels = names(var_dict),
-    labels = var_dict
-  )) %>%
-  mutate(date = as.Date(date)) %>%
-  ggplot(aes(
-    x = date,
-    y = estimate,
-    color = characteristic, shape = characteristic
-  )) +
-  geom_point() +
-  geom_pointrange(
-    aes(
-      ymin = estimate - 1.96 * std.error,
-      ymax = estimate + 1.96 * std.error
-    ),
-    position = position_dodge2(width = 1), alpha = 0.5
-  ) +
-  geom_hline(yintercept = 0, linetype = 2) +
-  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
-  labs(
-    y = "Marginal effect of 1 std. dev. on cumul. returns",
-    x = "Date", color = "Characteristic", shape = "Characteristic"
-  ) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
-  # put legend in bottom left
-  theme(legend.position = "bottom") +
-  guides(color = guide_legend(ncol = 1))
-# Table 2, short run ---
-est1 <- feols(cumul_abnormal ~ dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_short, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal ~ htm_ratio_std,
-  data = bank_cumul_ret_linked_y9c_short, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal ~ unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c_short, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c_short, vcov = "HC1"
-)
-
-est5 <- feols(
-  cumul_abnormal ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    htm_ratio_std:dep_unins_share_std +
-    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_short, vcov = "HC1"
-)
-etable(est1, est2, est3, est4, est5, dict = var_dict)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-dep-htm-short",
-  title = "Cumulative returns correlated with uninsured deposits and HTM, immediately after SVB shutdown. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to March 10, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total
-deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets
-as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-
-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict
-)
-
-
+```{r}
+#| label: table3_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 ## Table 2 with beta model ---
 est1 <- feols(cumul_abnormal_capm ~ dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
@@ -3030,7 +3038,6 @@ est4 <- feols(
     unrealized_htm_losses_rat_tier1_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
 )
-
 
 est5 <- feols(
   cumul_abnormal_capm ~ dep_unins_share_std +
@@ -3051,8 +3058,13 @@ etable(est1, est2, est3, est4, est5,
   dict = var_dict,
   file = "output/table3_beta.tex", replace = TRUE
 )
+```
 
-
+```{r}
+#| label: table3_late_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
 est1 <- feols(cumul_abnormal ~ dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
@@ -3068,7 +3080,6 @@ est4 <- feols(
     unrealized_htm_losses_rat_tier1_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
-
 
 est5 <- feols(
   cumul_abnormal ~ dep_unins_share_std +
@@ -3092,6 +3103,13 @@ etable(est1, est2, est3, est4, est5,
   dict = var_dict,
   file = "output/table3_late.tex", replace = TRUE
 )
+```
+
+```{r}
+#| label: table3_late_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
 est1 <- feols(cumul_abnormal_capm ~ dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
@@ -3131,120 +3149,13 @@ etable(est1, est2, est3, est4, est5,
   dict = var_dict,
   file = "output/table3_late_beta.tex", replace = TRUE
 )
+```
 
-
-## Figure 7 Liquid Assets ----
-### Liquid Assets ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = liquid_asset_ratio, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker)) +
-  geom_smooth() +
-  theme(legend.position = "none") +
-  labs(
-    x = "Liquid Assets / Total Assets",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format())
-
-### Cash  ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = cash_asset_ratio, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker)) +
-  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
-  theme(legend.position = "none") +
-  labs(
-    x = "Cash Assets / Total Assets",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_manual(values = c("black", "grey"))
-
-### Securities  ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = securities_asset_ratio, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker)) +
-  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
-  theme(legend.position = "none") +
-  labs(
-    x = "Securities / Total Assets",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_manual(values = c("black", "grey"))
-
-
-### Table 3----
-est1 <- feols(cumul_abnormal ~ liquid_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal ~ liquid_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est4 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est5 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-etable(est1, est3, est2, est4, est5)
-
-feols(cumul_abnormal_capm ~ i(Date, cash_asset_ratio_std) + i(Date, securities_asset_ratio_std) + i(Date, dep_unins_share_std) | Date,
-  data = bank_returns_data_parsed_y9c, vcov = "HC1"
-) %>%
-  broom::tidy() %>%
-  # check if term includes either "cash_asset_ratio_std" or "securities_asset_ratio_std" or "dep_unins_share_std"
-  filter(str_detect(term, "cash_asset_ratio_std|securities_asset_ratio_std")) %>%
-  # seperate on colon
-  separate(term, c(NA, NA, "date", "characteristic"), sep = ":") %>%
-  # create factor with var_dict
-  mutate(characteristic = factor(characteristic,
-    levels = names(var_dict),
-    labels = var_dict
-  )) %>%
-  mutate(date = as.Date(date)) %>%
-  ggplot(aes(
-    x = date,
-    y = estimate,
-    color = characteristic, shape = characteristic
-  )) +
-  geom_point() +
-  geom_pointrange(
-    aes(
-      ymin = estimate - 1.96 * std.error,
-      ymax = estimate + 1.96 * std.error
-    ),
-    position = position_dodge2(width = 1), alpha = 0.5
-  ) +
-  geom_hline(yintercept = 0, linetype = 2) +
-  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
-  labs(
-    y = "Marginal effect of 1 std. dev. on cumul. returns",
-    x = "Date", color = "Characteristic", shape = "Characteristic"
-  ) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
-  theme(legend.position = "bottom") +
-  guides(color = guide_legend(ncol = 1))
-
+```{r}
+#| label: table4_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 est1 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
 )
@@ -3277,6 +3188,13 @@ assets) measured in 2022q4. %
   dict = var_dict,
   file = "output/table4_beta.tex", replace = TRUE
 )
+```
+
+```{r}
+#| label: table4_late_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
 est1 <- feols(cumul_abnormal ~ liquid_asset_ratio_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
@@ -3309,6 +3227,13 @@ assets) measured in 2022q4. %
   dict = var_dict,
   file = "output/table4_late.tex", replace = TRUE
 )
+```
+
+```{r}
+#| label: table4_late_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
 est1 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
@@ -3341,110 +3266,13 @@ assets) measured in 2022q4. %
   dict = var_dict,
   file = "output/table4_late_beta.tex", replace = TRUE
 )
+```
 
-
-## Capitalization ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = tier1capratio, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker)) +
-  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
-  theme(legend.position = "none") +
-  labs(
-    x = "Tier 1 Capital Ratio",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_manual(values = c("black", "grey"))
-
-## NPLs ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early %>%
-    mutate(nonbank = (ticker %in% nonbank)),
-  aes(x = npl_ratio, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker)) +
-  geom_smooth(data = bank_cumul_ret_linked_y9c_early) +
-  theme(legend.position = "none") +
-  labs(
-    x = "Non-Performing Loan Ratio",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_manual(values = c("black", "grey")) +
-  geom_hline(yintercept = 0, color = "black", linetype = 2)
-
-
-# Table 4 ----
-est1 <- feols(cumul_abnormal ~ tier1capratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal ~ npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal ~ tier1capratio_std + npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est5 <- feols(
-  cumul_abnormal ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std +
-    tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-
-feols(cumul_abnormal_capm ~ i(Date, npl_ratio_std) + i(Date, tier1capratio_std) + i(Date, dep_unins_share_std) | Date,
-  data = bank_returns_data_parsed_y9c, vcov = "HC1"
-) %>%
-  broom::tidy() %>%
-  # check if term includes either "cash_asset_ratio_std" or "securities_asset_ratio_std" or "dep_unins_share_std"
-  filter(str_detect(term, "tier1capratio_std|npl_ratio_std")) %>%
-  # seperate on colon
-  separate(term, c(NA, NA, "date", "characteristic"), sep = ":") %>%
-  # create factor with var_dict
-  mutate(characteristic = factor(characteristic,
-    levels = names(var_dict),
-    labels = var_dict
-  )) %>%
-  mutate(date = as.Date(date)) %>%
-  ggplot(aes(
-    x = date,
-    y = estimate,
-    color = characteristic, shape = characteristic
-  )) +
-  geom_point() +
-  geom_pointrange(
-    aes(
-      ymin = estimate - 1.96 * std.error,
-      ymax = estimate + 1.96 * std.error
-    ),
-    position = position_dodge2(width = 1), alpha = 0.5
-  ) +
-  geom_hline(yintercept = 0, linetype = 2) +
-  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
-  labs(
-    y = "Marginal effect of 1 std. dev. on cumul. returns",
-    x = "Date", color = "Characteristic", shape = "Characteristic"
-  ) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
-  theme(legend.position = "bottom") +
-  guides(color = guide_legend(ncol = 1))
-
-
+```{r}
+#| label: table5_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 est1 <- feols(cumul_abnormal_capm ~ tier1capratio_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
 )
@@ -3483,8 +3311,13 @@ etable(est1, est2, est3, est4, est5,
   dict = var_dict,
   file = "output/table5_beta.tex", replace = TRUE
 )
+```
 
-
+```{r}
+#| label: table5_late_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
 est1 <- feols(cumul_abnormal ~ tier1capratio_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
@@ -3523,7 +3356,13 @@ etable(est1, est2, est3, est4, est5,
   dict = var_dict,
   file = "output/table5_late.tex", replace = TRUE
 )
+```
 
+```{r}
+#| label: table5_late_beta
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
 est1 <- feols(cumul_abnormal_capm ~ tier1capratio_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
@@ -3561,398 +3400,6 @@ etable(est1, est2, est3, est4, est5,
     All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
   dict = var_dict,
   file = "output/table5_late_beta.tex", replace = TRUE
-)
-
-
-## Assets  ----
-ggplot(
-  data = bank_cumul_ret_linked_y9c_early,
-  aes(x = assets, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker)) +
-  geom_smooth() +
-  theme(legend.position = "none") +
-  labs(
-    x = "Assets (000s)",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-03-17"
-  ) +
-  scale_x_log10(labels = scales::dollar_format()) +
-  scale_y_continuous(labels = scales::percent_format(), limits = c(-1, 0.5)) +
-  scale_color_manual(values = c("black", "grey")) +
-  geom_hline(yintercept = 0, color = "black", linetype = 2) +
-  geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
-  geom_vline(xintercept = 250000000, color = "black", linetype = 3)
-
-
-ggplot(
-  data = bank_cumul_ret_linked_y9c,
-  aes(x = assets, y = cumul_abnormal)
-) +
-  geom_point() +
-  geom_text_repel(aes(label = ticker)) +
-  geom_smooth() +
-  theme(legend.position = "none") +
-  labs(
-    x = "Assets (000s)",
-    y = "Cumulative Return Excess of Market\n2023-02-01 to 2023-05-25"
-  ) +
-  scale_x_log10(labels = scales::dollar_format()) +
-  scale_y_continuous(labels = scales::percent_format(), limits = c(-1, 0.5)) +
-  scale_color_manual(values = c("black", "grey")) +
-  geom_hline(yintercept = 0, color = "black", linetype = 2) +
-  geom_vline(xintercept = 50000000, color = "black", linetype = 3) +
-  geom_vline(xintercept = 250000000, color = "black", linetype = 3)
-
-if (FALSE) {
-reg_data <- bank_cumul_ret_linked_y9c_early %>%
-  mutate(asset_bin = cut(as.numeric(assets),
-    breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
-  ))
-
-est1 <- feols(cumul_abnormal ~ -1 + asset_bin, data = reg_data)
-est2 <- feols(
-  cumul_abnormal ~ asset_bin +
-    asset_bin +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank,
-  data = reg_data
-)
-est3 <- feols(
-  cumul_abnormal ~ asset_bin +
-    asset_bin +
-    cumul_abnormal_2022 +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank +
-    cumul_abnormal_2022,
-  data = reg_data
-)
-
-reg_data <- bank_cumul_ret_linked_y9c %>%
-  mutate(asset_bin = cut(as.numeric(assets),
-    breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
-  ))
-
-est4 <- feols(cumul_abnormal ~ -1 + asset_bin, data = reg_data)
-est5 <- feols(
-  cumul_abnormal ~ asset_bin +
-    asset_bin +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank,
-  data = reg_data
-)
-est6 <- feols(
-  cumul_abnormal ~ asset_bin +
-    asset_bin +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank +
-    cumul_abnormal_2022,
-  data = reg_data
-)
-
-etable(est1, est2, est3, est4, est5, est6, dict = var_dict, vcov = "HC1")
-
-reg_data <- bank_cumul_ret_linked_y9c_early %>%
-  mutate(asset_bin = cut(as.numeric(assets),
-    breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
-  ))
-
-est1 <- feols(cumul_abnormal_capm ~ -1 + asset_bin, data = reg_data)
-est2 <- feols(
-  cumul_abnormal_capm ~ asset_bin +
-    asset_bin +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank,
-  data = reg_data
-)
-est3 <- feols(
-  cumul_abnormal_capm ~ asset_bin +
-    asset_bin +
-    cumul_abnormal_2022 +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank +
-    cumul_abnormal_2022,
-  data = reg_data
-)
-
-reg_data <- bank_cumul_ret_linked_y9c %>%
-  mutate(asset_bin = cut(as.numeric(assets),
-    breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
-  ))
-
-est4 <- feols(cumul_abnormal_capm ~ -1 + asset_bin, data = reg_data)
-est5 <- feols(
-  cumul_abnormal_capm ~ asset_bin +
-    asset_bin +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank,
-  data = reg_data
-)
-est6 <- feols(
-  cumul_abnormal_capm ~ asset_bin +
-    asset_bin +
-    dep_unins_share_std +
-    tier1capratio_std +
-    cash_asset_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    beta_bank +
-    cumul_abnormal_2022,
-  data = reg_data
-)
-
-etable(est1, est2, est3, est4, est5, est6, dict = var_dict, vcov = "HC1")
-etable(est1, est2, est3, est4, est5, est6,
-  vcov = "HC1",
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-dep-assets-beta",
-  title = "Cumulative returns correlated with asset size, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample. %
-   In Column (1), we report the relationship with binned indicator variables of total assets measured in 2022q4. The bins exhaustively bin out all observations, and do not include a constant, so each coefficient is the average for each bin. %
-   Column (2) includes the binned controls for assets (excluding the bin for banks with total assets less than 5 billion dollars) and a constant, as well as the controls for uninsured deposit share, tier 1 capital ratio, cash/ total assets and unrealized hold-to-maturity losses. Column 3 adds the cumulative abnormal return from February 1, 2022 to January 31, 2023 to Column (2). Columns (1)-(3) use cumluative returns from February 1, 2023 to March 17, 2023 as the outcome. Columns (4)-(6) repeat Columns (1)-(3) and use cumluative returns from February 1, 2023 to May 25, 2023 as the outcome.
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict
-)
-
-
-reg_data <- bank_cumul_ret_linked_y9c_early %>%
-  mutate(asset_bin = cut(as.numeric(assets),
-    breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
-  ))
-
-est1 <- feols(cumul_abnormal_2022 ~ -1 + asset_bin, data = reg_data)
-est2 <- feols(
-  cumul_abnormal_2022 ~ asset_bin +
-    dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std,
-  data = reg_data
-)
-est3 <- feols(
-  cumul_abnormal_2022 ~ asset_bin +
-    dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    cash_asset_ratio_std +
-    securities_asset_ratio_std,
-  data = reg_data
-)
-est4 <- feols(
-  cumul_abnormal_2022 ~ asset_bin +
-    dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    cash_asset_ratio_std +
-    securities_asset_ratio_std +
-    tier1capratio_std +
-    npl_ratio_std,
-  data = reg_data
-)
-
-etable(est1, est2, est3, est4, dict = var_dict, vcov = "HC1")
-}
-
-feols(cumul_abnormal_capm ~ i(Date, asset_bin, ref2 = "(0,5e+06]") + i(Date, dep_unins_share_std) + i(Date, tier1capratio_std) + i(Date, cash_asset_ratio_std) + i(Date, unrealized_htm_losses_rat_tier1_std) | Date,
-  data = bank_returns_data_parsed_y9c %>%
-    mutate(asset_bin = cut(as.numeric(assets),
-      breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
-    )), vcov = "HC1"
-) %>%
-  broom::tidy() %>%
-  # check if term includes either "cash_asset_ratio_std" or "securities_asset_ratio_std" or "dep_unins_share_std"
-  filter(str_detect(term, "asset_bin")) %>%
-  # seperate on colon
-  separate(term, c(NA, NA, "date", "characteristic", NA, "size"), sep = ":") %>%
-  # remove 0,5e+06]\" from size
-  mutate(size = str_replace(size, "0,5e\\+06]\\\"\\)", "")) %>%
-  # create factor with var_dict
-  mutate(size = factor(size,
-    levels = c("(0,5e+06]", "(5e+06,1e+07]", "(1e+07,5e+07]", "(5e+07,2.5e+08]", "(2.5e+08,1e+09]", "(1e+09,5e+09]"),
-    labels = c("0-5b", "5b-10b", "10b-50b", "50b-250b", "250b-1tr", "1tr-10tr")
-  )) %>%
-  mutate(date = as.Date(date)) %>%
-  ggplot(aes(
-    x = date,
-    y = estimate,
-    color = size,
-    shape = size
-  )) +
-  geom_point() +
-  geom_pointrange(
-    aes(
-      ymin = estimate - 1.96 * std.error,
-      ymax = estimate + 1.96 * std.error
-    ),
-    position = position_dodge2(width = 1), alpha = 0.5
-  ) +
-  geom_hline(yintercept = 0, linetype = 2) +
-  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
-  labs(
-    y = "Change in cumul returns by asset size relative to (0,5b)",
-    x = "Date", color = "Asset Size", shape = "Asset Size"
-  ) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
-  theme(legend.position = "bottom") +
-  guides(color = guide_legend(ncol = 1))
-
-
-feols(
-  cumul_abnormal_capm ~ i(Date, asset_bin, ref2 = "(0,5e+06]") +
-    i(Date, dep_unins_share_std) + i(Date, tier1capratio_std) +
-    i(Date, cash_asset_ratio_std) +
-    i(Date, unrealized_htm_losses_rat_tier1_std) + i(Date, cumul_abnormal_2022) | Date,
-  data = bank_returns_data_parsed_y9c %>%
-    mutate(asset_bin = cut(as.numeric(assets),
-      breaks = c(0, 5e6, 1e7, 5e7, 2.5e8, 1e9, 5e9)
-    )) %>%
-    left_join(bank_cumul_ret_2022 %>%
-      select(ticker,
-        cumul_abnormal_2022 = cumul_abnormal
-      )) %>% mutate(cumul_abnormal_2022 = standardize(cumul_abnormal_2022)), vcov = "HC1"
-) %>%
-  broom::tidy() %>%
-  # check if term includes
-  filter(str_detect(term, "cumul_abnormal_2022|dep_unins_share_std|tier1capratio_std|cash_asset_ratio_std|unrealized_htm_losses_rat_tier1_std")) %>%
-  # seperate on colon
-  separate(term, c(NA, NA, "date", "characteristic"), sep = ":") %>%
-  # create factor with var_dict
-  mutate(characteristic = factor(characteristic,
-    levels = names(var_dict),
-    labels = var_dict
-  )) %>%
-  mutate(date = as.Date(date)) %>%
-  ggplot(aes(
-    x = date,
-    y = estimate,
-    color = characteristic,
-    shape = characteristic
-  )) +
-  geom_point() +
-  geom_pointrange(
-    aes(
-      ymin = estimate - 1.96 * std.error,
-      ymax = estimate + 1.96 * std.error
-    ),
-    position = position_dodge2(width = 1), alpha = 0.5
-  ) +
-  geom_hline(yintercept = 0, linetype = 2) +
-  geom_vline(xintercept = as.Date("2023-03-08"), linetype = 2) +
-  labs(
-    y = "Marginal effect of 1 std. dev. on cumul. returns",
-    x = "Date", color = "Characteristic", shape = "Characteristic"
-  ) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %d") +
-  theme(legend.position = "bottom") +
-  guides(color = guide_legend(ncol = 1))
-
-
-## CAPM (Single Index Model) Excess Returns around date ---
-ggplot(
-  data = returns_data_parsed_feb15 %>%
-    filter(Date < early_date),
-  aes(
-    y = cumul_abnormal_capm,
-    x = Date, group = ticker
-  )
-) +
-  geom_line(color = "grey", alpha = 0.2) +
-  geom_point(color = "grey", alpha = 0.2) +
-  geom_line(data = returns_data_parsed_feb15 %>%
-    filter(Date < early_date) %>% filter(ticker %in% bank_list), aes(color = ticker)) +
-  geom_point(data = returns_data_parsed_feb15 %>%
-    filter(Date < early_date) %>% filter(ticker %in% bank_list), aes(color = ticker)) +
-  geom_hline(aes(yintercept = 0)) +
-  geom_vline(
-    data = seq.Date(as.Date("2023-02-01"), early_date, by = "days") %>%
-      as_tibble() %>%
-      rename(Date = value) %>%
-      filter(lubridate::wday(Date) %in% c(1, 7)),
-    aes(xintercept = Date), color = "grey80", size = 2
-  ) +
-  scale_color_brewer(palette = "Dark2") +
-  # turn legend off
-  theme(legend.position = "none") +
-  geom_vline(aes(xintercept = as.Date("2023-03-09"))) +
-  labs(x = "Date", y = "Cumulative Abnormal Returns From February 15, 2023", color = "Bank") +
-  geom_text(
-    data = returns_data_parsed_feb15 %>%
-      filter(Date == as.Date("2023-03-16")) %>% filter(ticker %in% bank_list),
-    aes(
-      y = cumul_abnormal_capm,
-      x = Date + 1,
-      label = ticker,
-      color = ticker
-    )
-  )
-```
-
-```{r}
-#| eval: false
-#| echo: true
-#| warning: false
-#| message: false
-#| include: false
-# Legacy output exports retained for reference only; not used in rendering.
-sumtable(
-  bank_cumul_ret_linked_y9c_early %>%
-    select(-cumul_abnormal) %>%
-    rename(cumul_abnormal = cumul_abnormal_2022) %>%
-    mutate(Date = as.Date("2023-01-31")) %>%
-    bind_rows(bank_cumul_ret_linked_y9c_early) %>%
-    bind_rows(bank_cumul_ret_linked_y9c),
-  labels = c("Cumulative Abnormal Returns"),
-  summ = c("mean(x)", "sd(x)", "pctile(x)[5]", "pctile(x)[25]", "median(x)", "pctile(x)[75]", "pctile(x)[95]"),
-  summ.names = c("Mean", "SD", "5th Pct.", "25th Pct.", "50th Pct.", "75th Pct.", "95th Pct."),
-  numformat = c("percent"),
-  vars = c("cumul_abnormal"), group = "Date", group.long = TRUE,
-  out = "latex",
-  file = "output/table2.tex"
-)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-dep-htm-short",
-  title = "Cumulative returns correlated with uninsured deposits and HTM, immediately after SVB shutdown.",
-  dict = var_dict,
-  file = "output/table3_short.tex", replace = TRUE
-)
-
-etable(est1, est2, est3, est4, est5, est6,
-  vcov = "HC1",
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-dep-assets-beta",
-  title = "Cumulative returns correlated with asset size, adjusted for beta.",
-  dict = var_dict,
-  file = "output/table5_size_beta.tex", replace = TRUE
 )
 ```
 
@@ -4153,6 +3600,8 @@ emit_tex_table <- function(path) {
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table3_beta_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4161,6 +3610,8 @@ emit_tex_table("output/table3_beta.tex")
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table3_late_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4169,6 +3620,8 @@ emit_tex_table("output/table3_late.tex")
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table3_late_beta_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4177,6 +3630,8 @@ emit_tex_table("output/table3_late_beta.tex")
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table4_beta_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4185,6 +3640,8 @@ emit_tex_table("output/table4_beta.tex")
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table4_late_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4193,6 +3650,8 @@ emit_tex_table("output/table4_late.tex")
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table4_late_beta_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4201,6 +3660,8 @@ emit_tex_table("output/table4_late_beta.tex")
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table5_beta_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4209,6 +3670,8 @@ emit_tex_table("output/table5_beta.tex")
 ```
 
 ```{r}
+#| cache: true
+#| dependson: table5_late_tex
 #| results: asis
 #| echo: false
 #| warning: false
@@ -4218,6 +3681,8 @@ emit_tex_table("output/table5_late.tex")
 
 ```{r}
 #| results: asis
+#| cache: true
+#| dependson: table5_late_beta_tex
 #| echo: false
 #| warning: false
 #| message: false
