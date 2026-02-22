@@ -606,6 +606,7 @@ Moreover, the treatment and incorporation of these implied losses into regulator
 These are important topics for further research and, going forward, policymakers should incorporate these lessons into their policies to enhance the resilience of the financial system.
 
 ```{r}
+#| label: load-packages
 #| include: false
 library(tidyverse)
 library(ggrepel)
@@ -616,6 +617,7 @@ library(ggfixest)
 ```
 
 ```{r}
+#| label: set-params
 #| include: false
 #| cache: false
 date_list <- c(
@@ -1275,29 +1277,11 @@ bank_cumul_ret <-
 #| dependson: returns_data_parsed_2022
 #| cache: true
 #| include: false
-bank_cumul_ret_2022 <- returns_data_parsed_2022 %>%
+bank_cumul_ret_2022 <- 
+  returns_data_parsed_2022 %>%
   group_by(ticker) %>%
-  # filter(row_number() == n())  %>%
   filter(row_number() == n()) %>%
   arrange(cumul_abnormal)
-```
-
-
-```{r}
-#| dependson: bank_cumul_ret_2022, bank_cumul_ret_early, final_bank_data
-#| cache: true
-#| include: false
-feols(cumul_abnormal ~ cumul_abnormal_2022,
-  data = bank_cumul_ret_2022 %>%
-    select(ticker, cumul_abnormal_2022 = cumul_abnormal) %>%
-    mutate(cumul_abnormal_2022 = (1 + cumul_abnormal_2022)^(1 / 365) - 1) %>%
-    inner_join(bank_cumul_ret_early,
-      by = c("ticker")
-    ) %>% mutate(cumul_abnormal = (1 + cumul_abnormal)^(1 / 47) - 1) %>%
-    left_join(final_bank_data %>%
-      select(assets_imp, ticker = TICKER)),
-  vcov = "hetero"
-)
 ```
 
 ```{r}
@@ -1437,6 +1421,7 @@ bank_returns_data_parsed_y9c <-
 ```
 
 ```{r}
+#| label: sample-counts
 #| include: false
 # Counts of Sample for Data Description
 dim(bank_sample)
@@ -1448,6 +1433,7 @@ bank_list <- c(bank_cumul_ret_early[1:8, ] %>% pull(ticker))
 ```
 
 ```{r}
+#| label: set-theme
 #| include: false
 theme_set(theme_minimal(base_size = 16))
 ```
@@ -1472,8 +1458,6 @@ theme_set(theme_minimal(base_size = 16))
 #| fig-height: 6.25
 #| out-width: "82%"
 #| fig-align: center
-
-# Figure 1 ----
 ggplot(data = sp_data_parsed_2022 %>%
   left_join(sample_bank_return_2022) %>%
   mutate(group = "Feb 2022-Feb 2023") %>% bind_rows(
@@ -2760,214 +2744,6 @@ table6_tex <- gsub(
 ```
 
 ```{r}
-#| include: false
-# Figure 2 ----
-# Panel A: 2022
-label1 <- paste(
-  c(
-    "Bank Index Return\n Excess of Market:",
-    scales::percent(round(bank_cumul_ret_2022$cumul_abnormal_bankidx[1], 3))
-  ),
-  collapse = "\n"
-)
-label2 <- paste(
-  c(
-    "Equal-Weighted Bank Return\n Excess of Market:",
-    scales::percent(round(mean(bank_cumul_ret_2022$cumul_abnormal), 3))
-  ),
-  collapse = "\n"
-)
-ggplot(data = bank_cumul_ret_2022) +
-  geom_density(aes(x = cumul_abnormal)) +
-  geom_vline(xintercept = 0, alpha = .2) +
-  geom_vline(
-    xintercept = bank_cumul_ret_2022$cumul_abnormal_bankidx[1],
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
-    linetype = 2
-  ) +
-  geom_vline(
-    xintercept = mean(bank_cumul_ret_2022$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
-    linetype = 3
-  ) +
-  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
-  scale_color_brewer(palette = "Dark2") +
-  labs(
-    x = "Cumulative Return in Excess of S&P500\n2022-02-01 to 2023-01-31",
-    y = "Bank Density",
-    color = "Stock Close Date"
-  ) +
-  annotate("text",
-    x = bank_cumul_ret_2022$cumul_abnormal_bankidx[1],
-    y = 2.5,
-    label = label1,
-    vjust = 1,
-    hjust = 1
-  ) +
-  annotate("text",
-    x = mean(bank_cumul_ret_2022$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2], ,
-    y = 3,
-    label = label2,
-    vjust = 1,
-    hjust = 1
-  )
-
-# Panel B: Early 2023
-label1 <- paste(
-  c(
-    "Bank Index Return\nExcess of Market:",
-    scales::percent(round(bank_cumul_ret_early$cumul_abnormal_bankidx[1], 3))
-  ),
-  collapse = "\n"
-)
-label2 <- paste(
-  c(
-    "Equal Weighted Bank Return\nExcess of Market:",
-    scales::percent(round(mean(bank_cumul_ret_early$cumul_abnormal), 3))
-  ),
-  collapse = "\n"
-)
-ggplot(data = bank_cumul_ret_early) +
-  geom_density(aes(x = cumul_abnormal)) +
-  geom_vline(xintercept = 0, alpha = .2) +
-  geom_vline(
-    xintercept = bank_cumul_ret_early$cumul_abnormal_bankidx[1],
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
-    linetype = 2
-  ) +
-  geom_vline(
-    xintercept = mean(bank_cumul_ret_early$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
-    linetype = 3
-  ) +
-  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
-  scale_color_brewer(palette = "Dark2") +
-  labs(
-    x = "Cumulative Return in Excess of S&P500\n2023-02-01 to 2023-03-17",
-    y = "Bank Density",
-    color = "Stock Close Date"
-  ) +
-  annotate("text",
-    x = bank_cumul_ret_early$cumul_abnormal_bankidx[1],
-    y = 3.25,
-    label = label1,
-    vjust = 1,
-    hjust = 1
-  ) +
-  annotate("text",
-    x = mean(bank_cumul_ret_early$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2], ,
-    y = 5,
-    label = label2,
-    vjust = 1,
-    hjust = 1
-  )
-
-# Panel C: Late 2023
-label1 <- paste(
-  c(
-    "Bank Index Return\nExcess of Market:",
-    scales::percent(round(bank_cumul_ret$cumul_abnormal_bankidx[1], 3))
-  ),
-  collapse = "\n"
-)
-label2 <- paste(
-  c(
-    "Equal Weighted Bank Return\nExcess of Market:",
-    scales::percent(round(mean(bank_cumul_ret$cumul_abnormal), 3))
-  ),
-  collapse = "\n"
-)
-ggplot(data = bank_cumul_ret) +
-  geom_density(aes(x = cumul_abnormal)) +
-  geom_vline(xintercept = 0, alpha = .2) +
-  geom_vline(
-    xintercept = bank_cumul_ret$cumul_abnormal_bankidx[1],
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
-    linetype = 2
-  ) +
-  geom_vline(
-    xintercept = mean(bank_cumul_ret$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
-    linetype = 3
-  ) +
-  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
-  scale_color_brewer(palette = "Dark2") +
-  labs(
-    x = "Cumulative Return in Excess of S&P500\n2023-02-01 to 2023-05-25",
-    y = "Bank Density",
-    color = "Stock Close Date"
-  ) +
-  annotate("text",
-    x = bank_cumul_ret$cumul_abnormal_bankidx[1],
-    y = 2,
-    label = label1,
-    vjust = 1,
-    hjust = 1
-  ) +
-  annotate("text",
-    x = mean(bank_cumul_ret$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2], ,
-    y = 3,
-    label = label2,
-    vjust = 1,
-    hjust = 1
-  )
-
-# Panel C: Late 2023
-label1 <- paste(
-  c(
-    "Bank Index Return\nExcess of Market:",
-    scales::percent(round(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal_bankidx[1], 3))
-  ),
-  collapse = "\n"
-)
-label2 <- paste(
-  c(
-    "Equal Weighted Bank Return\nExcess of Market\n (Excluding FCNCA):",
-    scales::percent(round(mean(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal), 3))
-  ),
-  collapse = "\n"
-)
-ggplot(data = bank_cumul_ret %>% filter(ticker != "FCNCA")) +
-  geom_density(aes(x = cumul_abnormal)) +
-  geom_vline(xintercept = 0, alpha = .2) +
-  geom_vline(
-    xintercept = bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal_bankidx[1],
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[1],
-    linetype = 2
-  ) +
-  geom_vline(
-    xintercept = mean(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2],
-    linetype = 3
-  ) +
-  scale_x_continuous(labels = scales::percent_format(), limits = c(NA, NA)) +
-  scale_color_brewer(palette = "Dark2") +
-  labs(
-    x = "Cumulative Return in Excess of S&P500\n2023-02-01 to 2023-05-25",
-    y = "Bank Density",
-    color = "Stock Close Date"
-  ) +
-  annotate("text",
-    x = bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal_bankidx[1],
-    y = 2,
-    label = label1,
-    vjust = 1,
-    hjust = 1
-  ) +
-  annotate("text",
-    x = mean(bank_cumul_ret[bank_cumul_ret$ticker != "FCNCA", ]$cumul_abnormal),
-    color = RColorBrewer::brewer.pal(3, name = "Dark2")[2], ,
-    y = 3,
-    label = label2,
-    vjust = 1,
-    hjust = 1
-  )
-```
-
-```{r}
 #| label: nonbank
 #| cache: true
 #| dependson: final_bank_data
@@ -3002,11 +2778,6 @@ var_dict <- c(
   `asset_bin(1e+09,5e+09]` = "Assets (1tr-10tr]",
   beta_bank = "Beta on Bank Index (Excess of S&P500)"
 )
-```
-
-```{r}
-
-
 ```
 
 ```{=latex}
@@ -3187,6 +2958,7 @@ ggplot(
 ```
 
 ```{r}
+#| label: emit_tex_table
 #| include: false
 emit_tex_table <- function(path) {
   lines <- readLines(path)
@@ -3235,7 +3007,6 @@ est5 <- feols(
     unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
 )
-etable(est1, est2, est3, est4, est5, dict = var_dict)
 
 etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
