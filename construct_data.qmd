@@ -2803,6 +2803,8 @@ var_dict <- c(
 
 ```{r}
 #| label: fig-a1
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 #| fig-cap: >-
 #|   Early cumulative returns explained by liquid assets. Panel (a) plots the
 #|   cumulative returns in excess of the S&P 500 index for the banks in our
@@ -2887,6 +2889,8 @@ pA1c
 
 ```{r}
 #| label: fig-a2
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 #| fig-cap: >-
 #|   Early cumulative returns explained by Tier 1 Capital ratio. This figure
 #|   plots the cumulative returns in excess of the S&P 500 index for the banks
@@ -2921,6 +2925,8 @@ ggplot(
 
 ```{r}
 #| label: fig-a3
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
 #| fig-cap: >-
 #|   Early cumulative returns explained by non-performing loan ratio. This
 #|   figure plots the cumulative returns in excess of the S&P 500 index for the
@@ -3058,11 +3064,7 @@ est5 <- feols(
     unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
-etable(est1, est2, est3, est4, est5,
-  digits = 3,
-  depvar = FALSE, digits.stats = 3,
-  dict = var_dict
-)
+
 etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
@@ -3113,11 +3115,7 @@ est5 <- feols(
     unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c, vcov = "HC1"
 )
-etable(est1, est2, est3, est4, est5,
-  digits = 3,
-  depvar = FALSE, digits.stats = 3,
-  dict = var_dict
-)
+
 etable(est1, est2, est3, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
@@ -3159,7 +3157,6 @@ est4 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_rati
 est5 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
   data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
 )
-etable(est1, est3, est2, est4, est5)
 etable(est1, est3, est2, est4, est5,
   digits = 3, depvar = FALSE, digits.stats = 3,
   style.tex = style.tex("aer"),
