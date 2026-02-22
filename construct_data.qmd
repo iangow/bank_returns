@@ -3017,392 +3017,6 @@ bank_cumul_ret_linked_y9c <- bank_cumul_ret_linked_y9c %>%
 
 ```
 
-```{r}
-#| label: table3_beta_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c_early
-## Table 2 with beta model ---
-est1 <- feols(cumul_abnormal_capm ~ dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal_capm ~ htm_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal_capm ~ unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal_capm ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-
-est5 <- feols(
-  cumul_abnormal_capm ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    htm_ratio_std:dep_unins_share_std +
-    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-etable(est1, est2, est3, est4, est5, dict = var_dict)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-dep-htm-beta",
-  title = "Cumulative returns correlated with uninsured deposits and HTM, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusting for beta estimated in 2022, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table3_beta.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table3_late_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c
-est1 <- feols(cumul_abnormal ~ dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal ~ htm_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal ~ unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-
-est5 <- feols(
-  cumul_abnormal ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    htm_ratio_std:dep_unins_share_std +
-    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-etable(est1, est2, est3, est4, est5,
-  digits = 3,
-  depvar = FALSE, digits.stats = 3,
-  dict = var_dict
-)
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-dep-htm-late",
-  title = "Cumulative returns correlated with uninsured deposits and HTM, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusting for beta estimated in 2022, for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table3_late.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table3_late_beta_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c
-est1 <- feols(cumul_abnormal_capm ~ dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal_capm ~ htm_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal_capm ~ unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal_capm ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-
-
-est5 <- feols(
-  cumul_abnormal_capm ~ dep_unins_share_std +
-    htm_ratio_std +
-    unrealized_htm_losses_rat_tier1_std +
-    htm_ratio_std:dep_unins_share_std +
-    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-etable(est1, est2, est3, est4, est5,
-  digits = 3,
-  depvar = FALSE, digits.stats = 3,
-  dict = var_dict
-)
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-dep-htm-late-beta",
-  title = "Cumulative returns correlated with uninsured deposits and HTM, long run and adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table3_late_beta.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table4_beta_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c_early
-est1 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est4 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est5 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-etable(est1, est3, est2, est4, est5)
-etable(est1, est3, est2, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-liquid-assets-beta",
-  title = "Cumulative returns correlated with liquid assets, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
-   In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
-assets) measured in 2022q4. %
-   Column (2) adds uninsured deposit share to Column (1). %
-   Column (3) reports the coefficient with the cash scaled by total assets and securities scaled by total assets. %
-    Column (4) adds uninsured deposit share to Column (3). %
-    Column (5) interacts uninsured deposit share with cash and securities. %
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table4_beta.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table4_late_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c
-est1 <- feols(cumul_abnormal ~ liquid_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal ~ liquid_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est4 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est5 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-etable(est1, est3, est2, est4, est5)
-etable(est1, est3, est2, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-liquid-assets-late",
-  title = "Cumulative returns correlated with liquid assets, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
-   In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
-assets) measured in 2022q4. %
-   Column (2) adds uninsured deposit share to Column (1). %
-   Column (3) reports the coefficient with the cash scaled by total assets and securities scaled by total assets. %
-    Column (4) adds uninsured deposit share to Column (3). %
-    Column (5) interacts uninsured deposit share with cash and securities. %
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table4_late.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table4_late_beta_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c
-est1 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est4 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est5 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-etable(est1, est3, est2, est4, est5)
-etable(est1, est3, est2, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-liquid-assets-late-beta",
-  title = "Cumulative returns correlated with liquid assets, adjusted for beta, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
-   In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
-assets) measured in 2022q4. %
-   Column (2) adds uninsured deposit share to Column (1). %
-   Column (3) reports the coefficient with the cash scaled by total assets and securities scaled by total assets. %
-    Column (4) adds uninsured deposit share to Column (3). %
-    Column (5) interacts uninsured deposit share with cash and securities. %
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table4_late_beta.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table5_beta_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c_early
-est1 <- feols(cumul_abnormal_capm ~ tier1capratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal_capm ~ npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal_capm ~ tier1capratio_std + npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal_capm ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-est5 <- feols(
-  cumul_abnormal_capm ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std +
-    tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
-)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-npl-capital-beta",
-  title = "Cumulative returns correlated with NPL and Tier 1 capital, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
-   In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
-   Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
-   Column (3) combines Column (1) and (2). %
-    Column (4) adds uninsured deposit share to Column (3). %
-    Column (5) interacts uninsured deposit share with non-performing loans and tier 1 capital. %
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table5_beta.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table5_late_tex
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c
-est1 <- feols(cumul_abnormal ~ tier1capratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal ~ npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal ~ tier1capratio_std + npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est5 <- feols(
-  cumul_abnormal ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std +
-    tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-npl-capital-late",
-  title = "Cumulative returns correlated with NPL and Tier 1 capital, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome. %
-   In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
-   Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
-   Column (3) combines Column (1) and (2). %
-    Column (4) adds uninsured deposit share to Column (3). %
-    Column (5) interacts uninsured deposit share with non-performing loans and tier 1 capital. %
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table5_late.tex", replace = TRUE
-)
-```
-
-```{r}
-#| label: table5_late_beta
-#| include: false
-#| cache: true
-#| dependson: bank_cumul_ret_linked_y9c
-est1 <- feols(cumul_abnormal_capm ~ tier1capratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est2 <- feols(cumul_abnormal_capm ~ npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est3 <- feols(cumul_abnormal_capm ~ tier1capratio_std + npl_ratio_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est4 <- feols(
-  cumul_abnormal_capm ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-est5 <- feols(
-  cumul_abnormal_capm ~
-    tier1capratio_std + npl_ratio_std +
-    dep_unins_share_std +
-    tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
-  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
-)
-
-etable(est1, est2, est3, est4, est5,
-  digits = 3, depvar = FALSE, digits.stats = 3,
-  style.tex = style.tex("aer"),
-  adjustbox = 1.2,
-  label = "tbl-npl-capital-late-beta",
-  title = "Cumulative returns correlated with NPL and Tier 1 capital, adjusted for beta, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome. %
-   In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
-   Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
-   Column (3) combines Column (1) and (2). %
-    Column (4) adds uninsured deposit share to Column (3). %
-    Column (5) interacts uninsured deposit share with non-performing loans and tier 1 capital. %
-    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
-  dict = var_dict,
-  file = "output/table5_late_beta.tex", replace = TRUE
-)
-```
-
 ```{=latex}
 \clearpage
 ```
@@ -3600,6 +3214,49 @@ emit_tex_table <- function(path) {
 ```
 
 ```{r}
+#| label: table3_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
+## Table 2 with beta model ---
+est1 <- feols(cumul_abnormal_capm ~ dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal_capm ~ htm_ratio_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal_capm ~ unrealized_htm_losses_rat_tier1_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est4 <- feols(
+  cumul_abnormal_capm ~ dep_unins_share_std +
+    htm_ratio_std +
+    unrealized_htm_losses_rat_tier1_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+
+est5 <- feols(
+  cumul_abnormal_capm ~ dep_unins_share_std +
+    htm_ratio_std +
+    unrealized_htm_losses_rat_tier1_std +
+    htm_ratio_std:dep_unins_share_std +
+    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+etable(est1, est2, est3, est4, est5, dict = var_dict)
+
+etable(est1, est2, est3, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-dep-htm-beta",
+  title = "Cumulative returns correlated with uninsured deposits and HTM, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusting for beta estimated in 2022, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table3_beta.tex", replace = TRUE
+)
+```
+
+```{r}
 #| cache: true
 #| dependson: table3_beta_tex
 #| results: asis
@@ -3607,6 +3264,51 @@ emit_tex_table <- function(path) {
 #| warning: false
 #| message: false
 emit_tex_table("output/table3_beta.tex")
+```
+
+```{r}
+#| label: table3_late_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
+est1 <- feols(cumul_abnormal ~ dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal ~ htm_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal ~ unrealized_htm_losses_rat_tier1_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est4 <- feols(
+  cumul_abnormal ~ dep_unins_share_std +
+    htm_ratio_std +
+    unrealized_htm_losses_rat_tier1_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+
+est5 <- feols(
+  cumul_abnormal ~ dep_unins_share_std +
+    htm_ratio_std +
+    unrealized_htm_losses_rat_tier1_std +
+    htm_ratio_std:dep_unins_share_std +
+    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+etable(est1, est2, est3, est4, est5,
+  digits = 3,
+  depvar = FALSE, digits.stats = 3,
+  dict = var_dict
+)
+etable(est1, est2, est3, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-dep-htm-late",
+  title = "Cumulative returns correlated with uninsured deposits and HTM, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusting for beta estimated in 2022, for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table3_late.tex", replace = TRUE
+)
 ```
 
 ```{r}
@@ -3620,6 +3322,51 @@ emit_tex_table("output/table3_late.tex")
 ```
 
 ```{r}
+#| label: table3_late_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
+est1 <- feols(cumul_abnormal_capm ~ dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal_capm ~ htm_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal_capm ~ unrealized_htm_losses_rat_tier1_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est4 <- feols(
+  cumul_abnormal_capm ~ dep_unins_share_std +
+    htm_ratio_std +
+    unrealized_htm_losses_rat_tier1_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+
+est5 <- feols(
+  cumul_abnormal_capm ~ dep_unins_share_std +
+    htm_ratio_std +
+    unrealized_htm_losses_rat_tier1_std +
+    htm_ratio_std:dep_unins_share_std +
+    unrealized_htm_losses_rat_tier1_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+etable(est1, est2, est3, est4, est5,
+  digits = 3,
+  depvar = FALSE, digits.stats = 3,
+  dict = var_dict
+)
+etable(est1, est2, est3, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-dep-htm-late-beta",
+  title = "Cumulative returns correlated with uninsured deposits and HTM, long run and adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome.  In Column (1), we report the bivariate relationship with the uninsured deposit share (uninsured deposts as a share of total deposits) measured in 2022q4. Column (2) reports the coefficient with the hold-to-maturity asset share (hold-to-maturity assets as a share of total assets) measured in 2022q4. Column (3) reports unrealized hold-to-maturity losses scaled by tier 1 capital. Column (4) combines Columns (1)-(3). Column (5) adds the interaction of uninsured deposit share with HTM Asset Share and Unrealized HTM Losses. All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table3_late_beta.tex", replace = TRUE
+)
+```
+
+```{r}
 #| cache: true
 #| dependson: table3_late_beta_tex
 #| results: asis
@@ -3627,6 +3374,45 @@ emit_tex_table("output/table3_late.tex")
 #| warning: false
 #| message: false
 emit_tex_table("output/table3_late_beta.tex")
+```
+
+```{r}
+#| label: table4_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
+est1 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std + dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est4 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est5 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+etable(est1, est3, est2, est4, est5)
+etable(est1, est3, est2, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-liquid-assets-beta",
+  title = "Cumulative returns correlated with liquid assets, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
+   In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
+assets) measured in 2022q4. %
+   Column (2) adds uninsured deposit share to Column (1). %
+   Column (3) reports the coefficient with the cash scaled by total assets and securities scaled by total assets. %
+    Column (4) adds uninsured deposit share to Column (3). %
+    Column (5) interacts uninsured deposit share with cash and securities. %
+    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table4_beta.tex", replace = TRUE
+)
 ```
 
 ```{r}
@@ -3640,6 +3426,45 @@ emit_tex_table("output/table4_beta.tex")
 ```
 
 ```{r}
+#| label: table4_late_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
+est1 <- feols(cumul_abnormal ~ liquid_asset_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal ~ liquid_asset_ratio_std + dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est4 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est5 <- feols(cumul_abnormal ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+etable(est1, est3, est2, est4, est5)
+etable(est1, est3, est2, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-liquid-assets-late",
+  title = "Cumulative returns correlated with liquid assets, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
+   In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
+assets) measured in 2022q4. %
+   Column (2) adds uninsured deposit share to Column (1). %
+   Column (3) reports the coefficient with the cash scaled by total assets and securities scaled by total assets. %
+    Column (4) adds uninsured deposit share to Column (3). %
+    Column (5) interacts uninsured deposit share with cash and securities. %
+    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table4_late.tex", replace = TRUE
+)
+```
+
+```{r}
 #| cache: true
 #| dependson: table4_late_tex
 #| results: asis
@@ -3647,6 +3472,45 @@ emit_tex_table("output/table4_beta.tex")
 #| warning: false
 #| message: false
 emit_tex_table("output/table4_late.tex")
+```
+
+```{r}
+#| label: table4_late_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
+est1 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal_capm ~ liquid_asset_ratio_std + dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est4 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est5 <- feols(cumul_abnormal_capm ~ cash_asset_ratio_std + securities_asset_ratio_std + dep_unins_share_std + cash_asset_ratio_std:dep_unins_share_std + securities_asset_ratio_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+etable(est1, est3, est2, est4, est5)
+etable(est1, est3, est2, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-liquid-assets-late-beta",
+  title = "Cumulative returns correlated with liquid assets, adjusted for beta, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
+   In Column (1), we report the bivariate relationship with the liquid asset share (securities + cash scaled by total
+assets) measured in 2022q4. %
+   Column (2) adds uninsured deposit share to Column (1). %
+   Column (3) reports the coefficient with the cash scaled by total assets and securities scaled by total assets. %
+    Column (4) adds uninsured deposit share to Column (3). %
+    Column (5) interacts uninsured deposit share with cash and securities. %
+    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table4_late_beta.tex", replace = TRUE
+)
 ```
 
 ```{r}
@@ -3660,6 +3524,51 @@ emit_tex_table("output/table4_late_beta.tex")
 ```
 
 ```{r}
+#| label: table5_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c_early
+est1 <- feols(cumul_abnormal_capm ~ tier1capratio_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal_capm ~ npl_ratio_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal_capm ~ tier1capratio_std + npl_ratio_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est4 <- feols(
+  cumul_abnormal_capm ~
+    tier1capratio_std + npl_ratio_std +
+    dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+est5 <- feols(
+  cumul_abnormal_capm ~
+    tier1capratio_std + npl_ratio_std +
+    dep_unins_share_std +
+    tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c_early, vcov = "HC1"
+)
+
+etable(est1, est2, est3, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-npl-capital-beta",
+  title = "Cumulative returns correlated with NPL and Tier 1 capital, adjusted for beta. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to March 17, 2023 as the outcome. %
+   In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
+   Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
+   Column (3) combines Column (1) and (2). %
+    Column (4) adds uninsured deposit share to Column (3). %
+    Column (5) interacts uninsured deposit share with non-performing loans and tier 1 capital. %
+    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table5_beta.tex", replace = TRUE
+)
+```
+
+```{r}
 #| cache: true
 #| dependson: table5_beta_tex
 #| results: asis
@@ -3670,6 +3579,51 @@ emit_tex_table("output/table5_beta.tex")
 ```
 
 ```{r}
+#| label: table5_late_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
+est1 <- feols(cumul_abnormal ~ tier1capratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal ~ npl_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal ~ tier1capratio_std + npl_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est4 <- feols(
+  cumul_abnormal ~
+    tier1capratio_std + npl_ratio_std +
+    dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est5 <- feols(
+  cumul_abnormal ~
+    tier1capratio_std + npl_ratio_std +
+    dep_unins_share_std +
+    tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+
+etable(est1, est2, est3, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-npl-capital-late",
+  title = "Cumulative returns correlated with NPL and Tier 1 capital, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome. %
+   In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
+   Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
+   Column (3) combines Column (1) and (2). %
+    Column (4) adds uninsured deposit share to Column (3). %
+    Column (5) interacts uninsured deposit share with non-performing loans and tier 1 capital. %
+    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table5_late.tex", replace = TRUE
+)
+```
+
+```{r}
 #| cache: true
 #| dependson: table5_late_tex
 #| results: asis
@@ -3677,6 +3631,51 @@ emit_tex_table("output/table5_beta.tex")
 #| warning: false
 #| message: false
 emit_tex_table("output/table5_late.tex")
+```
+
+```{r}
+#| label: table5_late_beta_tex
+#| include: false
+#| cache: true
+#| dependson: bank_cumul_ret_linked_y9c
+est1 <- feols(cumul_abnormal_capm ~ tier1capratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est2 <- feols(cumul_abnormal_capm ~ npl_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est3 <- feols(cumul_abnormal_capm ~ tier1capratio_std + npl_ratio_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est4 <- feols(
+  cumul_abnormal_capm ~
+    tier1capratio_std + npl_ratio_std +
+    dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+est5 <- feols(
+  cumul_abnormal_capm ~
+    tier1capratio_std + npl_ratio_std +
+    dep_unins_share_std +
+    tier1capratio_std:dep_unins_share_std + npl_ratio_std:dep_unins_share_std,
+  data = bank_cumul_ret_linked_y9c, vcov = "HC1"
+)
+
+etable(est1, est2, est3, est4, est5,
+  digits = 3, depvar = FALSE, digits.stats = 3,
+  style.tex = style.tex("aer"),
+  adjustbox = 1.2,
+  label = "tbl-npl-capital-late-beta",
+  title = "Cumulative returns correlated with NPL and Tier 1 capital, adjusted for beta, long run. This table reports estimated coefficients of regressions with the cumulative returns in excess of the S\\&P 500 index, adjusted for beta estimated in 2002, for the banks in our sample from February 1, 2023 to May 25, 2023 as the outcome. %
+   In Column (1), we report the bivariate relationship with the non-performing loan ratio (non-performing loans scaled by total loans) measured in 2022q4. %
+   Column (2) reports the coefficient with the the tier 1 capital ratio measured in 2022q4. %
+   Column (3) combines Column (1) and (2). %
+    Column (4) adds uninsured deposit share to Column (3). %
+    Column (5) interacts uninsured deposit share with non-performing loans and tier 1 capital. %
+    All variables (except for the cumulative returns) are mean zero and standarized to have standard deviation one, prior to interactions.",
+  dict = var_dict,
+  file = "output/table5_late_beta.tex", replace = TRUE
+)
 ```
 
 ```{r}
