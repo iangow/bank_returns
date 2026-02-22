@@ -1301,15 +1301,42 @@ feols(cumul_abnormal ~ cumul_abnormal_2022,
 ```
 
 ```{r}
+#| label: add_std_cols
+#| cache: true
+#| include: false
+standardize <- function(x) {
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+
+std_vars <- c(
+  "dep_unins_share",
+  "liquid_asset_ratio",
+  "cash_asset_ratio",
+  "securities_asset_ratio",
+  "htm_ratio",
+  "unrealized_htm_losses_rat_tier1",
+  "npl_ratio",
+  "tier1capratio"
+)
+
+add_std_cols <- function(df) {
+  df %>%
+    ungroup() %>%
+    mutate(across(all_of(std_vars), standardize, .names = "{.col}_std"))
+}
+```
+
+```{r}
 #| label: bank_cumul_ret_linked_y9c
-#| dependson: bank_cumul_ret, final_bank_data, bank_cumul_ret_2022
+#| dependson: bank_cumul_ret, final_bank_data, bank_cumul_ret_2022, add_std_cols
 #| cache: true
 #| include: false
 ## Linked FRB-Call-FDIC-Return Sample ----
 bank_cumul_ret_linked_y9c <- bank_cumul_ret %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER")) %>%
   left_join(bank_cumul_ret_2022 %>%
-    select(ticker, cumul_abnormal_2022 = cumul_abnormal))
+    select(ticker, cumul_abnormal_2022 = cumul_abnormal)) |>
+  add_std_cols()
 ```
 
 ```{r}
@@ -1327,25 +1354,27 @@ bank_cumul_ret_linked_fdic <-
 
 ```{r}
 #| label: bank_cumul_ret_linked_y9c_early
-#| dependson: bank_cumul_ret_early, final_bank_data, bank_cumul_ret_2022
+#| dependson: bank_cumul_ret_early, final_bank_data, bank_cumul_ret_2022, add_std_cols
 #| cache: true
 #| include: false
 bank_cumul_ret_linked_y9c_early <-
   bank_cumul_ret_early %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER")) %>%
   left_join(bank_cumul_ret_2022 %>%
-    select(ticker, cumul_abnormal_2022 = cumul_abnormal))
+    select(ticker, cumul_abnormal_2022 = cumul_abnormal)) |>
+  add_std_cols()
 ```
 
 ```{r}
 #| label: bank_cumul_ret_linked_y9c_short
-#| dependson: bank_cumul_ret_short, final_bank_data, bank_cumul_ret_2022
+#| dependson: bank_cumul_ret_short, final_bank_data, bank_cumul_ret_2022, add_std_cols
 #| cache: true
 #| include: false
 bank_cumul_ret_linked_y9c_short <- bank_cumul_ret_short %>%
   inner_join(final_bank_data, by = c("ticker" = "TICKER")) %>%
   left_join(bank_cumul_ret_2022 %>%
-    select(ticker, cumul_abnormal_2022 = cumul_abnormal))
+    select(ticker, cumul_abnormal_2022 = cumul_abnormal)) |>
+  add_std_cols()
 ```
 
 ```{r}
@@ -1381,31 +1410,29 @@ bank_multiple_cumul_ret_linked_fdic <-
 ```
 
 ```{r}
-#| include: false
-# Effects over time prep (needed by Figure 7+)
-standardize <- function(x) {
-  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
-}
-```
-
-```{r}
 #| label: bank_returns_data_parsed_y9c
 #| dependson: returns_data_parsed, final_bank_data
 #| cache: true
 #| include: false
 bank_returns_data_parsed_y9c <-
-  returns_data_parsed %>%
+  returns_data_parsed |>
   inner_join(final_bank_data, by = c("ticker" = "TICKER")) |>
-  ungroup() %>%
+  ungroup() |>
   mutate(
-    dep_unins_share_std = standardize(dep_unins_share),
-    liquid_asset_ratio_std = standardize(liquid_asset_ratio),
-    cash_asset_ratio_std = standardize(cash_asset_ratio),
-    securities_asset_ratio_std = standardize(securities_asset_ratio),
-    htm_ratio_std = standardize(htm_ratio),
-    unrealized_htm_losses_rat_tier1_std = standardize(unrealized_htm_losses_rat_tier1),
-    npl_ratio_std = standardize(npl_ratio),
-    tier1capratio_std = standardize(tier1capratio)
+    across(
+      c(
+        dep_unins_share,
+        liquid_asset_ratio,
+        cash_asset_ratio,
+        securities_asset_ratio,
+        htm_ratio,
+        unrealized_htm_losses_rat_tier1,
+        npl_ratio,
+        tier1capratio
+      ),
+      standardize,
+      .names = "{.col}_std"
+    )
   )
 ```
 
@@ -2953,8 +2980,9 @@ nonbank <- final_bank_data %>%
 
 
 ```{r}
+#| label: var_dict
+#| cache: true
 #| include: false
-
 ### Table 2 ----
 var_dict <- c(
   liquid_asset_ratio_std = "Liquid Assets / Total Assets",
@@ -2974,46 +3002,10 @@ var_dict <- c(
   `asset_bin(1e+09,5e+09]` = "Assets (1tr-10tr]",
   beta_bank = "Beta on Bank Index (Excess of S&P500)"
 )
+```
 
-bank_cumul_ret_linked_y9c_early <- bank_cumul_ret_linked_y9c_early %>%
-  ungroup() %>%
-  mutate(
-    dep_unins_share_std = (dep_unins_share - mean(dep_unins_share, na.rm = TRUE)) / sd(dep_unins_share, na.rm = TRUE),
-    liquid_asset_ratio_std = (liquid_asset_ratio - mean(liquid_asset_ratio, na.rm = TRUE)) / sd(liquid_asset_ratio, na.rm = TRUE),
-    cash_asset_ratio_std = (cash_asset_ratio - mean(cash_asset_ratio, na.rm = TRUE)) / sd(cash_asset_ratio, na.rm = TRUE),
-    securities_asset_ratio_std = (securities_asset_ratio - mean(securities_asset_ratio, na.rm = TRUE)) / sd(securities_asset_ratio, na.rm = TRUE),
-    htm_ratio_std = (htm_ratio - mean(htm_ratio, na.rm = TRUE)) / sd(htm_ratio, na.rm = TRUE),
-    unrealized_htm_losses_rat_tier1_std = (unrealized_htm_losses_rat_tier1 - mean(unrealized_htm_losses_rat_tier1, na.rm = TRUE)
-    ) / sd(unrealized_htm_losses_rat_tier1, na.rm = TRUE),
-    npl_ratio_std = scale(npl_ratio),
-    tier1capratio_std = scale(tier1capratio)
-  )
-bank_cumul_ret_linked_y9c_short <- bank_cumul_ret_linked_y9c_short %>%
-  ungroup() %>%
-  mutate(
-    dep_unins_share_std = (dep_unins_share - mean(dep_unins_share, na.rm = TRUE)) / sd(dep_unins_share, na.rm = TRUE),
-    liquid_asset_ratio_std = (liquid_asset_ratio - mean(liquid_asset_ratio, na.rm = TRUE)) / sd(liquid_asset_ratio, na.rm = TRUE),
-    cash_asset_ratio_std = (cash_asset_ratio - mean(cash_asset_ratio, na.rm = TRUE)) / sd(cash_asset_ratio, na.rm = TRUE),
-    securities_asset_ratio_std = (securities_asset_ratio - mean(securities_asset_ratio, na.rm = TRUE)) / sd(securities_asset_ratio, na.rm = TRUE),
-    htm_ratio_std = (htm_ratio - mean(htm_ratio, na.rm = TRUE)) / sd(htm_ratio, na.rm = TRUE),
-    unrealized_htm_losses_rat_tier1_std = (unrealized_htm_losses_rat_tier1 - mean(unrealized_htm_losses_rat_tier1, na.rm = TRUE)
-    ) / sd(unrealized_htm_losses_rat_tier1, na.rm = TRUE),
-    npl_ratio_std = scale(npl_ratio),
-    tier1capratio_std = scale(tier1capratio)
-  )
-bank_cumul_ret_linked_y9c <- bank_cumul_ret_linked_y9c %>%
-  ungroup() %>%
-  mutate(
-    dep_unins_share_std = (dep_unins_share - mean(dep_unins_share, na.rm = TRUE)) / sd(dep_unins_share, na.rm = TRUE),
-    liquid_asset_ratio_std = (liquid_asset_ratio - mean(liquid_asset_ratio, na.rm = TRUE)) / sd(liquid_asset_ratio, na.rm = TRUE),
-    cash_asset_ratio_std = (cash_asset_ratio - mean(cash_asset_ratio, na.rm = TRUE)) / sd(cash_asset_ratio, na.rm = TRUE),
-    securities_asset_ratio_std = (securities_asset_ratio - mean(securities_asset_ratio, na.rm = TRUE)) / sd(securities_asset_ratio, na.rm = TRUE),
-    htm_ratio_std = (htm_ratio - mean(htm_ratio, na.rm = TRUE)) / sd(htm_ratio, na.rm = TRUE),
-    unrealized_htm_losses_rat_tier1_std = (unrealized_htm_losses_rat_tier1 - mean(unrealized_htm_losses_rat_tier1, na.rm = TRUE)
-    ) / sd(unrealized_htm_losses_rat_tier1, na.rm = TRUE),
-    npl_ratio_std = scale(npl_ratio),
-    tier1capratio_std = scale(tier1capratio)
-  )
+```{r}
+
 
 ```
 
